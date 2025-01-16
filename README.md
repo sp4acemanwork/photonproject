@@ -6,6 +6,10 @@ this is a test from bryan charles williams
 
 hello elmer made it hoorayyyyy - i know made a change in my own branch
 
+<<<<<<< HEAD
 RAAAAAAAAAAAAH (RJ) 
 
 AHHHHHHHHHH (BCW)
+=======
+TESTING IT AGAIN (RJ)
+>>>>>>> origin/main
