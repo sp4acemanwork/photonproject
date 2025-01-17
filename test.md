@@ -1,5 +1,2 @@
-Hi this is a test
-Hi this is another test
-from bryan
-
-I swear this is the last test if it works
+Hey guys we need to figure out what coding language we are going to use. 
+I vote Python
