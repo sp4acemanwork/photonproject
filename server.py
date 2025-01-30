@@ -1,5 +1,7 @@
 import socket
 
+local_ip = "127.0.0.1"
+
 
 # possibly handle client server com using tcp
 class tcp_handler:
