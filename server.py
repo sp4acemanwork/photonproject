@@ -1,5 +1,14 @@
-class udp_handler():
-    def __init__():
+import socket
+
+
+# possibly handle client server com using tcp
+class tcp_handler:
+    def __init__(self):
+        print("lol")
+
+
+class udp_handler:
+    def __init__(self, local_ip: str, local_port: int, buffer_size: int):
         print("lol")
 
 
