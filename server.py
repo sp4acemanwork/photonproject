@@ -10,11 +10,11 @@ class tcp_handler:
 
 class udp_handler:
     def __init__(self, local_ip: str, local_port: int, buffer_size: int):
-        self.local_ip
-        self.local_port
-        self.buffer_size
+        self.local_ip = local_ip
+        self.local_port = local_port
+        self.buffer_size = buffer_size
         self.udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-        self.udp_server_socket.bind(local_ip, local_port)
+        self.udp_server_socket.bind((self.local_ip, self.local_port))
         print("udp server up and listening")
 
     # idea make it async
@@ -31,8 +31,6 @@ class udp_handler:
         bytes_to_send = str.encode(send_message)
 
 
-
-
 class data_base_handler():
     def __init__():
         print("lol")
@@ -40,3 +38,10 @@ class data_base_handler():
 
 def __main__():
     print("starting server")
+    udplistener = udp_handler("127.0.0.1", 7501, 1024)
+    print("listening on 127.0.0.1 port 7501")
+    while (True):
+        udplistener.recive_message()
+
+
+__main__()
