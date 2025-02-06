@@ -4,12 +4,12 @@
             "previewLimit": 50,
             "server": "localhost",
             "port": 5432,
-            "askForPassword": true,
             "driver": "PostgreSQL",
-            "name": "PG Local",
+            "name": "Database",
             "database": "photon",
             "username": "postgres",
-            "connectionTimeout": 30
+            "connectionTimeout": 40,
+            "password": ""
         }
     ]
 }
