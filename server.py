@@ -41,6 +41,7 @@ class data_base_handler():
 
 def __main__():
     print("starting server")
+    # create udp handler with udp_handler(ip, port, buffer size)
     udpexample = udp_handler("127.0.0.1", 7501, 1024)
     print("listening on 127.0.0.1 port 7501")
     while (True):
