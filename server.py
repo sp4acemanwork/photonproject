@@ -19,14 +19,14 @@ class udp_handler:
 
     # idea make it async
     def recive_message(self):
-        bytes_address_pair = self.udp_server_socket.recv(self.buffer_size)
+        bytes_address_pair = self.udp_server_socket.recvfrom(self.buffer_size)
         message = bytes_address_pair[0]
         address = bytes_address_pair[1]
         client_msg = "message from client:{}".format(message)
         client_ip = "client ip:{}".format(address)
         print(client_msg)
         print(client_ip)
-        #self.send_message(message, address)
+        self.send_message("hi from server", address)
 
     def send_message(self, send_message, address):
 
@@ -45,7 +45,6 @@ def __main__():
     print("listening on 127.0.0.1 port 7501")
     while (True):
         udplistener.recive_message()
-        #udp_handler.send_message("hi")
 
 
 __main__()
