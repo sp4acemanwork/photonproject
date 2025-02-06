@@ -29,7 +29,6 @@ class udp_handler:
         return bytes_address_pair
 
     def send_message(self, send_message: str, address: tuple[str, str]):
-
         bytes_to_send = str.encode(send_message)
         self.udp_server_socket.sendto(bytes_to_send, address)
 
