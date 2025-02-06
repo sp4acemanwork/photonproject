@@ -18,7 +18,7 @@ class udp_handler:
         print("udp server up and listening")
 
     # idea make it async
-    def recive_message(self):
+    def recive_message(self) -> tuple[str, tuple[str, str]]:
         bytes_address_pair = self.udp_server_socket.recvfrom(self.buffer_size)
         message = bytes_address_pair[0]
         address = bytes_address_pair[1]
@@ -26,9 +26,9 @@ class udp_handler:
         client_ip = "client ip:{}".format(address)
         print(client_msg)
         print(client_ip)
-        self.send_message("hi from server", address)
+        return bytes_address_pair
 
-    def send_message(self, send_message, address):
+    def send_message(self, send_message: str, address: tuple[str, str]):
 
         bytes_to_send = str.encode(send_message)
         self.udp_server_socket.sendto(bytes_to_send, address)
@@ -41,10 +41,14 @@ class data_base_handler():
 
 def __main__():
     print("starting server")
-    udplistener = udp_handler("127.0.0.1", 7501, 1024)
+    udpexample = udp_handler("127.0.0.1", 7501, 1024)
     print("listening on 127.0.0.1 port 7501")
     while (True):
-        udplistener.recive_message()
+        # message and address gets returned as a tuple
+        addandmes = udpexample.recive_message()
+        # there's a tuple in a tuple with the format [address, port] that this function takes for the address
+        # call this function with the format send_message("message", tuple[address:str, port:str])
+        udpexample.send_message("test", addandmes[1])
 
 
 __main__()
