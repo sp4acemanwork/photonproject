@@ -26,9 +26,12 @@ class udp_handler:
         client_ip = "client ip:{}".format(address)
         print(client_msg)
         print(client_ip)
+        #self.send_message(message, address)
 
-    def send_message(self, send_message):
+    def send_message(self, send_message, address):
+
         bytes_to_send = str.encode(send_message)
+        self.udp_server_socket.sendto(bytes_to_send, address)
 
 
 class data_base_handler():
@@ -42,6 +45,7 @@ def __main__():
     print("listening on 127.0.0.1 port 7501")
     while (True):
         udplistener.recive_message()
+        #udp_handler.send_message("hi")
 
 
 __main__()
