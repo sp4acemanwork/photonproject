@@ -21,7 +21,7 @@ class handler:
         print("changing ip and port from ip:{} port{} -> ip:{} port{}".format(self.local_ip, self.local_port, local_ip, local_port))
     
     
-
+    
 
 
 class udp_handler:
@@ -34,20 +34,6 @@ class udp_handler:
         print("udp server up and listening")
 
     # idea make it async
-    def recive_message(self) -> tuple[str, tuple[str, str]]:
-        bytes_address_pair = self.udp_server_socket.recvfrom(self.buffer_size)
-        message = bytes_address_pair[0]
-        address = bytes_address_pair[1]
-        client_msg = "message from client:{}".format(message)
-        client_ip = "client ip:{}".format(address)
-        print(client_msg)
-        print(client_ip)
-        return bytes_address_pair
-
-    def send_message(self, send_message: str, address: tuple[str, str]):
-        bytes_to_send = str.encode(send_message)
-        self.udp_server_socket.sendto(bytes_to_send, address)
-
 
 class data_base_handler():
     def __init__():
