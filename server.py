@@ -7,13 +7,19 @@ class tcp_handler:
     def __init__(self):
         print("lol")
 
+
 class handler:
     def __init__(self, local_ip: str, local_port: int, buffer_size: int):
         self.local_ip = local_ip
         self.local_port = local_port
         self.buffer_size = buffer_size
         self.udp_handler = udp_handler(self.local_ip, self.local_port, self.buffer_size)
-    def changesocket(self)
+        print("lol")
+
+    # change ip and port
+    def change_socket(self, local_ip: str, local_port: int):
+        print("lol")
+
 
 
 class udp_handler:
