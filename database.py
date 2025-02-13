@@ -5,6 +5,7 @@ class Database:
     def __init__(self) -> None:
         self.__conn = psycopg2.connect(dbname="photon", user="postgres", host="localhost",  port="5432")
         self.cur = self.__conn.cursor()
+        
 
         
     # add a player 
@@ -30,11 +31,23 @@ class Database:
 
     # print database
     def print_table(self) -> None:
+        print("{:10.10} {:20.20}".format("PLayer ID", "Username"))
         self.cur.execute("SELECT * FROM players LIMIT 5;")
         rows = self.cur.fetchall()
 
         for row in rows:
-            print(row)
+            print(f"{row[0]: <10} {row[1]:<20} \n")
+
+     # print database
+    def __str__(self) -> None:
+        print("{:10.10} {:20.20}".format("PLayer ID", "Username"))
+        output = ""
+        self.cur.execute("SELECT * FROM players LIMIT 5;")
+        rows = self.cur.fetchall()
+        for row in rows:
+            output += f"{row[0]: <10} {row[1]:<20} \n"
+        return output
+
 
 
     def close(self) -> None:
@@ -42,9 +55,15 @@ class Database:
         self.cur.close()
         self.__conn.close()
 
+    def __len__(self) -> int:
+        self.cur.execute("select count(*) from players")
+        rows = self.cur.fetchall()
+        return (rows[0][0])
+    
+
 #player = (4, 'james')
-test = Database()
+# test = Database()
 # test.delete_player(4)
-test.print_table()
-test.get_player(1)
+# test.print_table()
+# test.get_player(1)
 # test.close()
