@@ -20,6 +20,13 @@ class handler:
     def change_socket(self, local_ip: str, local_port: int):
         print("changing ip and port from ip:{} port{} -> ip:{} port{}".format(self.local_ip, self.local_port, local_ip, local_port))
 
+    # call thing with address to send?
+    # this function will call the add player to database then transit the equipment codes for player?
+
+    def add_player(self, player_name: str, player_id: str, address_to_send: tuple[str, tuple[str, str]]):
+        data_base_handler.add_player(player_name, player_id)
+        self.udp_handler.send_message("equipment codes?", ["127.0.0.1", "someport"])
+
 
 class udp_handler:
     def __init__(self, local_ip: str, local_port: int, buffer_size: int):
@@ -49,6 +56,9 @@ class udp_handler:
 class data_base_handler():
     def __init__():
         print("lol")
+
+    def add_player(player_name: str, player_id: str):
+        print("placeholder fucntion!! player name {} player id{}".format(player_name, player_id))
 
 
 def __main__():
