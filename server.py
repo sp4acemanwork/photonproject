@@ -1,3 +1,4 @@
+
 import socket
 
 # possibly handle client server com using tcp disscus with team
@@ -28,6 +29,7 @@ class handler:
         self.udp_handler.send_message("equipment codes?", ["127.0.0.1", "someport"])
 
 
+
 class udp_handler:
     def __init__(self, local_ip: str, local_port: int, buffer_size: int):
         self.local_ip = local_ip
@@ -51,14 +53,6 @@ class udp_handler:
     def send_message(self, send_message: str, address: tuple[str, str]):
         bytes_to_send = str.encode(send_message)
         self.udp_server_socket.sendto(bytes_to_send, address)
-
-
-class data_base_handler():
-    def __init__():
-        print("lol")
-
-    def add_player(player_name: str, player_id: str):
-        print("placeholder fucntion!! player name {} player id{}".format(player_name, player_id))
 
 
 def __main__():
