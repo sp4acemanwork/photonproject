@@ -14,6 +14,12 @@ class Database:
             VALUES (%s, %s);
             """, ( player_tuple[0], player_tuple[1]))
         self.__conn.commit()
+
+    def get_player(self, player_id: int) -> tuple[int, str] :
+        self.cur.execute(f"select * from players where id = {player_id}")
+        row = self.cur.fetchall()
+        player = (row[0][0], row[0][1])
+        return player
         
 
     # delete a player
@@ -37,7 +43,8 @@ class Database:
         self.__conn.close()
 
 #player = (4, 'james')
-# test = Database()
+test = Database()
 # test.delete_player(4)
-# test.print_table()
+test.print_table()
+test.get_player(1)
 # test.close()
