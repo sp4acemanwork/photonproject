@@ -1,6 +1,5 @@
-
 import socket
-
+from database import database_handler
 # possibly handle client server com using tcp disscus with team
 
 
@@ -24,10 +23,10 @@ class handler:
     # call thing with address to send?
     # this function will call the add player to database then transit the equipment codes for player?
 
-    def add_player(self, player_name: str, player_id: str, address_to_send: tuple[str, tuple[str, str]]):
-        data_base_handler.add_player(player_name, player_id)
+    def add_player(self, player_name: str, player_id: int, address_to_send: tuple[str, tuple[str, str]]):
+        database_handler.add_player([player_id, player_name])
         self.udp_handler.send_message("equipment codes?", ["127.0.0.1", "someport"])
-
+        database_handler.print_table()
 
 
 class udp_handler:
@@ -51,8 +50,12 @@ class udp_handler:
         return bytes_address_pair
 
     def send_message(self, send_message: str, address: tuple[str, str]):
-        bytes_to_send = str.encode(send_message)
-        self.udp_server_socket.sendto(bytes_to_send, address)
+        try:
+            bytes_to_send = str.encode(send_message)
+            self.udp_server_socket.sendto(bytes_to_send, address)
+        except:
+            print("error occured sending")
+
 
 
 def __main__():
