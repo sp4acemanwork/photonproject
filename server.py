@@ -19,9 +19,6 @@ class handler:
     # change ip and port
     def change_socket(self, local_ip: str, local_port: int):
         print("changing ip and port from ip:{} port{} -> ip:{} port{}".format(self.local_ip, self.local_port, local_ip, local_port))
-    
-    
-    
 
 
 class udp_handler:
