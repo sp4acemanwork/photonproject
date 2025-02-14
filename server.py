@@ -15,11 +15,11 @@ class handler:
         self.local_port_listen = local_port_listen
         self.local_port_send = local_port_send
         self.buffer_size = buffer_size
-        self.udp_handler_listen = udp_handler(self.local_ip, self.local_port_listen, self.buffer_size)
+        self.udp_handler = udp_handler(self.local_ip, self.local_port_listen, self.buffer_size)
 
     def start_game(self):
         print("printing values")
-        self.udp_handler_listen.send_message("202", [self.local_ip, self.local_port_send])
+        self.udp_handler.send_message("202", [self.local_ip, self.local_port_send])
 
     # change ip and port
     def change_socket(self, local_ip: str, local_port: int):
@@ -31,12 +31,12 @@ class handler:
     def add_player(self, player_name: str, player_id: int, equipment_id: int):
         # database_handler.add_player((player_id, player_name))
         test = (self.local_ip, self.local_port_send)
-        self.udp_handler_listen.send_message(str(equipment_id), test)
+        self.udp_handler.send_message(str(equipment_id), test)
         # add check for if user is in the table already
         # database_handler.print_table()
 
     def recive_message(self) -> tuple[str, str]:
-        return self.udp_handler_listen.recive_message()
+        return self.udp_handler.recive_message()
 
 
 # this class shouldn't be called directly rather use the functions that do the sending functions automatically
