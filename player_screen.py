@@ -3,11 +3,6 @@ from tkinter import *
 import customtkinter
 
 
-
-
-
-
-
 app = customtkinter.CTk()
 
 app.geometry("500x400")
