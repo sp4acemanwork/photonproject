@@ -8,6 +8,7 @@ class tcp_handler:
         print("lol")
 
 
+# you should do all main functions of the back end through this class
 class handler:
     def __init__(self, local_ip: str, local_port: int, buffer_size: int):
         self.local_ip = local_ip
@@ -23,12 +24,13 @@ class handler:
     # call thing with address to send?
     # this function will call the add player to database then transit the equipment codes for player?
 
-    def add_player(self, player_name: str, player_id: int, address_to_send: tuple[str, tuple[str, str]]):
+    def add_player(self, player_name: str, player_id: int, equipment_id: int):
         database_handler.add_player([player_id, player_name])
-        self.udp_handler.send_message("equipment codes?", ["127.0.0.1", "someport"])
+        self.udp_handler.send_message(equipment_id, [self.local_ip, self.local_port])
         database_handler.print_table()
 
 
+# this class shouldn't be called directly rather use the functions that do the sending functions automatically
 class udp_handler:
     def __init__(self, local_ip: str, local_port: int, buffer_size: int):
         self.local_ip = local_ip
@@ -39,6 +41,7 @@ class udp_handler:
         print("udp server up and listening")
 
     # idea make it async
+    # this function waits for a response from the listening port and then returns a tuple with [ip,port]
     def recive_message(self) -> tuple[str, tuple[str, str]]:
         bytes_address_pair = self.udp_server_socket.recvfrom(self.buffer_size)
         message = bytes_address_pair[0]
@@ -49,6 +52,7 @@ class udp_handler:
         print(client_ip)
         return bytes_address_pair
 
+    # this function takes -> (message, tuple:[ip, port])
     def send_message(self, send_message: str, address: tuple[str, str]):
         try:
             bytes_to_send = str.encode(send_message)
@@ -57,18 +61,9 @@ class udp_handler:
             print("error occured sending")
 
 
-
+# test class for debugging purposes
 def __main__():
-    print("starting server")
-    # create udp handler with udp_handler(ip, port, buffer size)
-    udpexample = udp_handler("127.0.0.1", 7501, 1024)
-    print("listening on 127.0.0.1 port 7501")
-    while (True):
-        # message and address gets returned as a tuple
-        addandmes = udpexample.recive_message()
-        # there's a tuple in a tuple with the format [address, port] that this function takes for the address
-        # call this function with the format send_message("message", tuple[address:str, port:str])
-        udpexample.send_message("test", addandmes[1])
+    print("starting test")
 
 
 __main__()
