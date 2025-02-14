@@ -10,12 +10,16 @@ class tcp_handler:
 
 # you should do all main functions of the back end through this class
 class handler:
-    def __init__(self, local_ip: str, local_port: int, buffer_size: int):
+    def __init__(self, local_ip: str, local_port_listen: int, local_port_send: int, buffer_size: int):
         self.local_ip = local_ip
-        self.local_port = local_port
+        self.local_port_listen = local_port_listen
+        self.local_port_send = local_port_send
         self.buffer_size = buffer_size
-        self.udp_handler = udp_handler(self.local_ip, self.local_port, self.buffer_size)
-        print("lol")
+        self.udp_handler_listen = udp_handler(self.local_ip, self.local_port_listen, self.buffer_size)
+
+    def start_game(self):
+        print("printing values")
+        self.udp_handler_listen.send_message("202", [self.local_ip, self.local_port_send])
 
     # change ip and port
     def change_socket(self, local_ip: str, local_port: int):
@@ -25,9 +29,14 @@ class handler:
     # this function will call the add player to database then transit the equipment codes for player?
 
     def add_player(self, player_name: str, player_id: int, equipment_id: int):
-        database_handler.add_player([player_id, player_name])
-        self.udp_handler.send_message(equipment_id, [self.local_ip, self.local_port])
-        database_handler.print_table()
+        # database_handler.add_player((player_id, player_name))
+        test = (self.local_ip, self.local_port_send)
+        self.udp_handler_listen.send_message(str(equipment_id), test)
+        # add check for if user is in the table already
+        # database_handler.print_table()
+
+    def recive_message(self) -> tuple[str, str]:
+        return self.udp_handler_listen.recive_message()
 
 
 # this class shouldn't be called directly rather use the functions that do the sending functions automatically
@@ -57,13 +66,22 @@ class udp_handler:
         try:
             bytes_to_send = str.encode(send_message)
             self.udp_server_socket.sendto(bytes_to_send, address)
-        except:
-            print("error occured sending")
+        except Exception as e:
+            print("error occured sending {}".format(e))
 
 
 # test class for debugging purposes
 def __main__():
     print("starting test")
+
+    test = handler("127.0.0.1", 7501, 7500, 1024)
+    test.start_game()
+    while (True):
+
+        user_name = input("enter name: ")
+        user_id = int(input("enter id: "))
+        user_eqid = int(input("enter equipment id: "))
+        test.add_player(user_name, user_id, user_eqid)
 
 
 __main__()
