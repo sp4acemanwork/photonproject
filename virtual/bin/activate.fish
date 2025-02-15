@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/student/SE/photonproject/virtual
+set -gx VIRTUAL_ENV /home/student/Desktop/PhotonProject/photonproject/virtual
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH
