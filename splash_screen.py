@@ -2,38 +2,33 @@
 # from tkinter import PhotoImage
 from tkinter import *
 from PIL import ImageTk, Image
-import customtkinter
-
-
-
-
-splash_root = customtkinter.CTk()
+import customtkinter as ctk
+from customtkinter import CTkImage, CTkLabel
+from player_screen import Test
+splash_root = ctk.CTk()
 splash_root.title("Photon Game")
-splash_root.iconbitmap('c:/Users/Tonyo/software/splash_icon.ico')
-
-splash_root.state('zoomed')
-
-# splash_label = Label(splash_root, )
+splash_root.geometry("500x400")
+splash_root.attributes("-fullscreen", True)
 
 
-#image = PhotoImage(file="splash_screen.png")
-#image_label = tkinter.Label(splash_root, image = image)
-#image_label.pack()
+screen_width = splash_root.winfo_screenwidth()
+screen_height = splash_root.winfo_screenheight()
 
-#Create our image 
-photon = Image.open("c:/Users/Tonyo/software/splash_screen.png").resize((600,400))
-photon = ImageTk.PhotoImage(photon)
 
-#Create Label
-photon_label = Label(splash_root, image=photon)
-photon_label.pack(pady=20)
 
-def player_screen():
-    player_window = Tk()
-    #splash_root.destroy()
-    player_window.title("Main Window - Player Screen")
-    splash_root.iconbitmap('c:/Users/Tonyo/software/splash_icon.ico')
-    player_window.geometry("500x550")
+image = Image.open("/home/student/SE/photonproject/assets/images/logo.jpg")
+photo = CTkImage(light_image=image, dark_image=image)
+resized_image = CTkImage(light_image=image, size=(screen_width,screen_height))
 
-splash_root.after(3000, player_screen)
-mainloop()
+image_label = CTkLabel(splash_root, image=resized_image, text="" )
+image_label.pack(expand=True)
+
+
+splash_root.bind("<Escape>", lambda e: splash_root.destroy())
+
+
+def next_screen():
+    Test()
+    splash_root.destroy
+splash_root.after(3000, next_screen )
+splash_root.mainloop()
