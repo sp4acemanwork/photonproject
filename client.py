@@ -1,21 +1,27 @@
 import socket
 
-msgFromClient = "Hello UDP Server"
-bytesToSend = str.encode(msgFromClient)
-serverAddressPort = ("127.0.0.1, 7501")
-bufferSize = 1024
+class udp_client:
+    def __init__(self, server_ip: str, server_port: int, buffer_size: int):
+        self.server_ip = server_ip
+        self.server_port = server_port
+        self.buffer_size = buffer_size
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        print(f"UDP client created for server {self.server_ip}:{self.server_port}")
 
-# Create a UDP socket at client side
-UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+    def send_data(self, data: bytes):
+        self.sock.sendto(data, (self.server_ip, self.server_port))
+        print(f"Sent message: {data} to {self.server_ip}:{self.server_port}")
 
-# Send to server using created UDP socket
-UDPClientSocket.sendto(bytesToSend, serverAddressPort)
+    def receive_data(self):
+        data, addr = self.sock.recvfrom(self.buffer_size)
+        print(f"Received message: {data} from {addr}")
+        return data, addr
 
-msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-msg = "Message from Server {}".format(msgFromServer[0])
+def __main__():
+    print("starting client")
+    udp_client1 = udp_client("127.0.0.1", 7501, 1024)
+    udp_client1.send_data(b"Add Player")
+    data, addr = udp_client1.receive_data()
+    print(f"Equipment codes from Server: {data}")
 
-print(msg)
-
-# class udp_client:
-#     # Constructor
-#     def __init__(self, server_ip:str, server_port: int, buffer_size: int):
+__main__()

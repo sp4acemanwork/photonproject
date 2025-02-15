@@ -159,19 +159,31 @@ class Test:
         add_values = customtkinter.CTkButton(app, text="Confirm Info", command = get_entry_value)
         add_values.grid(row = 2, column = 11)
 
-
-        
-        
-        
-
-
-
-
-                
-
-
-
-
-
+        change_network_button = customtkinter.CTkButton(app, text="Change Network", command=self.change_network)
+        change_network_button.grid(row=20, column=10, pady=20, columnspan=3)
 
         app.mainloop()
+
+    def change_network(self):
+        # Create a new window to enter network details
+        network_window = Toplevel()
+        network_window.title("Change Network")
+        network_window.geometry("300x200")
+
+        Label(network_window, text="New IP:").pack(pady=5)
+        ip_entry = Entry(network_window)
+        ip_entry.pack(pady=5)
+
+        Label(network_window, text="New Port:").pack(pady=5)
+        port_entry = Entry(network_window)
+        port_entry.pack(pady=5)
+
+        def submit_network():
+            new_ip = ip_entry.get()
+            new_port = int(port_entry.get())
+            print(f"Changing network to IP: {new_ip}, Port: {new_port}")
+            self.udp_handler.change_socket(new_ip, new_port)
+            network_window.destroy()
+
+        submit_button = customtkinter.CTkButton(network_window, text="Submit", command=submit_network)
+        submit_button.pack(pady=20)

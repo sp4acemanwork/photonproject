@@ -34,8 +34,3 @@ def next_screen():
     splash_root.destroy()
 splash_root.after(3000, next_screen )
 splash_root.mainloop()
-
-
-
-
-
