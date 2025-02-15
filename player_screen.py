@@ -137,15 +137,32 @@ class Test:
         list_of_id_and_names = []
 
         def get_entry_value():
-            for item in range(2):
+
+            for item in range(15):
+
                 new_id = player_id[item].get()
                 print("Entry value:", new_id)
                 new_name = player_name[item].get()
-                list_of_id_and_names.append((new_id, new_name))
-            print(f"this is the list of tuples needed: {list_of_id_and_names}")
+                temp_tuple = (new_id, new_name)
+                if temp_tuple not in list_of_id_and_names:
+                    list_of_id_and_names.append((new_id, new_name))
+            
+
+            for i in list_of_id_and_names:
+                if i[0] == '' and i[1] == '':
+                    list_of_id_and_names.pop(list_of_id_and_names.index(i))
+
+            print(f"Updated list of names and ids: {list_of_id_and_names}")
+
+            
 
         add_values = customtkinter.CTkButton(app, text="Confirm Info", command = get_entry_value)
         add_values.grid(row = 2, column = 11)
+
+
+        
+        
+        
 
 
 

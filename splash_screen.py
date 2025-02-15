@@ -16,7 +16,7 @@ screen_height = splash_root.winfo_screenheight()
 
 
 
-image = Image.open("/home/student/SE/photonproject/assets/images/logo.jpg")
+image = Image.open("/home/student/photonproject/assets/images/logo.jpg")
 photo = CTkImage(light_image=image, dark_image=image)
 resized_image = CTkImage(light_image=image, size=(screen_width,screen_height))
 
