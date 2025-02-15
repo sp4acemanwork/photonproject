@@ -1,12 +1,4 @@
-
 import socket
-
-# possibly handle client server com using tcp disscus with team
-
-
-class tcp_handler:
-    def __init__(self):
-        print("lol")
 
 
 class handler:
@@ -53,6 +45,11 @@ class udp_handler:
     def send_message(self, send_message: str, address: tuple[str, str]):
         bytes_to_send = str.encode(send_message)
         self.udp_server_socket.sendto(bytes_to_send, address)
+
+
+class data_base_handler():
+    def __init__():
+        print("lol")
 
 
 def __main__():
