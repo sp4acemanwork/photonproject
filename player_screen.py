@@ -5,7 +5,6 @@ import customtkinter
 
 class Test:
     def __init__(self):
-        
 
         app = customtkinter.CTk()
 
@@ -14,11 +13,11 @@ class Test:
 
         set_appearance_mode("dark")
 
-        main_label = customtkinter.CTkLabel(app, width = 10, compound = "center", anchor = "center", text = "PHOTON", font = ('Roboto', 30))
-        l1_red = Label(app, text = "Player ID")
-        l2_red = Label(app, text = "Player Name")
-        l1_green = Label(app, text = "Player ID")
-        l2_green = Label(app, text = "Player Name")
+        main_label = customtkinter.CTkLabel(app, width=10, compound="center", anchor="center", text="PHOTON", font=('Roboto', 30))
+        l1_red = Label(app, text="Player ID")
+        l2_red = Label(app, text="Player Name")
+        l1_green = Label(app, text="Player ID")
+        l2_green = Label(app, text="Player Name")
 
         main_label.grid(row = 0, column = 10)
 
@@ -177,7 +176,7 @@ class Test:
         Label(network_window, text="New Port:").pack(pady=5)
         port_entry = Entry(network_window)
         port_entry.pack(pady=5)
-
+        # BAD DO NOT DEFINE FUNCTIONS IN FUNCTIONS
         def submit_network():
             new_ip = ip_entry.get()
             new_port = int(port_entry.get())

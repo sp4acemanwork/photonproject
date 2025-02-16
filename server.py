@@ -11,6 +11,7 @@ class handler:
         self.buffer_size = buffer_size
         # bind to listen for incoming traffic
         self.udp_handler = udp_handler("127.0.0.1", self.local_port_listen, self.buffer_size)
+        self.database = database_handler()
 
     def start_game(self):
         print("printing values")
@@ -28,7 +29,8 @@ class handler:
         test = (self.target_ip, self.local_port_send)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
-        database_handler.print_table()
+        self.database.add_player(tuple(player_id, player_name))
+        self.database.print_table()
 
     def recive_message(self) -> tuple[str, str]:
         return self.udp_handler.recive_message()

@@ -4,10 +4,7 @@ reqpackeges=("python3-venv" "libpq-dev" "python3-dev" "python3-tk")
 set -e 
 
 
-
 checkpackeges() {
-  reqpackages=("python3-venv" "libpq-dev" "python3-dev" "python3-tk")
-
 # Flag to determine if we need to update
   needs_update=false
 
@@ -39,32 +36,32 @@ checkpackeges() {
 }
 echo "checking for req apt packages"
 
+
 checkpackeges
 
 start_env() {
   source virtual/bin/activate
 }
 
+
 create_env() {
   python3 -m venv virtual
 }
 
+
 echo "checking to see if venv exitst..."
 
 if [ -d "./virtual" ]; then
-  echo "env exits starting env"
+  echo "env exists starting env"
   start_env
 
 else
 
-  echo "env does not exits createing env and starting "
+  echo "env does not exists createing env and starting "
   create_env
   start_env
 
 fi
-
-
-
 
 echo "checking for req pip packages"
 
@@ -73,5 +70,4 @@ while IFS= read -r line; do
   pip install $line
 done < "$reqfile"
 
-
-python3 ./splash_screen.py
+python3 ./server.py

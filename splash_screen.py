@@ -22,15 +22,19 @@ image_path = os.path.join(os.path.dirname(__file__), "assets/images/logo.jpg")
 image = Image.open(image_path)
 
 photo = CTkImage(light_image=image, dark_image=image)
-resized_image = CTkImage(light_image=image, size=(screen_width,screen_height))
+resized_image = CTkImage(light_image=image, size=(screen_width, screen_height))
 
-image_label = CTkLabel(splash_root, image=resized_image, text="" )
+image_label = CTkLabel(splash_root, image=resized_image, text="")
 image_label.pack(expand=True)
 
 splash_root.bind("<Escape>", lambda e: splash_root.destroy())
 
+
 def next_screen():
     Test()
     splash_root.destroy()
-splash_root.after(3000, next_screen )
+
+
+splash_root.after(3000, next_screen)
 splash_root.mainloop()
+
