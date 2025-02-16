@@ -1,9 +1,9 @@
-this is the photon project for Brain RJ Tony Elmer and James
-lol test from brian test from james vm pluhh
+James add the instruction here:
 
 
-this is a test from bryan charles williams
-
-hello elmer made it hoorayyyyy - i know made a change in my own branch
-
-RAAAAAAAAAAAAH (RJ) 
+GitHub name           | Real Names
+RjGutierrezz          | Rover Juliann Gutierrez
+elmerpalencia         | Elmer Palencia
+Bwill0104             | Bryan Williams
+Stony4                | Tony Sanchez
+sp4acemanwork         | James Shufelt

@@ -1,5 +1,14 @@
 import socket
+<<<<<<< HEAD
+=======
 from database import database_handler
+# possibly handle client server com using tcp disscus with team
+
+
+class tcp_handler:
+    def __init__(self):
+        print("lol")
+>>>>>>> 7d838577a09258c6b5014c0f643a8594162ec864
 
 
 # you should do all main functions of the back end through this class
@@ -65,6 +74,15 @@ class udp_handler:
             print("error occured sending {}".format(e))
 
 
+<<<<<<< HEAD
+class data_base_handler():
+    def __init__():
+        print("lol")
+
+
+=======
+# test class for debugging purposes
+>>>>>>> 7d838577a09258c6b5014c0f643a8594162ec864
 def __main__():
     print("starting test")
 
