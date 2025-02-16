@@ -6,12 +6,33 @@ set -e
 
 
 checkpackeges() {
-  echo "checking for apt packages"
-  for pkg in "${packages[@]}"; do 
-    echo "checking for '$pkg'"
-    if ! dpkg -l | awk '{print $2}' | grep -q "^${pkg}$"; then 
-      echo "Package '$pkg' is not installed. Installing.."
-      sudo apt update 
+  reqpackages=("python3-venv" "libpq-dev" "python3-dev" "python3-tk")
+
+# Flag to determine if we need to update
+  needs_update=false
+
+  for pkg in "${reqpackages[@]}"; do
+    echo "Checking package: $pkg"  # Debugging output
+
+      # Check if package is installed
+      if ! dpkg -l | awk '{print $2}' | grep -qw "^${pkg}$"; then
+        echo "Package '$pkg' is NOT installed."
+        needs_update=true
+      else
+        echo "Package '$pkg' is already installed."
+      fi
+    done
+
+  # Run apt update only if a package is missing
+  if [ "$needs_update" = true ]; then
+    echo "Updating package lists..."
+    sudo apt update
+  fi
+
+  # Install missing packages
+  for pkg in "${reqpackages[@]}"; do
+    if ! dpkg -l | awk '{print $2}' | grep -qw "^${pkg}$"; then
+      echo "Installing '$pkg'..."
       sudo apt install -y "$pkg"
     fi
   done
