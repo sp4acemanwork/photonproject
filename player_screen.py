@@ -1,11 +1,13 @@
 from customtkinter import *
 from tkinter import *
 import customtkinter
-
+from server import handler
 
 class Test:
     def __init__(self):
+
         
+        self.handlerTest = handler("127.0.0.1", 7502, 7504, 1024)
 
         app = customtkinter.CTk()
 
@@ -153,7 +155,9 @@ class Test:
                     list_of_id_and_names.pop(list_of_id_and_names.index(i))
 
             print(f"Updated list of names and ids: {list_of_id_and_names}")
-
+            self.handlerTest.add_player(list_of_id_and_names[len(list_of_id_and_names) -1][1],
+                            list_of_id_and_names[len(list_of_id_and_names) -1][0], 
+                            list_of_id_and_names[len(list_of_id_and_names) -1][0])
             
 
         add_values = customtkinter.CTkButton(app, text="Confirm Info", command = get_entry_value)

@@ -30,7 +30,8 @@ image_label.pack(expand=True)
 splash_root.bind("<Escape>", lambda e: splash_root.destroy())
 
 def next_screen():
-    Test()
     splash_root.destroy()
+    Test()
+    
 splash_root.after(3000, next_screen )
 splash_root.mainloop()

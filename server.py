@@ -11,7 +11,7 @@ class handler:
         self.buffer_size = buffer_size
         # bind to listen for incoming traffic
         self.udp_handler = udp_handler("127.0.0.1", self.local_port_listen, self.buffer_size)
-
+        self.database_handler = database_handler()
     def start_game(self):
         print("printing values")
         self.udp_handler.send_message("202", [self.target_ip, self.local_port_send])
@@ -24,11 +24,12 @@ class handler:
     # this function will call the add player to database then transit the equipment codes for player?
 
     def add_player(self, player_name: str, player_id: int, equipment_id: int):
-        # database_handler.add_player((player_id, player_name))
+        player_tuple = (player_id, player_name)
+        self.database_handler.add_player(player_tuple)
         test = (self.target_ip, self.local_port_send)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
-        database_handler.print_table()
+        self.database_handler.print_table()
 
     def recive_message(self) -> tuple[str, str]:
         return self.udp_handler.recive_message()
@@ -70,12 +71,12 @@ def __main__():
 
     test = handler("127.0.0.1", 7501, 7500, 1024)
     test.start_game()
-    while (True):
+    # while (True):
 
-        user_name = input("enter name: ")
-        user_id = int(input("enter id: "))
-        user_eqid = int(input("enter equipment id: "))
-        test.add_player(user_name, user_id, user_eqid)
+    #     user_name = input("enter name: ")
+    #     user_id = int(input("enter id: "))
+    #     user_eqid = int(input("enter equipment id: "))
+    #     test.add_player(user_name, user_id, user_eqid)
 
 
-__main__()
+# __main__()

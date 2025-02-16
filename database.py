@@ -3,11 +3,12 @@ import psycopg2
 
 class database_handler:
     def __init__(self) -> None:
-        self.__conn = psycopg2.connect(dbname="photon", user="postgres", host="localhost", port="5432")
+        self.__conn = psycopg2.connect(dbname="photon", user="postgres",password="1234", host="localhost", port="5432")
         self.cur = self.__conn.cursor()
 
     # add a player
-    def add_player(self, player_tuple: tuple[int, str]) -> None:
+    def add_player(self, player_tuple) -> None:
+        
         self.cur.execute("""
             INSERT INTO players (id, codename)
             VALUES (%s, %s);
@@ -55,9 +56,7 @@ class database_handler:
         rows = self.cur.fetchall()
         return (rows[0][0])
 
-# player = (4, 'james')
-# test = Database()
-# test.delete_player(4)
+# test = database_handler()
 # test.print_table()
 # test.get_player(1)
 # test.close()
