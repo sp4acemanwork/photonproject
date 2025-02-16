@@ -1,5 +1,5 @@
-!#/bin/bash
-
+#!/bin/bash
+reqfile=./requiremets.txt
 set -e 
 
 start_env() {
@@ -23,3 +23,12 @@ else
   start_env
 
 fi
+
+echo "checking for req packages"
+
+
+while IFS= read -r line; do
+  # Process the line here
+  pip install $line
+done < "$reqfile"
+
