@@ -41,11 +41,12 @@ fi
 echo "checking for req packages"
 
 
+checkpackeges
+
 while IFS= read -r line; do
   # Process the line here
   pip install $line
 done < "$reqfile"
 
-checkpackeges
 
 python3 ./splash_screen.py
