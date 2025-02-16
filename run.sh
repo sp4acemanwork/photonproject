@@ -6,6 +6,7 @@ set -e
 
 
 checkpackeges() {
+  echo "checking for apt packages"
   for pkg in "${packages[@]}"; do 
     if [[$(dpkg -l | grep -c "^il ${pkg}") -eq 0]]; then 
       echo "Package '$pkg' is not installed. Installing.."
