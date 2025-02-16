@@ -8,7 +8,7 @@ set -e
 checkpackeges() {
   echo "checking for apt packages"
   for pkg in "${packages[@]}"; do 
-    if [[ $(dpkg -l | grep -c "^ii ${pkg}") -eq 0 ]]; then 
+    if ! dpkg -l | awk '{print $2}' | grep -q "^${pkg}$"; then 
       echo "Package '$pkg' is not installed. Installing.."
       sudo apt update 
       sudo apt install -y "$pkg"
