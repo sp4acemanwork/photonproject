@@ -1,6 +1,20 @@
 #!/bin/bash
 reqfile=./requiremets.txt
+reqpackeges=("python3-venv" "libpq-dev" "python3-dev" "python3-tk")
 set -e 
+
+
+
+checkpackeges() {
+  for pkg in "${packages[@]}"; do 
+    if [[$(dpkg -l | grep -c "^il ${pkg}") -eq 0]]; then 
+      echo "Package '$pkg' is not installed. Installing.."
+      sudo apt update 
+      sudo apt install -y "$pkg"
+    fi
+  done
+}
+
 
 start_env() {
   source virtual/bin/activate
@@ -32,3 +46,6 @@ while IFS= read -r line; do
   pip install $line
 done < "$reqfile"
 
+checkpackeges
+
+python3 ./splash_screen.py
