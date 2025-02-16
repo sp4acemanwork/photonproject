@@ -37,7 +37,9 @@ checkpackeges() {
     fi
   done
 }
+echo "checking for req apt packages"
 
+checkpackeges
 
 start_env() {
   source virtual/bin/activate
@@ -61,10 +63,10 @@ else
 
 fi
 
-echo "checking for req packages"
 
 
-checkpackeges
+
+echo "checking for req pip packages"
 
 while IFS= read -r line; do
   # Process the line here
