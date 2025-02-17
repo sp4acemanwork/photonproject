@@ -54,13 +54,10 @@ echo "checking to see if venv exitst..."
 if [ -d "./virtual" ]; then
   echo "env exists starting env"
   start_env
-
 else
-
   echo "env does not exists createing env and starting "
   create_env
   start_env
-
 fi
 
 echo "checking for req pip packages"
