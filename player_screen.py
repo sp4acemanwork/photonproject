@@ -10,6 +10,7 @@ class Test:
         self.game_handler = handler("127.0.0.1", 7502, 7504, 1024)
         self.game_handler.start_game()
 
+        self.num_players = 0
         app = customtkinter.CTk()
 
         app.geometry("500x400")
@@ -140,11 +141,11 @@ class Test:
         list_of_id_and_names = []
 
         def get_entry_value():
-
+           
             for item in range(15):
 
                 new_id = player_id[item].get()
-                print("Entry value:", new_id)
+                # print("Entry value:", new_id)
                 new_name = player_name[item].get()
                 temp_tuple = (new_id, new_name)
                 if temp_tuple not in list_of_id_and_names:
@@ -157,7 +158,7 @@ class Test:
                 else:
                     self.game_handler.add_player(i[1],i[0],i[0])
 
-            print(f"Updated list of names and ids: {list_of_id_and_names}")
+            # print(f"Updated list of names and ids: {list_of_id_and_names}")
             
             
 
@@ -186,8 +187,8 @@ class Test:
         def submit_network():
             new_ip = ip_entry.get()
             new_port = int(port_entry.get())
-            if len(new_ip) == 0:
-                new_ip = self.game_handler.target_ip
+            if not new_port:
+                new_port = self.game_handler.local_port_send
             
             print(f"Changing network to IP: {new_ip}, Port: {new_port}")
             self.game_handler.change_socket(new_ip, new_port)

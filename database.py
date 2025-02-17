@@ -8,12 +8,14 @@ class database_handler:
 
     # add a player
     def add_player(self, player_tuple) -> None:
-        
-        self.cur.execute("""
-            INSERT INTO players (id, codename)
-            VALUES (%s, %s);
-            """, (player_tuple[0], player_tuple[1]))
-        self.__conn.commit()
+        if not self.player_exists(player_tuple[0]):
+            self.cur.execute("""
+                INSERT INTO players (id, codename)
+                VALUES (%s, %s);
+                """, (player_tuple[0], player_tuple[1]))
+            self.__conn.commit()
+        else:
+            self.update_player(player_tuple[0], player_tuple[1])
 
     def get_player(self, player_id: int) -> tuple[int, str]:
         self.cur.execute(f"select * from players where id = {player_id}")
@@ -38,7 +40,7 @@ class database_handler:
 
     # print database
     def __str__(self) -> None:
-        print("{:10.10} {:20.20}".format("PLayer ID", "Username"))
+        print("{:10.10} {:20.20}".format("Player ID", "Username"))
         output = ""
         self.cur.execute("SELECT * FROM players LIMIT 5;")
         rows = self.cur.fetchall()
@@ -60,6 +62,20 @@ class database_handler:
         self.cur.execute("DELETE FROM players")
         self.__conn.commit()
 
+    def player_exists(self, player_id: int) -> bool:
+        self.cur.execute("SELECT COUNT(*) FROM players WHERE id = %s;", (player_id,))
+        count = self.cur.fetchone()[0]
+        return count > 0
+    
+    def update_player(self, player_id: int, new_codename: str) -> None:
+        self.cur.execute("""
+            UPDATE players 
+            SET codename = %s 
+            WHERE id = %s;
+        """, (new_codename, player_id))
+        self.__conn.commit()
+
+   
 test = database_handler()
 test.clear()
 test.print_table()
