@@ -7,13 +7,6 @@ the script then will automatically install any req packages and then run the pro
 
 **IF IT ASKS FOR A PASSWORD TYPE "student" **
 
-GitHub name           | Real Names
-RjGutierrezz          | Rover Juliann Gutierrez
-elmerpalencia         | Elmer Palencia
-Bwill0104             | Bryan Williams
-Stony4                | Tony Sanchez
-sp4acemanwork         | James Shufelt
-
 |GitHub name           | Real Names|
 |---------------------|------------------------|
 |RjGutierrezz          | Rover Juliann Gutierrez|
