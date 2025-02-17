@@ -55,8 +55,13 @@ class database_handler:
         self.cur.execute("select count(*) from players")
         rows = self.cur.fetchall()
         return (rows[0][0])
+    
+    def clear(self):
+        self.cur.execute("DELETE FROM players")
+        self.__conn.commit()
 
 # test = database_handler()
+# test.clear()
 # test.print_table()
 # test.get_player(1)
 # test.close()
