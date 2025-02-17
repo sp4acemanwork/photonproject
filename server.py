@@ -10,7 +10,7 @@ class handler:
         self.local_port_send = local_port_send
         self.buffer_size = buffer_size
         # bind to listen for incoming traffic
-        self.udp_handler = udp_handler("127.0.0.1", self.local_port_listen, self.buffer_size)
+        self.udp_handler = udp_handler("127.0.0.1", self.local_port_send, self.buffer_size)
         self.database_handler = database_handler()
     def start_game(self):
         print("printing values")
@@ -18,7 +18,9 @@ class handler:
 
     # change ip and port
     def change_socket(self, target_ip: str, local_port: int):
-        print("changing ip and port from ip:{} port{} -> ip:{} port{}".format(self.target_ip, self.local_port, target_ip, local_port))
+        print("changing ip and port from ip:{} port:{} -> ip:{} port:{}".format(self.target_ip, self.local_port_send, target_ip, local_port))
+        self.udp_handler.target_ip = target_ip
+        self.udp_handler.local_port = local_port
 
     # call thing with address to send?
     # this function will call the add player to database then transit the equipment codes for player?
@@ -29,6 +31,7 @@ class handler:
         test = (self.target_ip, self.local_port_send)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
+        self.udp_handler.recive_message()
         self.database_handler.print_table()
 
     def recive_message(self) -> tuple[str, str]:
@@ -66,17 +69,17 @@ class udp_handler:
             print("error occured sending {}".format(e))
 
 
-def __main__():
-    print("starting test")
+# def __main__():
+#     print("starting test")
 
-    test = handler("127.0.0.1", 7501, 7500, 1024)
-    test.start_game()
-    # while (True):
+#     test = handler("127.0.0.1", 7501, 7500, 1024)
+#     test.start_game()
+#     # while (True):
 
-    #     user_name = input("enter name: ")
-    #     user_id = int(input("enter id: "))
-    #     user_eqid = int(input("enter equipment id: "))
-    #     test.add_player(user_name, user_id, user_eqid)
+#     #     user_name = input("enter name: ")
+#     #     user_id = int(input("enter id: "))
+#     #     user_eqid = int(input("enter equipment id: "))
+#     #     test.add_player(user_name, user_id, user_eqid)
 
 
-# __main__()
+# # __main__()

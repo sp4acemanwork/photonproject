@@ -7,7 +7,8 @@ class Test:
     def __init__(self):
 
         
-        self.handlerTest = handler("127.0.0.1", 7502, 7504, 1024)
+        self.game_handler = handler("127.0.0.1", 7502, 7504, 1024)
+        self.game_handler.start_game()
 
         app = customtkinter.CTk()
 
@@ -153,11 +154,11 @@ class Test:
             for i in list_of_id_and_names:
                 if i[0] == '' and i[1] == '':
                     list_of_id_and_names.pop(list_of_id_and_names.index(i))
+                else:
+                    self.game_handler.add_player(i[1],i[0],[0])
 
             print(f"Updated list of names and ids: {list_of_id_and_names}")
-            self.handlerTest.add_player(list_of_id_and_names[len(list_of_id_and_names) -1][1],
-                            list_of_id_and_names[len(list_of_id_and_names) -1][0], 
-                            list_of_id_and_names[len(list_of_id_and_names) -1][0])
+            
             
 
         add_values = customtkinter.CTkButton(app, text="Confirm Info", command = get_entry_value)
@@ -186,7 +187,7 @@ class Test:
             new_ip = ip_entry.get()
             new_port = int(port_entry.get())
             print(f"Changing network to IP: {new_ip}, Port: {new_port}")
-            self.udp_handler.change_socket(new_ip, new_port)
+            self.game_handler.change_socket(new_ip, new_port)
             network_window.destroy()
 
         submit_button = customtkinter.CTkButton(network_window, text="Submit", command=submit_network)
