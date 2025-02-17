@@ -30,7 +30,7 @@ class database_handler:
     # print database
     def print_table(self) -> None:
         print("{:10.10} {:20.20}".format("PLayer ID", "Username"))
-        self.cur.execute("SELECT * FROM players LIMIT 5;")
+        self.cur.execute("SELECT * FROM players ;")
         rows = self.cur.fetchall()
 
         for row in rows:
@@ -60,8 +60,8 @@ class database_handler:
         self.cur.execute("DELETE FROM players")
         self.__conn.commit()
 
-# test = database_handler()
-# test.clear()
-# test.print_table()
+test = database_handler()
+test.clear()
+test.print_table()
 # test.get_player(1)
 # test.close()

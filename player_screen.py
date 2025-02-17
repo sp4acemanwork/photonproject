@@ -155,7 +155,7 @@ class Test:
                 if i[0] == '' and i[1] == '':
                     list_of_id_and_names.pop(list_of_id_and_names.index(i))
                 else:
-                    self.game_handler.add_player(i[1],i[0],[0])
+                    self.game_handler.add_player(i[1],i[0],i[0])
 
             print(f"Updated list of names and ids: {list_of_id_and_names}")
             
@@ -186,6 +186,9 @@ class Test:
         def submit_network():
             new_ip = ip_entry.get()
             new_port = int(port_entry.get())
+            if len(new_ip) == 0:
+                new_ip = self.game_handler.target_ip
+            
             print(f"Changing network to IP: {new_ip}, Port: {new_port}")
             self.game_handler.change_socket(new_ip, new_port)
             network_window.destroy()

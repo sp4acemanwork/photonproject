@@ -19,8 +19,8 @@ class handler:
     # change ip and port
     def change_socket(self, target_ip: str, local_port: int):
         print("changing ip and port from ip:{} port:{} -> ip:{} port:{}".format(self.target_ip, self.local_port_send, target_ip, local_port))
-        self.udp_handler.target_ip = target_ip
-        self.udp_handler.local_port = local_port
+        self.udp_handler = udp_handler(target_ip, local_port, self.buffer_size)
+        
 
     # call thing with address to send?
     # this function will call the add player to database then transit the equipment codes for player?
