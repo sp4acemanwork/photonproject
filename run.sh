@@ -37,9 +37,6 @@ checkpackeges() {
     fi
   done
 }
-echo "checking for req apt packages"
-
-checkpackeges
 
 start_env() {
   source virtual/bin/activate
@@ -48,6 +45,10 @@ start_env() {
 create_env() {
   python3 -m venv virtual
 }
+
+echo "checking for req apt packages"
+
+checkpackeges
 
 echo "checking to see if venv exitst..."
 
@@ -63,15 +64,11 @@ else
 
 fi
 
-
-
-
 echo "checking for req pip packages"
 
 while IFS= read -r line; do
   # Process the line here
   pip install $line
 done < "$reqfile"
-
 
 python3 ./splash_screen.py
