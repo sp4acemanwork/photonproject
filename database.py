@@ -3,7 +3,8 @@ import psycopg2
 
 class database_handler:
     def __init__(self) -> None:
-        self.__conn = psycopg2.connect(dbname="photon", user="postgres",password="1234", host="localhost", port="5432")
+        self.__conn = psycopg2.connect(dbname="photon")
+        # self.__conn = psycopg2.connect(dbname="photon", user="postgres",password="1234", host="localhost", port="5432")
         self.cur = self.__conn.cursor()
 
     # add a player
