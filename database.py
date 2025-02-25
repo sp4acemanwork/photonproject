@@ -58,7 +58,7 @@ class database_handler:
         self.cur.execute("select count(*) from players")
         rows = self.cur.fetchall()
         return (rows[0][0])
-    
+
     def clear(self):
         self.cur.execute("DELETE FROM players")
         self.__conn.commit()
@@ -67,7 +67,7 @@ class database_handler:
         self.cur.execute("SELECT COUNT(*) FROM players WHERE id = %s;", (player_id,))
         count = self.cur.fetchone()[0]
         return count > 0
-    
+
     def update_player(self, player_id: int, new_codename: str) -> None:
         self.cur.execute("""
             UPDATE players 

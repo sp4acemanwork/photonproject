@@ -9,13 +9,12 @@ class handler:
         self.local_port_listen = local_port_listen
         self.local_port_send = local_port_send
         self.buffer_size = buffer_size
-        # bind to listen for incoming traffic
         self.udp_handler = udp_handler("127.0.0.1", self.local_port_send, self.buffer_size)
         self.database_handler = database_handler()
+
     def start_game(self):
         print("printing values")
         self.udp_handler.send_message("202", [self.target_ip, self.local_port_send])
-    
 
     # change ip and port
     def change_socket(self, new_target_ip: str, new_local_port: int):
@@ -24,12 +23,9 @@ class handler:
         # close original socket and set up new socket
         self.udp_handler.udp_server_socket.close()
         self.udp_handler.udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-        self.udp_handler.udp_server_socket.bind((new_target_ip,new_local_port))
-
+        self.udp_handler.udp_server_socket.bind((new_target_ip, new_local_port))
         self.target_ip = new_target_ip
         self.local_port_send = new_local_port
-
-        
 
     # call thing with address to send?
     # this function will call the add player to database then transit the equipment codes for player?
@@ -40,7 +36,6 @@ class handler:
         test = (self.target_ip, self.local_port_send)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
-        
         self.udp_handler.recive_message()
         self.database_handler.print_table()
 
