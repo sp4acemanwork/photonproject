@@ -5,21 +5,14 @@ from server import handler
 
 class Test:
     def __init__(self):
-
-        
         self.game_handler = handler("127.0.0.1", 7501, 7500, 1024)
         self.game_handler.start_game()
-
         self.num_players = 0
         self.app = customtkinter.CTk()
-
         self.app.geometry("500x400")
         self.app.attributes("-zoomed", True)
-
         set_appearance_mode("dark")
-
         self.app.bind("<Enter>", lambda e: self.get_entry_value())
-
 
         self.teams_data = {}
 
@@ -38,8 +31,6 @@ class Test:
         equipment_id.grid(row=2,column = col + 2)
         player_name.grid(row = 2, column = col + 3)
         
-
-
         # creates the player numbers
         player_num = []
         for i in range(15):
@@ -50,7 +41,6 @@ class Test:
             item.configure(state = "disabled")
             item.grid(row = num_row, column = col, pady = 2)
             num_row += 1
-
 
         # ceates entry fields for IDs and Names
         self.teams_data[team_name] = {"player_ids": [],"equpiment_ids": [], "player_names": []}
