@@ -31,7 +31,8 @@ splash_root.bind("<Escape>", lambda e: splash_root.destroy())
 
 def next_screen():
     splash_root.destroy()
-    Test()
+    player_screen = Test()
+    player_screen.main()
     
 splash_root.after(3000, next_screen )
 splash_root.mainloop()
