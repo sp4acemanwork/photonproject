@@ -3,172 +3,83 @@ from tkinter import *
 import customtkinter
 from server import handler
 
-class Test:
+class PlayerScreen:
     def __init__(self):
-
-        
-        self.game_handler = handler("127.0.0.1", 7502, 7504, 1024)
+        self.game_handler = handler("127.0.0.1", 7501, 7500, 1024)
         self.game_handler.start_game()
-
         self.num_players = 0
-        app = customtkinter.CTk()
-
-        app.geometry("500x400")
-        app.attributes("-zoomed", True)
-
+        self.app = customtkinter.CTk()
+        self.app.geometry("500x400")
+        self.app.attributes("-zoomed", True)
         set_appearance_mode("dark")
+        self.app.bind("<Enter>", lambda e: self.get_entry_value())
 
-        main_label = customtkinter.CTkLabel(app, width = 10, compound = "center", anchor = "center", text = "PHOTON", font = ('Roboto', 30))
-        l1_red = Label(app, text = "Player ID")
-        l2_red = Label(app, text = "Player Name")
-        l1_green = Label(app, text = "Player ID")
-        l2_green = Label(app, text = "Player Name")
+        self.teams_data = {}
 
+    def create(self, col: int, team_name: str, team_color: str):
+        # creates the labels
+        main_label = customtkinter.CTkLabel(self.app, width = 10, compound = "center", anchor = "center", text = "PHOTON", font = ('Roboto', 30))
+        player_id = Label(self.app, text = "Player ID")
+        equipment_id = Label(self.app, text = "Equipment ID")
+        player_name = Label(self.app, text = "Player Name")
+        team_label = customtkinter.CTkLabel(self.app, width = 10, text = team_name, font = ('Roboto', 20), text_color= team_color)
+
+        # writes the grid
         main_label.grid(row = 0, column = 10)
-
-        red_team_label = customtkinter.CTkLabel(app, width = 10, text = "RED TEAM", font = ('Roboto', 20), text_color= "red")
-        green_team_label = customtkinter.CTkLabel(app, width = 10, text = "GREEN TEAM", font = ('Roboto', 20), text_color = "green")
-
-
-
-
-        red_team_label.grid(row = 1, column = 0)
-        green_team_label.grid(row = 1, column = 12)
-
-        l1_red.grid(row = 2, column = 1)
-        l2_red.grid(row = 2, column = 2)
-        l1_green.grid(row = 2, column = 13)
-        l2_green.grid(row = 2, column = 14)
-
-
-
-        #CODE FOR GREEN TEAM NAME, ID, # AND TEXT BOXES
-        #Code for which player # you are on the green team
-        player_num_green = []
+        team_label.grid(row = 1, column = col)
+        player_id.grid(row = 2, column = col + 1)
+        equipment_id.grid(row=2,column = col + 2)
+        player_name.grid(row = 2, column = col + 3)
+        
+        # creates the player numbers
+        player_num = []
         for i in range(15):
-            player_num_green.append(CTkTextbox(app, width = 40, height = 10, border_width = 2, border_color = "green"))
-
-        green_num_row = 3
-
-
-        for item in player_num_green:
-            item.insert(index = "0.0", text = green_num_row - 2)
-            item.configure(state = "disabled")
-            item.grid(row = green_num_row, column = 12, pady = 2)
-            green_num_row += 1
-
-        #code for text box that can have an id input for green team
-        green_player_id = []
-
-        transmitting_id_green = []
-
-        for i in range(15):
-            green_player_id.append(Entry(app))
-
-            
-
-        player_id_row = 3
-
-        for item in green_player_id:
-            item.grid(row = player_id_row, column = 13, pady = 2)
-            player_id_row += 1
-
-
-        #CODE FOR RED TEAM NAME, ID, #, AND TEXT BOXES 
-        #Code for which player # you are on red team
-
-        player_num_red = []
-        for i in range(15):
-            player_num_red.append(CTkTextbox(app, width = 40, height = 10, border_width = 2, border_color = "red"))
-
+            player_num.append(CTkTextbox(self.app, width = 40, height = 10, border_width = 2, border_color = team_color))
         num_row = 3
-        for item in player_num_red:
+        for item in player_num:
             item.insert(index = "0.0", text = num_row - 2)
             item.configure(state = "disabled")
-            item.grid(row = num_row, column = 0, pady = 2)
+            item.grid(row = num_row, column = col, pady = 2)
             num_row += 1
 
-
-        #code for text box that can have a name input for green team
-        green_player_name = []
-
+        # ceates entry fields for IDs and Names
+        self.teams_data[team_name] = {"player_ids": [],"equpiment_ids": [], "player_names": []}
         for i in range(15):
-            green_player_name.append(Entry(app))
+            id_entry = Entry(self.app)
+            equipment_id_entry = Entry(self.app)
+            name_entry = Entry(self.app)
 
-        player_name_row = 3
+            id_entry.grid(row=3 + i, column=col + 1, pady=2)
+            equipment_id_entry.grid(row=3 + i, column=col + 2, padx=2, pady=2)
+            name_entry.grid(row=3 + i, column=col + 3, padx=2, pady=2)
 
-        for item in green_player_name:
-            item.grid(row = player_name_row, column = 14, padx = 2,pady = 2)
-            player_name_row += 1
+            self.teams_data[team_name]["player_ids"].append(id_entry)
+            self.teams_data[team_name]["equpiment_ids"].append(equipment_id_entry)
+            self.teams_data[team_name]["player_names"].append(name_entry)
 
-
-
-
-
-        #red team random generated IDs
-        transmitting_ids_red = []
-
-        #code for text box that can have an id input for red team
-        player_id = []
-
-        for item  in range(15):
-
-            player_id.append(Entry(app))
-
-
-
-        player_id_row = 3
-
-        for item in player_id:
-            item.grid(row = player_id_row, column = 1, pady = 2)
-            player_id_row += 1
-
-
-        #code for player to put in their player name on read team
-
-        player_name = []
-
-        for i in range(15):
-            player_name.append(Entry(app))
-
-        player_name_row = 3
-
-        for item in player_name:
-            item.grid(row = player_name_row, column = 2, padx = 2,pady = 2)
-            player_name_row += 1
-
-
-        list_of_id_and_names = []
-
-        def get_entry_value():
-           
-            for item in range(15):
-
-                new_id = player_id[item].get()
-                # print("Entry value:", new_id)
-                new_name = player_name[item].get()
-                temp_tuple = (new_id, new_name)
-                if temp_tuple not in list_of_id_and_names:
-                    list_of_id_and_names.append((new_id, new_name))
             
 
-            for i in list_of_id_and_names:
-                if i[0] == '' and i[1] == '':
-                    list_of_id_and_names.pop(list_of_id_and_names.index(i))
-                else:
-                    self.game_handler.add_player(i[1],i[0],i[0])
+    def get_entry_value(self):
+        self.list_of_id_and_names = []
 
-            # print(f"Updated list of names and ids: {list_of_id_and_names}")
-            
-            
+        for team, data in self.teams_data.items():
+            for  id_entry,eqid_entry, name_entry in zip(data["player_ids"],data["equpiment_ids"], data["player_names"]):
+                new_id = id_entry.get()
+                new_eqid = eqid_entry.get()
+                new_name = name_entry.get()
 
-        add_values = customtkinter.CTkButton(app, text="Confirm Info", command = get_entry_value)
+                if new_id or new_name or new_eqid:  # Ignore empty entries
+                    self.list_of_id_and_names.append((new_id, new_eqid, new_name))
+                    self.game_handler.add_player(new_name, new_id, new_eqid)   
+
+        
+        
+    def buttons(self):
+        add_values = customtkinter.CTkButton(self.app, text="Confirm Info", command = self.get_entry_value)
         add_values.grid(row = 2, column = 11)
 
-        change_network_button = customtkinter.CTkButton(app, text="Change Network", command=self.change_network)
+        change_network_button = customtkinter.CTkButton(self.app, text="Change Network", command=self.change_network)
         change_network_button.grid(row=20, column=10, pady=20, columnspan=3)
-
-        app.mainloop()
 
     def change_network(self):
         # Create a new window to enter network details
@@ -196,3 +107,10 @@ class Test:
 
         submit_button = customtkinter.CTkButton(network_window, text="Submit", command=submit_network)
         submit_button.pack(pady=20)
+
+
+    def main(self):
+        self.create(0, "RED TEAM", "red" )
+        self.create(12, "GREEN TEAM", "green" )
+        self.buttons()
+        self.app.mainloop()
