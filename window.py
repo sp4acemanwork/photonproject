@@ -12,12 +12,11 @@ class window:
         testlabel = tk.Label(self.window, text='test')
         testlabel.pack()
         test2.pack()
-        # all items that are drawn on this page go here
         self.window_elements = {
             "test": tk.Button(self.window, text="test", width=10, command=self.window.destroy),
+            "test1": tk.Button(self.window, text="test", width=10, command=self.window.destroy),
             "test2": tk.Button(self.window, text="test", width=10, command=self.window.destroy),
-            "test3": tk.Button(self.window, text="test", width=10, command=self.window.destroy),
-            "test4": tk.Button(self.window, text="test", width=10, command=self.window.destroy)
+            "test3": tk.Button(self.window, text="test", width=10, command=self.window.destroy)
 
         }
 
