@@ -58,6 +58,13 @@ class PlayerScreen:
             self.teams_data[team_name]["player_names"].append(name_entry)
 
             
+    def delete_entries(self):
+        for item in self.teams_data["player_ids"]:
+            item.delete(0, customtkinter.END)
+        for item in self.teams_data["equipment_ids"]:
+            item.delete(0, customtkinter.END)
+        for item in self.teams_data["player_names"]:
+            item.delete(0, customtkinter.END)
 
     def get_entry_value(self):
         self.list_of_id_and_names = []
@@ -80,6 +87,9 @@ class PlayerScreen:
 
         change_network_button = customtkinter.CTkButton(self.app, text="Change Network", command=self.change_network)
         change_network_button.grid(row=20, column=10, pady=20, columnspan=3)
+
+        delete_all_entries = customtkinter.CTkButton(self.app, text = "Delete Entries", command = self.delete_entries)
+        delete_all_entries.grid(row = 3, column = 11)
 
     def change_network(self):
         # Create a new window to enter network details
