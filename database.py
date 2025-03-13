@@ -11,6 +11,7 @@ class database_handler:
             self.cur = self.__conn.cursor()
         except psycopg2.OperationalError:
             self.debug = True 
+            print("WARNING DATABASE IS NOT OPERATIANAL ON DEBUG MODE")
 
     # add a player
     def add_player(self, player_tuple) -> None:
