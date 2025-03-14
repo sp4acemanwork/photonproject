@@ -16,8 +16,9 @@ class actionFrame(page): # example of how a page could be implemented
     def __init__(self, parrent_window: tk.Tk):
         super().__init__(parrent_window)
         self.page_elements = {
-            "redteam_frame": {"el": tk.Frame(self.window, bg="red"), "opt": {"fill": "both", "side": "right", "expand": True}},
-            "greenteam_frame": {"el": tk.Frame(self.window, bg="green"), "opt": {"fill": "both", "side": "left", "expand": True}}
+            "redteam_frame": {"el": tk.Frame(self.window, bg="red", width="100p"), "opt": {"fill": "both", "side": "right", "expand": True}},
+            "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width="100p"), "opt": {"fill": "both", "side": "left", "expand": True}},
+            "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
 
 
