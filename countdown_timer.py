@@ -30,7 +30,7 @@ class CountdownTimer:
         self.countdown_folder = os.path.join(os.path.dirname(__file__), "countdown_images")
 
         self.countdown_label = Label(self.countdown_window)
-        self.countdown_label.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.countdown_label.place(relx=0.501, rely=0.583, anchor=CENTER)
 
         self.countdown_window.bind("<Escape>", lambda e: self.countdown_window.destroy())
 
@@ -42,8 +42,8 @@ class CountdownTimer:
             image = Image.open(image_path)
             
             # Resize the number images
-            number_width = 450  # Set the desired width
-            number_height = 200  # Set the desired height
+            number_width = 795  # Set the desired width
+            number_height = 270  # Set the desired height
             image = image.resize((number_width, number_height), Image.LANCZOS)
             
             photo = ImageTk.PhotoImage(image)
