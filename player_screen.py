@@ -196,3 +196,11 @@ class Test:
 
         submit_button = customtkinter.CTkButton(network_window, text="Submit", command=submit_network)
         submit_button.pack(pady=20)
+    
+    # Starts the game by sending a message to the server
+    def start_game(self):
+        start_window = Toplevel()
+        start_window.title("Start Game")
+        start_window.geometry("300x200")
+
+    def start_countdown ()
