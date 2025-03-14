@@ -4,6 +4,7 @@ import customtkinter
 from server import handler
 import os
 from PIL import Image, ImageTk
+from countdown_timer import CountdownTimer
 
 class PlayerScreen:
     def __init__(self):
@@ -101,24 +102,7 @@ class PlayerScreen:
         self.game_handler.start_game()
 
     def start_game_with_countdown(self):
-        countdown_images = [f"{i}.tif" for i in range(30, 0, -1)]
-        countdown_folder = os.path.join(os.path.dirname(__file__), "countdown_images")
-
-        def show_image(index):
-            if index < len(countdown_images):
-                image_path = os.path.join(countdown_folder, countdown_images[index])
-                image = Image.open(image_path)
-                photo = ImageTk.PhotoImage(image)
-                countdown_label.config(image=photo)
-                countdown_label.image = photo
-                self.app.after(1000, show_image, index + 1)
-            else:
-                countdown_label.destroy()
-                self.start_game()
-
-        countdown_label = Label(self.app)
-        countdown_label.grid(row=0, column=0, columnspan=21, rowspan=21)
-        show_image(0)
+        CountdownTimer(self.app, self.start_game)
 
     def change_network(self):
         # Create a new window to enter network details
