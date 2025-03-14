@@ -10,7 +10,7 @@ class database_handler:
         # self.__conn = psycopg2.connect(dbname="photon", user="postgres",password="1234", host="localhost", port="5432")
             self.cur = self.__conn.cursor()
         except psycopg2.OperationalError:
-            self.debug = True 
+            self.debug = True
             print("WARNING DATABASE IS NOT OPERATIANAL ON DEBUG MODE")
 
     # add a player

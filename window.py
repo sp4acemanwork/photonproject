@@ -5,30 +5,46 @@ import tkinter as tk
 # import keyboard # implement later
 
 
+class page:
+    def __init__(self, parrent_window: tk.Tk):
+        self.window = parrent_window
+        self.page_elements = {}
+        self.setvis = True
+
+
+class actionFrame(page): # example of how a page could be implemented
+    def __init__(self, parrent_window: tk.Tk):
+        super().__init__(parrent_window)
+        self.page_elements = {
+            "redteam_frame": {"el": tk.Frame(self.window, bg="red"), "opt": {"fill": "both", "side": "right", "expand": True}},
+            "greenteam_frame": {"el": tk.Frame(self.window, bg="green"), "opt": {"fill": "both", "side": "left", "expand": True}}
+        }
+
+
 class window:
     def __init__(self):
         self.window = tk.Tk()
-        test2 = tk.Button(self.window, text="this button works", width=10, command=self.window.destroy)
-        testlabel = tk.Label(self.window, text='test')
-        testlabel.pack()
-        test2.pack()
-        self.window_elements = {
-            "test": tk.Button(self.window, text="test", width=10, command=self.window.destroy),
-            "test1": tk.Button(self.window, text="test", width=10, command=self.window.destroy),
-            "test2": tk.Button(self.window, text="test", width=10, command=self.window.destroy),
-            "test3": tk.Button(self.window, text="test", width=10, command=self.window.destroy)
+        self.window.geometry("800x600")
+        self.pages = {}
 
-        }
+    def addPage(self, name: str, el: page):
+        self.pages[name] = el
 
     def redraw(self):
-        for key in self.window_elements:
-            test = self.window_elements[key]
-            test.pack()
+        print("packpages")
+        for key in self.pages:  # Loop over self.pages, not the class
+            page = self.pages[key]
+            for element in page.page_elements.values():  # Access the page elements
+                element["el"].pack(**element["opt"])  # Pack each element
+                print(f"packing{0} ", element)
 
 
 test = window()
+testpage = actionFrame(test.window)
+test.addPage("actionscreen", testpage)
 test.redraw()
 test.window.mainloop()
+
 '''
 window = tk.Tk()
 testlabel = tk.Label(window, text='test')
