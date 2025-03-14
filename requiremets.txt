@@ -3,3 +3,4 @@ darkdetect
 packaging
 pillow
 psycopg2-binary
+keyboard

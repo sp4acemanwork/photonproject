@@ -6,7 +6,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 import customtkinter as ctk
 from customtkinter import CTkImage, CTkLabel
-from player_screen import Test
+from player_screen import PlayerScreen
 splash_root = ctk.CTk()
 splash_root.title("Photon Game")
 splash_root.geometry("500x400")
@@ -31,7 +31,8 @@ splash_root.bind("<Escape>", lambda e: splash_root.destroy())
 
 def next_screen():
     splash_root.destroy()
-    Test()
+    player_screen = PlayerScreen()
+    player_screen.main()
     
 splash_root.after(3000, next_screen )
 splash_root.mainloop()
