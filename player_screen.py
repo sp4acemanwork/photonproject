@@ -2,12 +2,12 @@ from customtkinter import *
 from tkinter import *
 import customtkinter
 from server import handler
+import os
+from PIL import Image, ImageTk
 
 class PlayerScreen:
     def __init__(self):
         self.game_handler = handler("127.0.0.1", 7501, 7500, 1024)
-        self.game_handler.start_game()
-        self.num_players = 0
         self.app = customtkinter.CTk()
         self.app.geometry("500x400")
         self.app.attributes("-zoomed", True)
@@ -58,6 +58,12 @@ class PlayerScreen:
             self.teams_data[team_name]["player_names"].append(name_entry)
 
             
+    def delete_entries(self):
+        for team, data in self.teams_data.items():
+            for id_entry, eqid_entry, name_entry in zip(data["player_ids"], data["equpiment_ids"], data["player_names"]):
+                id_entry.delete(0, END)
+                eqid_entry.delete(0, END)
+                name_entry.delete(0, END)
 
     def get_entry_value(self):
         self.list_of_id_and_names = []
@@ -75,42 +81,75 @@ class PlayerScreen:
         
         
     def buttons(self):
-        add_values = customtkinter.CTkButton(self.app, text="Confirm Info", command = self.get_entry_value)
-        add_values.grid(row = 2, column = 11)
+        # To modify Confirm Info button
+        add_values = customtkinter.CTkButton(self.app, text="Confirm Info", command=self.get_entry_value)
+        add_values.grid(row=2, column=11)
 
+        # To modify Start button
+        start_button = customtkinter.CTkButton(self.app, text="<F5> Start", command=self.start_game_with_countdown)
+        start_button.grid(row=20, column=11, pady=20, columnspan=1)
+
+        # To modify Change Network button
         change_network_button = customtkinter.CTkButton(self.app, text="Change Network", command=self.change_network)
-        change_network_button.grid(row=20, column=10, pady=20, columnspan=3)
+        change_network_button.grid(row=20, column=10, pady=20, columnspan=1)
+
+        # To modify Delete Entries button
+        delete_all_entries = customtkinter.CTkButton(self.app, text="Delete Entries", command=self.delete_entries)
+        delete_all_entries.grid(row=20, column=12, pady=20, columnspan=1)
+
+    def start_game(self):
+        self.game_handler.start_game()
+
+    def start_game_with_countdown(self):
+        countdown_images = [f"{i}.tif" for i in range(30, 0, -1)]
+        countdown_folder = os.path.join(os.path.dirname(__file__), "countdown_images")
+
+        def show_image(index):
+            if index < len(countdown_images):
+                image_path = os.path.join(countdown_folder, countdown_images[index])
+                image = Image.open(image_path)
+                photo = ImageTk.PhotoImage(image)
+                countdown_label.config(image=photo)
+                countdown_label.image = photo
+                self.app.after(1000, show_image, index + 1)
+            else:
+                countdown_label.destroy()
+                self.start_game()
+
+        countdown_label = Label(self.app)
+        countdown_label.grid(row=0, column=0, columnspan=21, rowspan=21)
+        show_image(0)
 
     def change_network(self):
         # Create a new window to enter network details
         network_window = Toplevel()
         network_window.title("Change Network")
-        network_window.geometry("300x200")
+        network_window.geometry("300x150")
+
+        # Center the pop-up window
+        window_width = 300
+        window_height = 150
+        screen_width = network_window.winfo_screenwidth()
+        screen_height = network_window.winfo_screenheight()
+        position_top = int(screen_height / 2 - window_height / 2)
+        position_right = int(screen_width / 2 - window_width / 2)
+        network_window.geometry(f"{window_width}x{window_height}+{position_right}+{position_top}")
 
         Label(network_window, text="New IP:").pack(pady=5)
         ip_entry = Entry(network_window)
         ip_entry.pack(pady=5)
 
-        Label(network_window, text="New Port:").pack(pady=5)
-        port_entry = Entry(network_window)
-        port_entry.pack(pady=5)
-
         def submit_network():
             new_ip = ip_entry.get()
-            new_port = int(port_entry.get())
-            if not new_port:
-                new_port = self.game_handler.local_port_send
-            
-            print(f"Changing network to IP: {new_ip}, Port: {new_port}")
-            self.game_handler.change_socket(new_ip, new_port)
+            print(f"Changing network to IP: {new_ip}")
+            self.game_handler.change_socket(new_ip, self.game_handler.local_port_send)
             network_window.destroy()
 
         submit_button = customtkinter.CTkButton(network_window, text="Submit", command=submit_network)
         submit_button.pack(pady=20)
 
-
     def main(self):
-        self.create(0, "RED TEAM", "red" )
-        self.create(12, "GREEN TEAM", "green" )
+        self.create(0, "RED TEAM", "red")
+        self.create(12, "GREEN TEAM", "green")
         self.buttons()
         self.app.mainloop()
