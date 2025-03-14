@@ -94,10 +94,8 @@ class database_handler:
         self.__conn.commit()
 
     def player_exists(self, player_id: int) -> bool:
-        if self.debug:
-            pass
-            return True
-        self.cur.execute("SELECT COUNT(*) FROM players WHERE id = %s;", (player_id,))
+
+        self.cur.execute("SELECT COUNT(*) FROM players WHERE id = %s;", (player_id,player))
         count = self.cur.fetchone()[0]
         return count > 0
 
