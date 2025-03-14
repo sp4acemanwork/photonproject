@@ -106,20 +106,6 @@ class PlayerScreen:
             network_window.destroy()
 
         submit_button = customtkinter.CTkButton(network_window, text="Submit", command=submit_network)
-<<<<<<< HEAD
-        submit_button.pack(pady=20)
-    
-    # Starts the game by sending a message to the server
-    def start_game(self):
-        start_window = Toplevel()
-        start_window.title("Start Game")
-        start_window.geometry("300x200")
-
-    def start_countdown ()
-=======
-<<<<<<< HEAD
-        submit_button.pack(pady=20)
-=======
         submit_button.pack(pady=20)
 
 
@@ -128,5 +114,3 @@ class PlayerScreen:
         self.create(12, "GREEN TEAM", "green" )
         self.buttons()
         self.app.mainloop()
->>>>>>> 00d93c8ec80f24bf375519a1ee3429775cbb5217
->>>>>>> a32ade045616007e92fe95183379f4184e69a7fe
