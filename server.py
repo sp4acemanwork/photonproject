@@ -16,7 +16,7 @@ class handler:
         print("printing values")
         self.udp_handler.send_message("202", [self.target_ip, self.local_port_send])
 
-    # change ip and port
+    # change ip
     def change_socket(self, new_target_ip: str):
         print("changing ip from ip:{} -> ip:{}".format(self.target_ip, new_target_ip))
 
