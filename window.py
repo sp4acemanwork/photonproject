@@ -12,14 +12,6 @@ class page:
         self.setvis = True
 
 
-class actionFrame(page): # example of how a page could be implemented
-    def __init__(self, parrent_window: tk.Tk):
-        super().__init__(parrent_window)
-        self.page_elements = {
-            "redteam_frame": {"el": tk.Frame(self.window, bg="red", width="100p"), "opt": {"fill": "both", "side": "right", "expand": True}},
-            "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width="100p"), "opt": {"fill": "both", "side": "left", "expand": True}},
-            "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
-        }
 
 
 class window:
@@ -33,12 +25,28 @@ class window:
 
     def redraw(self):
         print("packpages")
-        for key in self.pages:  # Loop over self.pages, not the class
-            page = self.pages[key]
-            for element in page.page_elements.values():  # Access the page elements
-                element["el"].pack(**element["opt"])  # Pack each element
-                print(f"packing{0} ", element)
+        key = [0] 
+        page = self.pages[key]
+        for element in page.page_elements.values():  # Access the page elements
+            element["el"].pack(**element["opt"])  # Pack each element
+            print(f"packing{0} ", element)
 
+    def switch_window():
+
+        print ("switchingwindow")
+
+
+class actionFrame(page): # example of how a page could be implemented
+    def __init__(self, parrent_window: tk.Tk):
+        super().__init__(parrent_window)
+        self.middle {}
+        self.middle_frame = {}
+        self.redFrame = {}
+        self.page_elements = {
+            "redteam_frame": {"el": tk.Frame(self.window, bg="red", width="100p"), "opt": {"fill": "both", "side": "right", "expand": True}},
+            "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width="100p"), "opt": {"fill": "both", "side": "left", "expand": True}},
+            "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
+        }
 
 test = window()
 testpage = actionFrame(test.window)
