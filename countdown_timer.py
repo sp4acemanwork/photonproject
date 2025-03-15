@@ -22,14 +22,14 @@ class CountdownTimer:
         background_photo = ImageTk.PhotoImage(background_image)
 
         # Create background label
-        background_label = Label(self.countdown_window, image=background_photo)
+        background_label = Label(self.countdown_window, image=background_photo, borderwidth=0, highlightthickness=0) # Removes the white border
         background_label.image = background_photo  # Keep a reference to avoid garbage collection
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         self.countdown_images = [f"{i}.tif" for i in range(30, -1, -1)]
         self.countdown_folder = os.path.join(os.path.dirname(__file__), "countdown_images")
 
-        self.countdown_label = Label(self.countdown_window)
+        self.countdown_label = Label(self.countdown_window, borderwidth=0, highlightthickness=0) # Removes the white border
         self.countdown_label.place(relx=0.501, rely=0.583, anchor=CENTER)
 
         self.countdown_window.bind("<Escape>", lambda e: self.countdown_window.destroy())
@@ -42,7 +42,7 @@ class CountdownTimer:
             image = Image.open(image_path)
             
             # Resize the number images
-            number_width = 795  # Set the desired width
+            number_width = 805  # Set the desired width
             number_height = 270  # Set the desired height
             image = image.resize((number_width, number_height), Image.LANCZOS)
             
