@@ -15,7 +15,6 @@ class PlayerScreen:
         set_appearance_mode("dark")
         self.app.bind("<Return>", lambda e: self.get_entry_value())
         self.app.bind("<F12>", lambda e: self.delete_entries())
-        self.app.bind("<F5>", lambda e: self.start_game_with_countdown())
         self.teams_data = {}
 
     def create(self, col: int, team_name: str, team_color: str):
