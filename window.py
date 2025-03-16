@@ -99,11 +99,13 @@ class actionFrame(page):  # example of how a page could be implemented
         score: int = 0
         if team:
             print("appending red user")
-            self.red_frame["red_list"]["el"].insert(tk.END, f"{name:<20} {score:>5}")
+            self.red_frame["red_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
+            self.red_frame["red_list2"]["el"].insert(tk.END, f"{score}")
         else:
             print("user append green user")
-            self.green_frame["green_list"]["el"].insert(tk.END, f"{name:<20} {score:>5}")
-
+            self.green_frame["green_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
+            self.green_frame["green_list2"]["el"].insert(tk.END, f"{score}")
+            
     def append_list(self, listofusers: list):
 
         print("appendint_list")
