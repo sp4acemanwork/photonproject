@@ -96,24 +96,29 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
     def append_user(self, team: bool, name: str, id: str):
-        print("appendinguser to screen")
+        score: int = 0
         if team:
             print("appending red user")
-            self.redteam_frame["red_list"].insert(f"")
+            self.red_frame["red_list"]["el"].insert(tk.END, f"{name:<20} {score:>5}")
         else:
             print("user append green user")
+            self.green_frame["green_list"]["el"].insert(tk.END, f"{name:<20} {score:>5}")
 
     def append_list(self, listofusers: list):
 
         print("appendint_list")
         for player in listofusers:
-            if player[3] == "RED TEAM":
-                self.append_user(True, player[0], player[2])
+            if player[3] == "red_team":
 
-            if player[3] == "GREEN TEAM":
-                self.append_user(False, player[0], player[2])
+                print(f"r {player}")
+                self.append_user(True, player[2], player[1])
+
+            elif player[3] == "green_team":
+                print(f"g {player}")
+                self.append_user(False, player[2], player[1])
             else:
-                self.append_user(random.choice([True, False]), player[0], player[2])
+                print(f"e {player}")
+                self.append_user(random.choice([True, False]), player[2], player[1])
 
         # loop though red team and apend users
         # loop through green team and apand users
@@ -139,7 +144,18 @@ test = window()
 testpage = actionFrame(test.window, test)
 testpage2 = actionFrame2(test.window, test)
 test.addPage("actionscreen", testpage)
+example_list = [
+    (1, 101, "Alice", "red_team"),
+    (2, 102, "Bob", "green_team"),
+    (3, 103, "Charlie", "red_team"),
+    (4, 104, "David", "green_team"),
+    (5, 105, "Eve", "red_team"),
+    (6, 106, "Frank", "green_team"),
+    (7, 107, "Grace", "red_team"),
+    (8, 108, "Hank", "green_team")
+]
 
+testpage.append_list(example_list)
 test.addPage("test", testpage2)
 test.redraw("actionscreen")
 test.window.mainloop()
