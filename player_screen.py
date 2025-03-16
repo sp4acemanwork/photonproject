@@ -108,6 +108,7 @@ class PlayerScreen:
     
 
     def countdown_to_playaction(self):
+        self.app.destroy()
         print("Countdown finished, switching to ActionFrame screen...")
         #New window initialized 
         test = window()
