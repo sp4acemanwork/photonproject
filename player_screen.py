@@ -81,7 +81,6 @@ class PlayerScreen:
                     self.game_handler.add_player(new_name, new_id, new_eqid)   
 
         
-        
     def buttons(self):
         # To modify Confirm Info button
         add_values = customtkinter.CTkButton(self.app, text="Confirm Info", command=self.get_entry_value)
@@ -96,7 +95,7 @@ class PlayerScreen:
         change_network_button.grid(row=20, column=10, pady=20, columnspan=1)
 
         # To modify Delete Entries button
-        delete_all_entries = customtkinter.CTkButton(self.app, text="Delete Entries", command=self.delete_entries)
+        delete_all_entries = customtkinter.CTkButton(self.app, text="<F12> Delete Entries", command=self.delete_entries)
         delete_all_entries.grid(row=20, column=12, pady=20, columnspan=1)
 
     def start_game(self):
