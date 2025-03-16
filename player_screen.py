@@ -13,7 +13,7 @@ class PlayerScreen:
         self.app.geometry("500x400")
         self.app.attributes("-zoomed", True)
         set_appearance_mode("dark")
-        self.app.bind("<Enter>", lambda e: self.get_entry_value())
+        self.app.bind("<Return>", lambda e: self.get_entry_value())
         self.app.bind("<F12>", lambda e: self.delete_entries())
         self.app.bind("<F5>", lambda e: self.start_game_with_countdown())
         self.teams_data = {}
