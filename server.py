@@ -36,7 +36,10 @@ class handler:
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
         self.udp_handler.recive_message()
-        self.database_handler.print_table()
+        # self.database_handler.print_table()
+
+    def player_exists(self,new_id):
+        return self.database_handler.player_exists(new_id)
 
     def recive_message(self) -> tuple[str, str]:
         return self.udp_handler.recive_message()

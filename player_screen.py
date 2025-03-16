@@ -75,7 +75,7 @@ class PlayerScreen:
                 new_eqid = eqid_entry.get()
                 new_name = name_entry.get()
 
-                if new_id or new_name or new_eqid:  # Ignore empty entries
+                if new_id or new_name or new_eqid and not self.game_handler.player_exists(new_id):  # Ignore empty entries
                     self.list_of_id_and_names.append((new_id, new_eqid, new_name))
                     self.game_handler.add_player(new_name, new_id, new_eqid)   
 
