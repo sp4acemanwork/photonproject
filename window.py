@@ -1,16 +1,13 @@
-from tkinter import Label
-from tkinter import Button
-from tkinter import Listbox
 import tkinter as tk
-
+import random
 # import keyboard # implement later
+
 
 class page:
     def __init__(self, parrent_window: tk.Tk):
         self.window = parrent_window
         self.page_elements = {}
         self.setvis = True
-
 
 
 class window:
@@ -47,7 +44,6 @@ class window:
         print(f"switching to window {0}", windowname)
         self.hidepage()
         self.redraw(windowname)
-
 
 
 class actionFrame(page):  # example of how a page could be implemented
@@ -99,35 +95,26 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list"]["el"].pack(**self.green_frame["green_list"]["opt"])
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
-
-
-
-    def append_user(team: str, user: tuple):
+    def append_user(self, team: bool, name: str, id: str):
         print("appendinguser to screen")
         if team:
             print("appending red user")
+            self.redteam_frame["red_list"].insert(f"")
         else:
             print("user append green user")
 
-    def append_list(self, listofusers: dict):
-        '''
-            takes a dict organized like this
-            {
-                "red_team": [ (id,name), (id,name), ....],
-                "green_team": [ (id,name), (id,name), ....]
-            }
-            i think this makes sense
-            i think eventually making it a dict and attaching a score might be useful
-        '''
+    def append_list(self, listofusers: list):
+
         print("appendint_list")
-        red_list = listofusers["red_team"]
-        green_list = listofusers["green_teamb"]
+        for player in listofusers:
+            if player[3] == "RED TEAM":
+                self.append_user(True, player[0], player[2])
 
-        for player in red_list:
-            self.append_user(True, player)
+            if player[3] == "GREEN TEAM":
+                self.append_user(False, player[0], player[2])
+            else:
+                self.append_user(random.choice([True, False]), player[0], player[2])
 
-        for player in green_list:
-            self.append_user(False, player)
         # loop though red team and apend users
         # loop through green team and apand users
 

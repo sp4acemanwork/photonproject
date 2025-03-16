@@ -69,10 +69,10 @@ class PlayerScreen:
                 new_name = name_entry.get()
 
                 if new_id or new_name or new_eqid:  # Ignore empty entries
-                    self.list_of_id_and_names.append((new_id, new_eqid, new_name))
-                    self.game_handler.add_player(new_name, new_id, new_eqid)   
+                    self.list_of_id_and_names.append((new_id, new_eqid, new_name, team))
+                    self.game_handler.add_player(new_name, new_id, new_eqid)
 
-        
+        print(self.list_of_id_and_names)
         
     def buttons(self):
         add_values = customtkinter.CTkButton(self.app, text="Confirm Info", command = self.get_entry_value)
