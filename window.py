@@ -108,12 +108,12 @@ class actionFrame(page):  # example of how a page could be implemented
 
         print("appendint_list")
         for player in listofusers:
-            if player[3] == "red_team":
+            if player[3] == "RED TEAM":
 
                 print(f"r {player}")
                 self.append_user(True, player[2], player[1])
 
-            elif player[3] == "green_team":
+            elif player[3] == "GREEN TEAM":
                 print(f"g {player}")
                 self.append_user(False, player[2], player[1])
             else:
@@ -145,14 +145,14 @@ testpage = actionFrame(test.window, test)
 testpage2 = actionFrame2(test.window, test)
 test.addPage("actionscreen", testpage)
 example_list = [
-    (1, 101, "Alice", "red_team"),
-    (2, 102, "Bob", "green_team"),
-    (3, 103, "Charlie", "red_team"),
-    (4, 104, "David", "green_team"),
-    (5, 105, "Eve", "red_team"),
-    (6, 106, "Frank", "green_team"),
-    (7, 107, "Grace", "red_team"),
-    (8, 108, "Hank", "green_team")
+    (1, 101, "Alice", "RED TEAM"),
+    (2, 102, "Bob", "GREEN TEAM"),
+    (3, 103, "Charlie", "RED TEAM"),
+    (4, 104, "David", "GREEN TEAM"),
+    (5, 105, "Eve", "RED TEAM"),
+    (6, 106, "Frank", "GREEN TEAM"),
+    (7, 107, "Grace", "RED TEAM"),
+    (8, 108, "Hank", "GREEN TEAM")
 ]
 
 testpage.append_list(example_list)
