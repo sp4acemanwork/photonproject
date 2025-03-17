@@ -5,6 +5,8 @@ from server import handler
 import os
 from PIL import Image, ImageTk
 from countdown_timer import CountdownTimer
+from window import actionFrame, actionFrame2
+from window import window
 
 class PlayerScreen:
     def __init__(self):
@@ -14,7 +16,7 @@ class PlayerScreen:
         self.app.attributes("-zoomed", True)
         set_appearance_mode("dark")
         self.app.bind("<Return>", lambda e: self.get_entry_value())
-        self.app.bind("<F12>", lambda e: self.delete_entries())
+        self.app.bind("<F5>", lambda e: self.start_game_with_countdown())
         self.teams_data = {}
 
     def create(self, col: int, team_name: str, team_color: str):
@@ -75,10 +77,11 @@ class PlayerScreen:
                 new_eqid = eqid_entry.get()
                 new_name = name_entry.get()
 
-                if new_id or new_name or new_eqid and not self.game_handler.player_exists(new_id):  # Ignore empty entries
-                    self.list_of_id_and_names.append((new_id, new_eqid, new_name))
-                    self.game_handler.add_player(new_name, new_id, new_eqid)   
+                if new_id or new_name or new_eqid:  # Ignore empty entries
+                    self.list_of_id_and_names.append((new_id, new_eqid, new_name, team))
+                    self.game_handler.add_player(new_name, new_id, new_eqid)
 
+        print(self.list_of_id_and_names)
         
     def buttons(self):
         # To modify Confirm Info button
@@ -101,7 +104,21 @@ class PlayerScreen:
         self.game_handler.start_game()
 
     def start_game_with_countdown(self):
-        CountdownTimer(self.app, self.start_game)
+        CountdownTimer(self.app, self.countdown_to_playaction)
+    
+
+    def countdown_to_playaction(self):
+        self.app.destroy()
+        print("Countdown finished, switching to ActionFrame screen...")
+        #New window initialized 
+        test = window()
+        testpage = actionFrame(test.window, test)
+        testpage2 = actionFrame2(test.window, test)
+        test.addPage("actionscreen", testpage)
+
+        test.addPage("test", testpage2)
+        test.redraw("actionscreen")
+
 
     def change_network(self):
         # Create a new window to enter network details
