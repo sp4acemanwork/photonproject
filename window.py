@@ -49,15 +49,15 @@ class window:
 class actionFrame(page):  # example of how a page could be implemented
     def __init__(self, parrent_window: tk.Tk, parrent: window):  # could horribly backfire
         super().__init__(parrent_window)
-
         self.parrent_window = parrent_window
         self.parrent = parrent
+        self.buttonfunc = lambda: self.parrent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=60), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="test", command=lambda: self.parrent.switch_window("test")), "opt": {}}}
+        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}}}
         # stupid dumb fix because we didn't use html and typescript
 
         lcontainergreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="green", height=16)
@@ -95,25 +95,34 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list"]["el"].pack(**self.green_frame["green_list"]["opt"])
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
+    def setbuttonfunction(self, functosend):
+        self.buttonfunc = lambda: functosend
+
     def append_user(self, team: bool, name: str, id: str):
-        print("appendinguser to screen")
+        score: int = 0
         if team:
             print("appending red user")
-            self.redteam_frame["red_list"].insert(f"")
+            self.red_frame["red_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
+            self.red_frame["red_list2"]["el"].insert(tk.END, f"{score}")
         else:
             print("user append green user")
+            self.green_frame["green_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
+            self.green_frame["green_list2"]["el"].insert(tk.END, f"{score}")
 
     def append_list(self, listofusers: list):
-
         print("appendint_list")
         for player in listofusers:
             if player[3] == "RED TEAM":
-                self.append_user(True, player[0], player[2])
 
-            if player[3] == "GREEN TEAM":
-                self.append_user(False, player[0], player[2])
+                print(f"r {player}")
+                self.append_user(True, player[2], player[1])
+
+            elif player[3] == "GREEN TEAM":
+                print(f"g {player}")
+                self.append_user(False, player[2], player[1])
             else:
-                self.append_user(random.choice([True, False]), player[0], player[2])
+                print(f"e {player}")
+                self.append_user(random.choice([True, False]), player[2], player[1])
 
         # loop though red team and apend users
         # loop through green team and apand users
@@ -129,10 +138,32 @@ class actionFrame2(page):  # example of how a page could be implemented
             "greenteam_frame": {"el": tk.Frame(self.window, bg="red", width="100p"), "opt": {"fill": "both", "side": "left", "expand": True}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="test", command=lambda: self.parrent.switch_window("actionscreen")), "opt": {}}}
+        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=lambda: self.parrent.switch_window("actionscreen")), "opt": {}}}
         self.middle_frame = {}
         self.redFrame = {}
         self.middle["button"]["el"].pack()
+
+
+
+test = window()
+testpage = actionFrame(test.window, test)
+testpage2 = actionFrame2(test.window, test)
+test.addPage("actionscreen", testpage)
+example_list = [
+    (1, 101, "Alice", "RED TEAM"),
+    (2, 102, "Bob", "GREEN TEAM"),
+    (3, 103, "Charlie", "RED TEAM"),
+    (4, 104, "David", "GREEN TEAM"),
+    (5, 105, "Eve", "RED TEAM"),
+    (6, 106, "Frank", "GREEN TEAM"),
+    (7, 107, "Grace", "RED TEAM"),
+    (8, 108, "Hank", "GREEN TEAM")
+]
+
+testpage.append_list(example_list)
+test.addPage("test", testpage2)
+test.redraw("actionscreen")
+test.window.mainloop()
 
 # TEST
 # test = window()
