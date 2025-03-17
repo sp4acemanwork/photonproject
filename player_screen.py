@@ -119,6 +119,7 @@ class PlayerScreen:
 
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
+        testpage.append_list(self.list_of_id_and_names)
 
 
     def change_network(self):
