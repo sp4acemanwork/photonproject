@@ -49,15 +49,15 @@ class window:
 class actionFrame(page):  # example of how a page could be implemented
     def __init__(self, parrent_window: tk.Tk, parrent: window):  # could horribly backfire
         super().__init__(parrent_window)
-
         self.parrent_window = parrent_window
         self.parrent = parrent
+        self.buttonfunc = self.parrent.switch_window("test") # set function that button will call here or set it with the function setbuttonfunction(func)
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=60), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="test", command=lambda: self.parrent.switch_window("test")), "opt": {}}}
+        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=lambda: self.buttonfunc), "opt": {}}}
         # stupid dumb fix because we didn't use html and typescript
 
         lcontainergreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="green", height=16)
@@ -95,6 +95,9 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list"]["el"].pack(**self.green_frame["green_list"]["opt"])
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
+    def setbuttonfunction(self, functosent):
+        self.buttonfunc = functosent
+
     def append_user(self, team: bool, name: str, id: str):
         score: int = 0
         if team:
@@ -105,9 +108,8 @@ class actionFrame(page):  # example of how a page could be implemented
             print("user append green user")
             self.green_frame["green_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
             self.green_frame["green_list2"]["el"].insert(tk.END, f"{score}")
-            
-    def append_list(self, listofusers: list):
 
+    def append_list(self, listofusers: list):
         print("appendint_list")
         for player in listofusers:
             if player[3] == "RED TEAM":
@@ -136,7 +138,7 @@ class actionFrame2(page):  # example of how a page could be implemented
             "greenteam_frame": {"el": tk.Frame(self.window, bg="red", width="100p"), "opt": {"fill": "both", "side": "left", "expand": True}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="test", command=lambda: self.parrent.switch_window("actionscreen")), "opt": {}}}
+        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=lambda: self.parrent.switch_window("actionscreen")), "opt": {}}}
         self.middle_frame = {}
         self.redFrame = {}
         self.middle["button"]["el"].pack()
