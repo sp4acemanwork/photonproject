@@ -16,16 +16,15 @@ class handler:
         print("printing values")
         self.udp_handler.send_message("202", [self.target_ip, self.local_port_send])
 
-    # change ip and port
-    def change_socket(self, new_target_ip: str, new_local_port: int):
-        print("changing ip and port from ip:{} port:{} -> ip:{} port:{}".format(self.target_ip, self.local_port_send, new_target_ip, new_local_port))
+    # change ip
+    def change_socket(self, new_target_ip: str):
+        print("changing ip from ip:{} -> ip:{}".format(self.target_ip, new_target_ip))
 
         # close original socket and set up new socket
         self.udp_handler.udp_server_socket.close()
         self.udp_handler.udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-        self.udp_handler.udp_server_socket.bind((new_target_ip, new_local_port))
+        self.udp_handler.udp_server_socket.bind((new_target_ip, self.local_port_send))
         self.target_ip = new_target_ip
-        self.local_port_send = new_local_port
 
     # call thing with address to send?
     # this function will call the add player to database then transit the equipment codes for player?
@@ -37,7 +36,10 @@ class handler:
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
         self.udp_handler.recive_message()
-        self.database_handler.print_table()
+        # self.database_handler.print_table()
+
+    def player_exists(self,new_id):
+        return self.database_handler.player_exists(new_id)
 
     def recive_message(self) -> tuple[str, str]:
         return self.udp_handler.recive_message()

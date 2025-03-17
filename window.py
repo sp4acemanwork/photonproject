@@ -144,6 +144,7 @@ class actionFrame2(page):  # example of how a page could be implemented
         self.middle["button"]["el"].pack()
 
 
+
 test = window()
 testpage = actionFrame(test.window, test)
 testpage2 = actionFrame2(test.window, test)
@@ -163,6 +164,16 @@ testpage.append_list(example_list)
 test.addPage("test", testpage2)
 test.redraw("actionscreen")
 test.window.mainloop()
+
+# TEST
+# test = window()
+# testpage = actionFrame(test.window, test)
+# testpage2 = actionFrame2(test.window, test)
+# test.addPage("actionscreen", testpage)
+
+# test.addPage("test", testpage2)
+# test.redraw("actionscreen")
+# test.window.mainloop()
 
 '''
 window = tk.Tk()
