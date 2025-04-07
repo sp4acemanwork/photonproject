@@ -144,7 +144,6 @@ class actionFrame2(page):  # example of how a page could be implemented
         self.middle["button"]["el"].pack()
 
 
-
 # test = window()
 # testpage = actionFrame(test.window, test)
 # testpage2 = actionFrame2(test.window, test)

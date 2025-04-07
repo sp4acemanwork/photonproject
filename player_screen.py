@@ -10,7 +10,7 @@ from window import window
 
 class PlayerScreen:
     def __init__(self):
-        self.game_handler = handler("127.0.0.1", 7501, 7500, 1024)
+        self.game_handler = handler("127.0.0.1", 7501, 7500, 1024) # move to main
         self.app = customtkinter.CTk()
         self.app.geometry("500x400")
         self.app.attributes("-zoomed", True)
@@ -116,12 +116,12 @@ class PlayerScreen:
         testpage = actionFrame(test.window, test)
         testpage2 = actionFrame2(test.window, test)
         test.addPage("actionscreen", testpage)
-
+        
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
         # list_of_players = self.game_handler.database_handler.get_all_players()
         testpage.append_list(self.list_of_id_and_names)
-
+        
 
     def change_network(self):
         # Create a new window to enter network details

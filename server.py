@@ -38,7 +38,7 @@ class handler:
         self.udp_handler.recive_message()
         # self.database_handler.print_table()
 
-    def player_exists(self,new_id):
+    def player_exists(self, new_id):
         return self.database_handler.player_exists(new_id)
 
     def recive_message(self) -> tuple[str, str]:

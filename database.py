@@ -8,9 +8,10 @@ class database_handler:
             self.__conn = psycopg2.connect(dbname="photon")
 
             self.cur = self.__conn.cursor()
-        except psycopg2.OperationalError:
+        except Exception as e:
+
             self.debug = True
-            print("WARNING DATABASE IS NOT OPERATIANAL ON DEBUG MODE")
+            print(f"WARNING DATABASE IS NOT OPERATIANAL ON DEBUG MODE: {e}", e)
 
     # add a player
     def add_player(self, player_tuple) -> None:
