@@ -119,6 +119,7 @@ class PlayerScreen:
 
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
+        # list_of_players = self.game_handler.database_handler.get_all_players()
         testpage.append_list(self.list_of_id_and_names)
 
 

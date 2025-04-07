@@ -33,6 +33,14 @@ class database_handler:
         row = self.cur.fetchall()
         player = (row[0][0], row[0][1])
         return player
+    
+    # def get_all_players(self) :
+    #     list_of_players = []
+    #     self.cur.execute(f"select * from players")
+    #     result = self.cur.fetchall()
+    #     for x in result:
+    #         list_of_players.append(x)
+    #     return list_of_players
 
     # delete a player
     def delete_player(self, del_id: int) -> None:
@@ -108,7 +116,6 @@ class database_handler:
             WHERE id = %s;
         """, (new_codename, player_id))
         self.__conn.commit()
-
 
 # test.get_player(1)
 # test.close()
