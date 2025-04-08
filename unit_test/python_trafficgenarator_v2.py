@@ -2,9 +2,9 @@ import socket
 import random
 import time
 
-bufferSize  = 1024
-serverAddressPort   = ("127.0.0.1", 7500)
-clientAddressPort   = ("127.0.0.1", 7501)
+bufferSize = 1024
+serverAddressPort = ("127.0.0.1", 7500)
+clientAddressPort = ("127.0.0.1", 7501)
 
 
 print('this program will generate some test traffic for 2 players on the red ')
@@ -45,7 +45,7 @@ while True:
 
     if random.randint(1, 2) == 1:
         greenplayer = green1
-    else: 
+    else:
         greenplayer = green2
 
     if random.randint(1, 2) == 1:
