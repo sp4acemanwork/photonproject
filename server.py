@@ -1,6 +1,6 @@
 import socket
 from database import database_handler
-
+import re
 
 # you should do all main functions of the back end through this class
 class handler:
@@ -43,6 +43,26 @@ class handler:
 
     def recive_message(self) -> tuple[str, str]:
         return self.udp_handler.recive_message()
+
+    def add_score(self):
+        print("implement")
+
+    def recmsg(self) -> any: # figure out what to return
+        mesg: tuple = self.udp_handler.recive_message()
+        event: str = mesg[0]
+        part = re.split(r":", event, maxsplit=1)
+
+        if part[1] == "43":
+            print(f"user id:{part[0]} scored for RED")
+
+        if part[1] == "53":
+            print(f"user id:{part[0]} scored for GREEN")
+
+        else:
+            print(f"user id:{part[0]} tagged user id:{part[1]}")
+
+
+
 
 
 # this class shouldn't be called directly rather use the functions that do the sending functions automatically

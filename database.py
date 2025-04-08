@@ -34,7 +34,7 @@ class database_handler:
         row = self.cur.fetchall()
         player = (row[0][0], row[0][1])
         return player
-    
+
     # def get_all_players(self) :
     #     list_of_players = []
     #     self.cur.execute(f"select * from players")
