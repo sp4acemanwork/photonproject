@@ -36,7 +36,7 @@ print('')
 
 # create events, random player and order
 counter = 0
-
+# send player hardware id back 
 while True:
     if random.randint(1, 2) == 1:
         redplayer = red1
@@ -52,6 +52,9 @@ while True:
         message = str(redplayer) + ":" + str(greenplayer)
     else:
         message = str(greenplayer) + ":" + str(redplayer)
+
+    if random.randint(1, 10) == 4:
+        message = str(red1) + ":" + str(red2)
 
         # after 10 iterations, send base hit
     if counter == 10:
