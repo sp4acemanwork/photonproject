@@ -10,7 +10,7 @@ from window import window
 
 class PlayerScreen:
     def __init__(self):
-        self.game_handler = handler("127.0.0.1", 7501, 7500, 1024) # move to main
+        self.game_handler = handler("127.0.0.1", 7501, 1024)
         self.app = customtkinter.CTk()
         self.app.geometry("500x400")
         self.app.attributes("-zoomed", True)
