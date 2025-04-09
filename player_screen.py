@@ -115,6 +115,20 @@ class PlayerScreen:
             self.game_handler.change_socket(new_ip, new_port)
             network_window.destroy()
 
+        def stylized_b(base_hit_count, player_id):
+            #function that adds the stylized B if the player hits base 3 times
+            #error handling for if it is any other amount.
+
+            if base_hit_count == 3:
+                #show a Txt box with a B in it
+                pass
+            else:
+                #show error handling in the control center saying that the player has not hit base 3 times
+                pass
+            
+            pass
+
+
         submit_button = customtkinter.CTkButton(network_window, text="Submit", command=submit_network)
         submit_button.pack(pady=20)
 
