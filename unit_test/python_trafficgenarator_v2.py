@@ -60,10 +60,3 @@ class testprogram(unittest.TestCase):
     def tearDown(self):
         self.UDPServerSocketReceive.close()
         self.UDPServerSocketTransmit.close()
-
-
-
-
-
-
-
