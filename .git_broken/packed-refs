@@ -1,0 +1,9 @@
+# pack-refs with: peeled fully-peeled sorted 
+15c8b80c1cb00cebf6a1bfd5883617d123beba5f refs/remotes/origin/Elmer
+884f425be1fc19875f1093a82d867ce21711f6c0 refs/remotes/origin/RJStartCounter
+4fcdbdec005f8fa1be82fdf19e5bf31e7ce85dca refs/remotes/origin/alt_tony
+0232d9dfacf539327641afc4910d8445465ed4cd refs/remotes/origin/anothertestb
+226fda585a62bb56af2ec0364f4aa18a0c85c38a refs/remotes/origin/bryan
+50545502cf937d186e02465efede1ee7bfd941a0 refs/remotes/origin/main
+5c09f68f9c667a5c190a67cf433a927d3a552917 refs/remotes/origin/packageingbranch
+662adb94c99b57023efc2401ce4dce8c70e78504 refs/remotes/origin/workingbranch
