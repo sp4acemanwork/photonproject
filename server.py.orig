@@ -4,11 +4,18 @@ import re
 
 
 class usr:
+<<<<<<< HEAD
     def __init__(self, name: str, team: str):
         self.name = name
         self.score = 0
         self.base_score = 0
         self.team = ""  # check to see how players are sorted
+=======
+    def __init__(self, name: str):
+        self.name = name
+        self.score = 0
+        self.base_score = 0
+>>>>>>> b5903ba (wokring changes)
 
 
 # you should do all main functions of the back end through this class
@@ -44,9 +51,15 @@ class handler:
         test = (self.target_ip, self.port)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
+<<<<<<< HEAD
+        newusr = usr(player_name, team)
+        self.local_score_keep[equipment_id] = newusr
+        # self.udp_handler.recive_message()
+=======
         newusr = usr(player_name)
         self.local_score_keep[player_name] = newusr
         self.udp_handler.recive_message()
+>>>>>>> b5903ba (wokring changes)
         # self.database_handler.print_table()
 
     def player_exists(self, new_id):
