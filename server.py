@@ -2,6 +2,14 @@ import socket
 from database import database_handler
 import re
 
+
+class usr:
+    def __init__(self, name: str):
+        self.name = name
+        self.score = 0
+        self.base_score = 0
+
+
 # you should do all main functions of the back end through this class
 class handler:
     def __init__(self, target_ip: str, local_port_listen: int, local_port_send: int, buffer_size: int):
@@ -11,6 +19,7 @@ class handler:
         self.buffer_size = buffer_size
         self.udp_handler = udp_handler("127.0.0.1", self.local_port_send, self.buffer_size)
         self.database_handler = database_handler()
+        self.local_score_keep = {}  # keeps a list of usr obj
 
     def start_game(self):
         print("printing values")
@@ -35,6 +44,8 @@ class handler:
         test = (self.target_ip, self.local_port_send)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
+        newusr = usr(player_name)
+        self.local_score_keep[player_name] = newusr
         self.udp_handler.recive_message()
         # self.database_handler.print_table()
 

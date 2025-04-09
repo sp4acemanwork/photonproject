@@ -1,6 +1,7 @@
 import socket
 import random
 import time
+import unittest
 
 bufferSize = 1024
 serverAddressPort = ("127.0.0.1", 7500)
@@ -36,7 +37,7 @@ print('')
 
 # create events, random player and order
 counter = 0
-# send player hardware id back 
+# send player hardware id back
 while True:
     if random.randint(1, 2) == 1:
         redplayer = red1
@@ -59,6 +60,7 @@ while True:
         # after 10 iterations, send base hit
     if counter == 10:
         message = str(redplayer) + ":43"
+
     if counter == 20:
         message = str(greenplayer) + ":53"
 
@@ -76,3 +78,41 @@ while True:
     time.sleep(random.randint(1, 3))
 
 print("program complete")
+
+red1 = input('Enter equipment id of red player 1 ==> ')
+red2 = input('Enter equipment id of red player 1 ==> ')
+green1 = input('Enter equipment id of red player 1 ==> ')
+green2 = input('Enter equipment id of red player 1 ==> ')
+
+
+class testprogram(unittest.TestCase):
+    def __init__(self):
+        self.bufferSize = 1024
+        self.serverAddressPort = ("127.0.0.1", 7500)
+        self.clientAddressPort = ("127.0.0.1", 7501)
+        self.UDPServerSocketReceive = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        self.UDPServerSocketTransmit = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        self.UDPServerSocketReceive.bind(serverAddressPort)
+
+    def check_start_game(self) -> bool:
+        print("")
+        print("waiting for start game signal")
+        received_data = ' '
+        while received_data != '202':
+            received_data, address = self.UDPServerSocketReceive.recvfrom(self.bufferSize)
+            received_data = received_data.decode('utf-8')
+            self.assertEquals(received_data, '202')
+        return True
+
+    # send hit user then expect hit user hardware id to be returned
+    def check_player_hit_player(self, player1: str, player2: str) -> bool:
+        message = str(player1) + ":" + str(player2)
+        self.UDPServerSocketTransmit.sendto(str.encode(str(message), self.clientAddressPort))
+        hituser, address = self.UDPServerSocketReceive.recvfrom(self.bufferSize)
+        self.assertEquals(hituser, player2)
+
+    def player_scored(self, player: str, base: str):
+        message = str(player) + ":" + str(base)
+        self.UDPServerSocketTransmit.sendto(str(message), self.clientAddressPort)
+        
+
