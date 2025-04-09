@@ -7,6 +7,8 @@ from PIL import Image, ImageTk
 from countdown_timer import CountdownTimer
 from window import actionFrame, actionFrame2
 from window import window
+import pygame 
+import random
 
 class PlayerScreen:
     def __init__(self):
@@ -18,6 +20,7 @@ class PlayerScreen:
         self.app.bind("<Return>", lambda e: self.get_entry_value())
         self.app.bind("<F5>", lambda e: self.start_game_with_countdown())
         self.teams_data = {}
+        pygame.mixer.init() 
 
     def create(self, col: int, team_name: str, team_color: str):
         # creates the labels
@@ -118,6 +121,10 @@ class PlayerScreen:
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
 
+    def pick_random_file(self):
+
+    def play_music(self):
+        pygame.mixer.music.load("/home/student/photonproject/music/photon_tracks")
 
     def change_network(self):
         # Create a new window to enter network details
