@@ -7,7 +7,6 @@ class database_handler:
         try:
             self.__conn = psycopg2.connect(dbname="photon")
 
-        # self.__conn = psycopg2.connect(dbname="photon", user="postgres",password="1234", host="localhost", port="5432")
             self.cur = self.__conn.cursor()
         except psycopg2.OperationalError:
             self.debug = True
@@ -34,6 +33,14 @@ class database_handler:
         row = self.cur.fetchall()
         player = (row[0][0], row[0][1])
         return player
+    
+    # def get_all_players(self) :
+    #     list_of_players = []
+    #     self.cur.execute(f"select * from players")
+    #     result = self.cur.fetchall()
+    #     for x in result:
+    #         list_of_players.append(x)
+    #     return list_of_players
 
     # delete a player
     def delete_player(self, del_id: int) -> None:
@@ -95,7 +102,7 @@ class database_handler:
 
     def player_exists(self, player_id: int) -> bool:
 
-        self.cur.execute("SELECT COUNT(*) FROM players WHERE id = %s;", (player_id,player))
+        self.cur.execute("SELECT COUNT(*) FROM players WHERE id = %s;", (player_id,))
         count = self.cur.fetchone()[0]
         return count > 0
 
@@ -109,7 +116,6 @@ class database_handler:
             WHERE id = %s;
         """, (new_codename, player_id))
         self.__conn.commit()
-
 
 # test.get_player(1)
 # test.close()

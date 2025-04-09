@@ -12,13 +12,14 @@ import random
 
 class PlayerScreen:
     def __init__(self):
-        self.game_handler = handler("127.0.0.1", 7501, 7500, 1024)
+        self.game_handler = handler("127.0.0.1", 7501, 1024)
         self.app = customtkinter.CTk()
         self.app.geometry("500x400")
         self.app.attributes("-zoomed", True)
         set_appearance_mode("dark")
         self.app.bind("<Return>", lambda e: self.get_entry_value())
         self.app.bind("<F5>", lambda e: self.start_game_with_countdown())
+        self.app.bind("<F12>", lambda e: self.delete_entries())        
         self.teams_data = {}
         pygame.mixer.init() 
 
@@ -113,6 +114,7 @@ class PlayerScreen:
     
 
     def countdown_to_playaction(self):
+        self.app.destroy()
         print("Countdown finished, switching to ActionFrame screen...")
         #New window initialized 
         test = window()
@@ -122,6 +124,8 @@ class PlayerScreen:
 
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
+        # list_of_players = self.game_handler.database_handler.get_all_players()
+        testpage.append_list(self.list_of_id_and_names)
 
     def pick_random_file(self, folder_path):
         if not os.path.isdir(folder_path):
