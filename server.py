@@ -8,6 +8,7 @@ class usr:
         self.name = name
         self.score = 0
         self.base_score = 0
+        self.team = ""  # check to see how players are sorted
 
 
 # you should do all main functions of the back end through this class
@@ -45,7 +46,7 @@ class handler:
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
         newusr = usr(player_name)
-        self.local_score_keep[player_name] = newusr
+        self.local_score_keep[equipment_id] = newusr
         self.udp_handler.recive_message()
         # self.database_handler.print_table()
 
@@ -58,22 +59,37 @@ class handler:
     def add_score(self):
         print("implement")
 
-    def recmsg(self) -> any: # figure out what to return
+    #                                           [player,  b to their name]
+    def recive_event(self) -> tuple[str, bool]:  # figure out what to return
         mesg: tuple = self.udp_handler.recive_message()
         event: str = mesg[0]
         part = re.split(r":", event, maxsplit=1)
+        player = self.local_score_keep[part[0]]
 
         if part[1] == "43":
             print(f"user id:{part[0]} scored for RED")
+            if player == "GREEN":
+                player.score += 10
+            else:
+                player.score -= 10
+
+            self.udp_handler.send_message(player.score, (self.target_ip, self.local_port_send))
 
         if part[1] == "53":
             print(f"user id:{part[0]} scored for GREEN")
+            if player.team == "RED":
+                player.score += 10
+            else:
+                player.score -= 10
+
+            self.udp_handler.send_message(player.score, (self.target_ip, self.local_port_send))
 
         else:
             print(f"user id:{part[0]} tagged user id:{part[1]}")
-
-
-
+            self.udp_handler.send_message(part[1], (self.target_ip, self.local_port_send))
+            if player.scored == 3:
+                return (player.player_name, True)
+        return (player.player_name, False)
 
 
 # this class shouldn't be called directly rather use the functions that do the sending functions automatically
@@ -96,6 +112,7 @@ class udp_handler:
         client_ip = "client ip:{}".format(address)
         print(client_msg)
         print(client_ip)
+        bytes_address_pair[0] = bytes_address_pair[0].decode('utf-8')
         return bytes_address_pair
 
     # this function takes -> (message, tuple:[ip, port])
@@ -121,3 +138,5 @@ class udp_handler:
 
 
 # # __main__()
+
+
