@@ -64,7 +64,7 @@ class actionFrame(page):  # example of how a page could be implemented
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
             "stylized_b_green": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
-            "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}}
+            "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "right", "expand": False}}
             
             
         }
@@ -93,7 +93,9 @@ class actionFrame(page):  # example of how a page could be implemented
         }
         self.b_con = {
 
-            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
+            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}},
+            "b_label_red": {"el": tk.Listbox(self.page_elements["stylized_b_red"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
+
         }
         self.middle["button"]["el"].pack()
         # Red Team Containers
@@ -111,6 +113,7 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
         self.b_con["b_label_green"]["el"].pack(**self.b_con["b_label_green"]["opt"])
+        self.b_con["b_label_red"]["el"].pack(**self.b_con["b_label_red"]["opt"])
 
     def setbuttonfunction(self, functosend):
         self.buttonfunc = lambda: functosend
@@ -157,14 +160,22 @@ class actionFrame(page):  # example of how a page could be implemented
     #             self.b_con["b_label_green"]["el"].insert(index, "B")
 
     def stylized_b(self, listofusers: list):
-        for i in range(8):
+        
+        #loop through all the players
+        for player in listofusers:
+            #add empty items to Listbox
             self.b_con["b_label_green"]["el"].insert(tk.END, "")
+            self.b_con["b_label_red"]["el"].insert(tk.END, "")
+            #check for what team a player is on
+            if player[3] == "GREEN TEAM":
+                #check the score passed through from the server
+                if player.base_score == 3:
+                    self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
 
-        base_score = 3
-        #for player in listofusers:
-        if base_score == 3:
-            #index = listofusers.index(player)
-            self.b_con["b_label_green"]["el"].insert(3, "B")
+            if player[3] == "RED TEAM":
+                
+                if player.base_score == 3:
+                    self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
                 
         
 
