@@ -186,35 +186,34 @@ class actionFrame2(page):  # example of how a page could be implemented
         self.middle["button"]["el"].pack()
 
 
-# test = window()
-# testpage = actionFrame(test.window, test)
-# testpage2 = actionFrame2(test.window, test)
-# test.addPage("actionscreen", testpage)
-# example_list = [
-#     (1, 101, "Alice", "RED TEAM"),
-#     (2, 102, "Bob", "GREEN TEAM"),
-#     (3, 103, "Charlie", "RED TEAM"),
-#     (4, 104, "David", "GREEN TEAM"),
-#     (5, 105, "Eve", "RED TEAM"),
-#     (6, 106, "Frank", "GREEN TEAM"),
-#     (7, 107, "Grace", "RED TEAM"),
-#     (8, 108, "Hank", "GREEN TEAM")
-# ]
+test = window()
+testpage = actionFrame(test.window, test)
+testpage2 = actionFrame2(test.window, test)
+test.addPage("actionscreen", testpage)
+example_list = [
+    (1, 101, "Alice", "RED TEAM"),
+    (2, 102, "Bob", "GREEN TEAM"),
+    (3, 103, "Charlie", "RED TEAM"),
+    (4, 104, "David", "GREEN TEAM"),
+    (5, 105, "Eve", "RED TEAM"),
+    (6, 106, "Frank", "GREEN TEAM"),
+    (7, 107, "Grace", "RED TEAM"),
+    (8, 108, "Hank", "GREEN TEAM")
+]
 
-# testpage.append_list(example_list)
-# test.addPage("test", testpage2)
-# test.redraw("actionscreen")
-# test.window.mainloop()
+testpage.append_list(example_list)
+test.addPage("test", testpage2)
+test.redraw("actionscreen")
+test.window.mainloop()
 
-# TEST
-# test = window()
-# testpage = actionFrame(test.window, test)
-# testpage2 = actionFrame2(test.window, test)
-# test.addPage("actionscreen", testpage)
+test = window()
+testpage = actionFrame(test.window, test)
+testpage2 = actionFrame2(test.window, test)
+test.addPage("actionscreen", testpage)
 
-# test.addPage("test", testpage2)
-# test.redraw("actionscreen")
-# test.window.mainloop()
+test.addPage("test", testpage2)
+test.redraw("actionscreen")
+test.window.mainloop()
 
 '''
 window = tk.Tk()
