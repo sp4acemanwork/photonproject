@@ -1,7 +1,10 @@
 import tkinter as tk
 import random
+from server import handler
+from main import start_game_with_countdown
 # import keyboard # implement later
 
+game_handler = handler("127.0.0.1", 7501, 1024)
 class page:
     def __init__(self, parent_window: tk.Tk):
         self.window = parent_window
@@ -292,7 +295,6 @@ class playerFrame(page):
         listcongreen.pack(**self.green_frame["green_list_container"]["opt"])
         self.green_frame["green_list"]["el"].pack(**self.green_frame["green_list"]["opt"])
         green_label_row.pack(fill="x", side="top")
-
 
         # Green labels (horizontal)
         self.green_frame["green_label_1"]["el"].pack(**self.green_frame["green_label_1"]["opt"])
