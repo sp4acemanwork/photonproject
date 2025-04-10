@@ -1,21 +1,26 @@
 import tkinter as tk
 import random
+from server import handler
+from main import start_game_with_countdown
 # import keyboard # implement later
 
-
+game_handler = handler("127.0.0.1", 7501, 1024)
 class page:
     def __init__(self, parent_window: tk.Tk):
         self.window = parent_window
         self.page_elements = {}
         self.setvis = True
+        
 
 
 class window:
     def __init__(self):
         self.window = tk.Tk()
         self.window.geometry("800x600")
+        self.window.attributes("-zoomed", True)
         self.currentwindow = None
         self.pages = {}
+        
 
     def addPage(self, name: str, el: page):
         self.pages[name] = el
@@ -143,18 +148,41 @@ class actionFrame2(page):  # example of how a page could be implemented
         self.redFrame = {}
         self.middle["button"]["el"].pack()
 
+def create_popup():
+    popup = tk.Toplevel()
+    popup.title("Popup Window")
+    popup.geometry("300x150")
+    tk.Label(popup, text="Changing network to IP", font=("Helvetica", 14)).pack(pady=20)
+    
+
+    entry = tk.Entry(popup, font=("Helvetica", 12))
+    entry.pack(pady=5)
+
+    def submit():
+        new_ip = entry.get()
+        print(f"Changing network to IP: {new_ip}")
+        print(f"AHHHH: {new_ip}")
+        game_handler.change_socket(new_ip)
+        popup.destroy()
+
+    tk.Button(popup, text="Submit", command=submit).pack(pady=10)
+
 class playerFrame(page):
     def __init__(self, parent_window: window, parent: window):
         super().__init__(parent_window)
         self.parent_window = parent_window
         self.parent = parent
+        self.change_network = lambda: create_popup()
+        self.parent.window.bind("<F5>", lambda e: start_game_with_countdown(self.parent.window))
+        # self.parent.window.bind("<F12>", lambda e: self.delete_entries())
         self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=200), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=200), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}}}
+        self.middle = {"back_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}},
+                       "change_network_button": {"el" : tk.Button(self.page_elements["split_frame"]["el"], text="Change Network", command=self.change_network), "opt": {"anchor" :"center"}}}
         # stupid dumb fix because we didn't use html and typescript
 
         lcontainergreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="green", height=16)
@@ -174,7 +202,7 @@ class playerFrame(page):
 
         # GREEN ENTRY ROWS
         green_entries = []  
-        for i in range(14):
+        for i in range(15):
             row = tk.Frame(listcongreen, bg="lightgreen")
             row.pack(fill="x", pady=2)
 
@@ -194,7 +222,7 @@ class playerFrame(page):
 
         # RED ENTRY ROWS
         red_entries = []
-        for i in range(14):
+        for i in range(15):
             row = tk.Frame(listconred, bg="red")
             row.pack(fill="x", pady=2)
 
@@ -234,7 +262,8 @@ class playerFrame(page):
 
         
 
-        self.middle["button"]["el"].pack()
+        self.middle["back_button"]["el"].pack()
+        self.middle["change_network_button"]["el"].pack(**self.middle["change_network_button"]["opt"])
         # Red Team Containers
         lcontainerred.pack(**self.red_frame["red_label_container"]["opt"])
         self.red_frame["red_label"]["el"].pack(**self.red_frame["red_label"]["opt"])
@@ -253,7 +282,6 @@ class playerFrame(page):
         listcongreen.pack(**self.green_frame["green_list_container"]["opt"])
         self.green_frame["green_list"]["el"].pack(**self.green_frame["green_list"]["opt"])
         green_label_row.pack(fill="x", side="top")
-
 
         # Green labels (horizontal)
         self.green_frame["green_label_1"]["el"].pack(**self.green_frame["green_label_1"]["opt"])
