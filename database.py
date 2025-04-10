@@ -120,5 +120,5 @@ class database_handler:
         """, (new_codename, player_id))
         self.__conn.commit()
 
-# test.get_player(1)
-# test.close()
+test = database_handler()
+test.clear()
