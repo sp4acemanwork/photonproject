@@ -199,14 +199,54 @@ class playerFrame(page):
         listconred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="darkred", width=30, )
 
          # --- GREEN LABEL ROW FRAME ---
-        green_label_row = tk.Frame(lcontainergreen, bg="green")
+        green_label_row = tk.Frame(listcongreen, bg="green")
         green_label_row.pack(fill="x", side="top")
 
         
         # --- RED LABEL ROW FRAME ---
-        red_label_row = tk.Frame(lcontainerred, bg="red")
+        red_label_row = tk.Frame(listconred, bg="red")
         red_label_row.pack(fill="x", side="top")
-        
+
+
+        # GREEN ENTRY ROWS
+        green_entries = []  
+        for i in range(14):
+            row = tk.Frame(listcongreen, bg="lightgreen")
+            row.pack(fill="x", pady=2)
+
+            tk.Label(row, text=f"{i+1}", bg="lightgreen", width=5).pack(side="left")
+
+            player_id = tk.Entry(row, width=20)
+            player_id.pack(side="left", padx=10)
+
+            equip_id = tk.Entry(row, width=20)
+            equip_id.pack(side="left", padx=10)
+
+            player_name = tk.Entry(row, width=20)
+            player_name.pack(side="left", padx=10)
+
+            green_entries.append((player_id, equip_id, player_name))
+
+
+        # RED ENTRY ROWS
+        red_entries = []
+        for i in range(14):
+            row = tk.Frame(listconred, bg="red")
+            row.pack(fill="x", pady=2)
+
+            tk.Label(row, text=f"{i+1}", bg="red", width=5).pack(side="left", padx=5)
+
+            player_id = tk.Entry(row, width=20)
+            player_id.pack(side="left", padx=10)
+
+            equip_id = tk.Entry(row, width=20)
+            equip_id.pack(side="left", padx=10)
+
+            player_name = tk.Entry(row, width=20)
+            player_name.pack(side="left", padx=10)
+
+            red_entries.append((player_id, equip_id, player_name))
+  
 
         self.green_frame = {
             "green_label_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "x", "side": "top", "expand": False}},
@@ -216,7 +256,6 @@ class playerFrame(page):
             "green_label_1": {"el": tk.Label(green_label_row, text="Player ID", bg="lightgreen", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}},
             "green_label_2" : {"el": tk.Label(green_label_row, text="Equipment ID", bg="lightgreen", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}},
             "green_label_3" : {"el": tk.Label(green_label_row, text="Player Name", bg="lightgreen", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}}
-            
         }
         self.red_frame = {
             "red_label_container": {"el": tk.Frame(self.page_elements["redteam_frame"]["el"], bg="lightcoral"), "opt": {"fill": "x", "side": "top", "expand": False}},
@@ -226,7 +265,6 @@ class playerFrame(page):
             "red_label_1" : {"el": tk.Label(red_label_row, text="Player ID", bg="lightcoral", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}},
             "red_label_2" : {"el": tk.Label(red_label_row, text="Equipment ID", bg="lightcoral", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}},
             "red_label_3" : {"el": tk.Label(red_label_row, text="Player Name", bg="lightcoral", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}}
-            
         }
        
 
