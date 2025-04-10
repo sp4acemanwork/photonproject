@@ -59,7 +59,7 @@ class actionFrame(page):  # example of how a page could be implemented
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
             "stylized_b_green": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
-            "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "right", "expand": False}}
+            "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}}
             
             
         }
@@ -88,9 +88,7 @@ class actionFrame(page):  # example of how a page could be implemented
         }
         self.b_con = {
 
-            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}},
-            "b_label_red": {"el": tk.Listbox(self.page_elements["stylized_b_red"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
-
+            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
         }
         self.middle["button"]["el"].pack()
         # Red Team Containers
@@ -108,7 +106,6 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
         self.b_con["b_label_green"]["el"].pack(**self.b_con["b_label_green"]["opt"])
-        self.b_con["b_label_red"]["el"].pack(**self.b_con["b_label_red"]["opt"])
 
     def setbuttonfunction(self, functosend):
         self.buttonfunc = lambda: functosend
@@ -271,33 +268,34 @@ class playerFrame(page):
 
 
 
-# test = window()
-# testpage = actionFrame(test.window, test)
-# testpage2 = actionFrame2(test.window, test)
-# test.addPage("actionscreen", testpage)
-# example_list = [
-#     (1, 101, "Alice", "RED TEAM"),
-#     (2, 102, "Bob", "GREEN TEAM"),
-#     (3, 103, "Charlie", "RED TEAM"),
-#     (4, 104, "David", "GREEN TEAM"),
-#     (5, 105, "Eve", "RED TEAM"),
-#     (6, 106, "Frank", "GREEN TEAM"),
-#     (7, 107, "Grace", "RED TEAM"),
-#     (8, 108, "Hank", "GREEN TEAM")
-# ]
+test = window()
+testpage = actionFrame(test.window, test)
+testpage2 = actionFrame2(test.window, test)
+test.addPage("actionscreen", testpage)
+example_list = [
+    (1, 101, "Alice", "RED TEAM"),
+    (2, 102, "Bob", "GREEN TEAM"),
+    (3, 103, "Charlie", "RED TEAM"),
+    (4, 104, "David", "GREEN TEAM"),
+    (5, 105, "Eve", "RED TEAM"),
+    (6, 106, "Frank", "GREEN TEAM"),
+    (7, 107, "Grace", "RED TEAM"),
+    (8, 108, "Hank", "GREEN TEAM")
+]
 
-# testpage.append_list(example_list)
-# test.addPage("test", testpage2)
-# test.redraw("actionscreen")
-# test.window.mainloop()
+testpage.append_list(example_list)
+testpage.stylized_b(example_list)
+test.addPage("test", testpage2)
+test.redraw("actionscreen")
+test.window.mainloop()
 
 # TEST
-test = window()
-testpage = playerFrame(test.window, test)
-test.addPage("playerscreen", testpage)
+# test = window()
+# testpage = playerFrame(test.window, test)
+# test.addPage("playerscreen", testpage)
 
-test.redraw("playerscreen")
-test.window.mainloop()
+# test.redraw("playerscreen")
+# test.window.mainloop()
 
 '''
 window = tk.Tk()
