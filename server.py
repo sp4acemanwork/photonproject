@@ -4,7 +4,7 @@ import re
 
 
 class usr:
-    def __init__(self, name: str):
+    def __init__(self, name: str, team: str):
         self.name = name
         self.score = 0
         self.base_score = 0
@@ -39,15 +39,15 @@ class handler:
     # call thing with address to send?
     # this function will call the add player to database then transit the equipment codes for player?
 
-    def add_player(self, player_name: str, player_id: int, equipment_id: int):
+    def add_player(self, player_name: str, player_id: int, equipment_id: int, team: str):
         player_tuple = (player_id, player_name)
         self.database_handler.add_player(player_tuple)
         test = (self.target_ip, self.local_port_send)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
-        newusr = usr(player_name)
+        newusr = usr(player_name, team)
         self.local_score_keep[equipment_id] = newusr
-        self.udp_handler.recive_message()
+        # self.udp_handler.recive_message()
         # self.database_handler.print_table()
 
     def player_exists(self, new_id):
@@ -56,8 +56,8 @@ class handler:
     def recive_message(self) -> tuple[str, str]:
         return self.udp_handler.recive_message()
 
-    def add_score(self):
-        print("implement")
+    def get_base_score(self, equipment_id,) -> tuple[str, int]:
+        return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].score)
 
     #                                           [player,  b to their name]
     def recive_event(self) -> tuple[str, bool]:  # figure out what to return

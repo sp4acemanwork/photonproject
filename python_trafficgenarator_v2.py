@@ -7,8 +7,8 @@ import unittest
 from server import handler
 from server import usr
 from server import udp_handler
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-print("After sys.path update:", sys.path)
+
+
 class testprogram(unittest.TestCase):
     def setUp(self):
         self.bufferSize = 1024
@@ -69,13 +69,11 @@ class testprogram(unittest.TestCase):
 
 print("running test")
 
-tester = testprogram(unittest)
-
 
 print("ports will be ")
-bufferSize = tester.bufferSize
-serverADP = tester.serverAddressPort
-clientADP = tester.clientAddressPort
+bufferSize = 1024
+serverADP = ("127.0.0.1", 7500)
+clientADP = ("127.0.0.1", 7501)
 
 print(f"bufferSize {bufferSize}")
 print(f"serverADP {serverADP}")
@@ -92,10 +90,10 @@ users_with_teams = [
 
 print("instant server")
 
-server = handler(clientADP[0], serverADP[1], clientADP[1])
+server = handler(clientADP[0], serverADP[1], clientADP[1], bufferSize)
 
 print(f"adding users {users_with_teams}")
 
-for user in users_with_teams:
-    print(f"adding user {user}")
-    server.add_player(**user)
+for name, id, eq_id, team in users_with_teams:
+    print(f"adding {name}")
+    server.add_player(name, id, eq_id, team)
