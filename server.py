@@ -57,7 +57,7 @@ class handler:
         return self.udp_handler.recive_message()
 
     def get_base_score(self, equipment_id,) -> tuple[str, int]:
-        return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].score)
+        return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].scored)
 
     #                                           [player,  b to their name]
     def recive_event(self) -> tuple[str, bool]:  # figure out what to return
