@@ -59,6 +59,9 @@ class handler:
     def get_base_score(self, equipment_id,) -> tuple[str, int]:
         return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].scored)
 
+    def get_score(self, equipment_id,) -> tuple[str, int]:
+        return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].score)
+
     #                                           [player,  b to their name]
     def recive_event(self) -> tuple[str, bool]:  # figure out what to return
         mesg: tuple = self.udp_handler.recive_message()
@@ -69,7 +72,7 @@ class handler:
         if part[1] == "43":
             print(f"user id:{part[0]} scored for RED")
             if player == "GREEN":
-                player.score += 10
+                player.scored += 1
             else:
                 player.score -= 10
 
@@ -78,7 +81,7 @@ class handler:
         if part[1] == "53":
             print(f"user id:{part[0]} scored for GREEN")
             if player.team == "RED":
-                player.score += 10
+                player.scored += 1
             else:
                 player.score -= 10
 
