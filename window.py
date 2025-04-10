@@ -55,7 +55,11 @@ class actionFrame(page):  # example of how a page could be implemented
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=60), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
+            "stylized_b_green": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
+            "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}}
+            
+            
         }
         self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}}}
         # stupid dumb fix because we didn't use html and typescript
@@ -64,6 +68,7 @@ class actionFrame(page):  # example of how a page could be implemented
         lcontainerred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="red", height=16)
         listcongreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="darkgreen", width=30)
         listconred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="darkred", width=30, )
+        
 
         self.green_frame = {
             "green_label_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "x", "side": "top", "expand": False}},
@@ -79,7 +84,10 @@ class actionFrame(page):  # example of how a page could be implemented
             "red_list": {"el": tk.Listbox(listconred, bg="red", width=20, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "right"}},
             "red_list2": {"el": tk.Listbox(listconred, bg="darkred", width=2, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left"}}
         }
+        self.b_con = {
 
+            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
+        }
         self.middle["button"]["el"].pack()
         # Red Team Containers
         lcontainerred.pack(**self.red_frame["red_label_container"]["opt"])
@@ -95,6 +103,8 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list"]["el"].pack(**self.green_frame["green_list"]["opt"])
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
+        self.b_con["b_label_green"]["el"].pack(**self.b_con["b_label_green"]["opt"])
+
     def setbuttonfunction(self, functosend):
         self.buttonfunc = lambda: functosend
 
@@ -104,10 +114,12 @@ class actionFrame(page):  # example of how a page could be implemented
             print("appending red user")
             self.red_frame["red_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
             self.red_frame["red_list2"]["el"].insert(tk.END, f"{score}")
+            
         else:
             print("user append green user")
             self.green_frame["green_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
             self.green_frame["green_list2"]["el"].insert(tk.END, f"{score}")
+            #self.b_con["b_label_green"]["el"].insert(tk.END, "B")
 
     def append_list(self, listofusers: list):
         print("appendint_list")
@@ -125,7 +137,31 @@ class actionFrame(page):  # example of how a page could be implemented
                 self.append_user(random.choice([True, False]), player[2], player[1])
 
         # loop though red team and apend users
-        # loop through green team and apand users
+        # loop through green team and apend users
+
+        
+
+
+    # def stylized_b(self, listofusers: list):
+
+    #     for player in listofusers:
+    #         if player.base_score == 3:
+    #             index = listofusers.index(player)
+    #             self.b_con["b_label_green"]["el"].insert(index, "B")
+
+    def stylized_b(self, listofusers: list):
+        for i in range(8):
+            self.b_con["b_label_green"]["el"].insert(tk.END, "")
+
+        base_score = 3
+        #for player in listofusers:
+        if base_score == 3:
+            #index = listofusers.index(player)
+            self.b_con["b_label_green"]["el"].insert(3, "B")
+                
+        
+
+
 
 
 class actionFrame2(page):  # example of how a page could be implemented
@@ -228,6 +264,7 @@ class playerFrame(page):
 
 
 
+<<<<<<< HEAD
 # test = window()
 # testpage = actionFrame(test.window, test)
 # testpage2 = actionFrame2(test.window, test)
@@ -242,19 +279,37 @@ class playerFrame(page):
 #     (7, 107, "Grace", "RED TEAM"),
 #     (8, 108, "Hank", "GREEN TEAM")
 # ]
+=======
 
-# testpage.append_list(example_list)
-# test.addPage("test", testpage2)
-# test.redraw("actionscreen")
-# test.window.mainloop()
+test = window()
+testpage = actionFrame(test.window, test)
+testpage2 = actionFrame2(test.window, test)
+test.addPage("actionscreen", testpage)
+example_list = [
+    (1, 101, "Alice", "RED TEAM"),
+    (2, 102, "Bob", "GREEN TEAM"),
+    (3, 103, "Charlie", "RED TEAM"),
+    (4, 104, "David", "GREEN TEAM"),
+    (5, 105, "Eve", "RED TEAM"),
+    (6, 106, "Frank", "GREEN TEAM"),
+    (7, 107, "Grace", "RED TEAM"),
+    (8, 108, "Hank", "GREEN TEAM")
+]
+>>>>>>> 63aa40d (working on the stylized b, almost done)
+
+testpage.append_list(example_list)
+testpage.stylized_b(example_list)
+test.addPage("test", testpage2)
+test.redraw("actionscreen")
+test.window.mainloop()
 
 # TEST
-test = window()
-testpage = playerFrame(test.window, test)
-test.addPage("playerscreen", testpage)
+# test = window()
+# testpage = playerFrame(test.window, test)
+# test.addPage("playerscreen", testpage)
 
-test.redraw("playerscreen")
-test.window.mainloop()
+# test.redraw("playerscreen")
+# test.window.mainloop()
 
 '''
 window = tk.Tk()
