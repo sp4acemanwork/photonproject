@@ -44,9 +44,9 @@ class handler:
         test = (self.target_ip, self.port)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
-        newusr = usr(player_name)
-        self.local_score_keep[player_name] = newusr
-        self.udp_handler.recive_message()
+        newusr = usr(player_name, team)
+        self.local_score_keep[equipment_id] = newusr
+        # self.udp_handler.recive_message()
         # self.database_handler.print_table()
 
     def player_exists(self, new_id):
