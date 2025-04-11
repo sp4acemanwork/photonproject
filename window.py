@@ -218,7 +218,9 @@ def start_game_with_countdown(parent, list_of_id_and_names,event=None,):
     teams = list_of_id_and_names
 
     from countdown_timer import CountdownTimer  
+    
     CountdownTimer(parent, lambda: countdown_to_playaction(parent))
+    
 
 def countdown_to_playaction(parent):
     # self.app.destroy()
@@ -442,7 +444,7 @@ example_list = [
 ]
 
 testpage.append_list(example_list)
-testpage.stylized_b(example_list)
+#testpage.stylized_b(example_list)
 test.addPage("test", testpage2)
 test.redraw("actionscreen")
 test.window.mainloop()
