@@ -2,6 +2,9 @@ import os
 from tkinter import *
 from PIL import Image, ImageTk
 import customtkinter as ctk
+import subprocess
+import pygame
+import os
 
 class CountdownTimer:
     def __init__(self, parent, callback):
@@ -10,7 +13,8 @@ class CountdownTimer:
         self.countdown_window = Toplevel(self.parent)
         self.countdown_window.title("Game Countdown")
         self.countdown_window.geometry("800x600")
-        self.countdown_window.attributes("-fullscreen", True)
+        self.countdown_window.attributes("-zoomed", True)
+        pygame.mixer.init()
 
         screen_width = self.countdown_window.winfo_screenwidth()
         screen_height = self.countdown_window.winfo_screenheight()
@@ -33,14 +37,25 @@ class CountdownTimer:
         self.countdown_label.place(relx=0.501, rely=0.583, anchor=CENTER)
 
         self.countdown_window.bind("<Escape>", lambda e: self.countdown_window.destroy())
-
+        self.countdown_window.bind("<F1>", lambda e: self.countdown_window.minsize())
         self.show_image(0)
 
     def show_image(self, index):
+        track_path = "/home/student/photonproject/music/photon_tracks/Track05.mp3"
         if index < len(self.countdown_images):
+            if index == 12:  
+                if not os.path.isfile(track_path):
+                    print("File not Found.")
+                    return
+                try:
+                    pygame.mixer.music.set_volume(1.0)
+                    pygame.mixer.music.load(track_path)
+                    pygame.mixer.music.play()
+                    print(f"Now playing: {os.path.basename(track_path)}")
+                except pygame.error as e:
+                    print(f"Error Loading or Playing Music: {e}")
             image_path = os.path.join(self.countdown_folder, self.countdown_images[index])
             image = Image.open(image_path)
-            
             # Resize the number images
             number_width = 805  # Set the desired width
             number_height = 270  # Set the desired height
@@ -51,6 +66,31 @@ class CountdownTimer:
             self.countdown_label.config(image=photo)
             self.countdown_label.image = photo
             self.countdown_window.after(1000, self.show_image, index + 1)
+            # self.countdown_window.after(18000, self.play_music)
         else:
             self.countdown_window.destroy()
             self.callback()
+
+    # def play_music(self):
+        # track_path = "/home/student/photonproject/music/photon_tracks/Track05.mp3"
+
+        # if not os.path.isfile(track_path):
+        #     print("File not Found.")
+        #     return
+        # try:
+        #     pygame.mixer.music.set_volume(1.0)
+        #     pygame.mixer.music.load(track_path)
+        #     pygame.mixer.music.play()
+        #     print(f"Now playing: {os.path.basename(track_path)}")
+        # except pygame.error as e:
+        #     print(f"Error Loading or Playing Music: {e}")
+
+        # track_path = "/home/student/photonproject/music/photon_tracks/Track05.mp3"
+        # print(f"Now playing: {track_path}")
+        
+        # # Run mpg123 command to play the music
+        # try:
+        #     subprocess.run(["mpg123", track_path])
+        #     print("Music started successfully!")
+        # except Exception as e:
+        #     print(f"Error playing music: {e}")

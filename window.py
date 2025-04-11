@@ -151,14 +151,6 @@ class actionFrame(page):  # example of how a page could be implemented
 
         
 
-
-    # def stylized_b(self, listofusers: list):
-
-    #     for player in listofusers:
-    #         if player.base_score == 3:
-    #             index = listofusers.index(player)
-    #             self.b_con["b_label_green"]["el"].insert(index, "B")
-
     def stylized_b(self, listofusers: list):
         
         #loop through all the players
@@ -218,7 +210,9 @@ def start_game_with_countdown(parent, list_of_id_and_names,event=None,):
     teams = list_of_id_and_names
 
     from countdown_timer import CountdownTimer  
+    
     CountdownTimer(parent, lambda: countdown_to_playaction(parent))
+    
 
 def countdown_to_playaction(parent):
     # self.app.destroy()
@@ -442,7 +436,7 @@ example_list = [
 ]
 
 testpage.append_list(example_list)
-testpage.stylized_b(example_list)
+#testpage.stylized_b(example_list)
 test.addPage("test", testpage2)
 test.redraw("actionscreen")
 test.window.mainloop()
