@@ -159,7 +159,7 @@ class actionFrame(page):  # example of how a page could be implemented
     #             index = listofusers.index(player)
     #             self.b_con["b_label_green"]["el"].insert(index, "B")
 
-    def stylized_b(self, listofusers: list):
+    def stylized_b(self, listofusers: list, name: str, base_score: int):
         
         #loop through all the players
         for player in listofusers:
@@ -167,14 +167,14 @@ class actionFrame(page):  # example of how a page could be implemented
             self.b_con["b_label_green"]["el"].insert(tk.END, "")
             self.b_con["b_label_red"]["el"].insert(tk.END, "")
             #check for what team a player is on
-            if player[3] == "GREEN TEAM":
+            if player[3] == "GREEN TEAM" and player[2] == name:
                 #check the score passed through from the server
-                if player.base_score == 3:
+                if base_score == 3:
                     self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
 
-            if player[3] == "RED TEAM":
+            if player[3] == "RED TEAM" and player[2] == name:
                 
-                if player.base_score == 3:
+                if base_score == 3:
                     self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
                 
         
