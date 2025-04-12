@@ -74,4 +74,4 @@ class CountdownTimer:
             self.countdown_window.after(1000, self.show_image, index + 1)
         else:
             self.countdown_window.destroy()
-            self.callback()
+            self.callback()  # Trigger the callback to start the next action
