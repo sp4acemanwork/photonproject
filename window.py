@@ -22,7 +22,6 @@ class window:
         self.window.attributes("-zoomed", True)
         self.currentwindow = None
         self.pages = {}
-        
 
     def addPage(self, name: str, el: page):
         self.pages[name] = el
@@ -114,6 +113,34 @@ class actionFrame(page):  # example of how a page could be implemented
 
         self.b_con["b_label_green"]["el"].pack(**self.b_con["b_label_green"]["opt"])
         self.b_con["b_label_red"]["el"].pack(**self.b_con["b_label_red"]["opt"])
+
+        # Add the timer label
+        self.timer_label = tk.Label(self.window, text="06:00", font=("Helvetica", 48), bg="black", fg="white")
+        self.timer_label.place(relx=0.5, rely=0.1, anchor="center")  # Place the timer in the middle-top of the screen
+
+        # Start the timer
+        self.remaining_time = 6 * 60  # 6 minutes in seconds
+        self.update_timer()
+        
+
+    def update_timer(self):
+        if self.remaining_time > 0:
+            minutes = self.remaining_time // 60
+            seconds = self.remaining_time % 60
+            self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
+            self.remaining_time -= 1
+            self.window.after(1000, self.update_timer)
+        else:
+            # Display "GAME OVER" text in the middle of the screen and make it blink
+            self.timer_label.config(text="GAME OVER", font=("Helvetica", 64), fg="red")
+            self.timer_label.place(relx=0.5, rely=0.5, anchor="center")  # Center the "GAME OVER" text
+            self.blink_game_over()
+
+    def blink_game_over(self):
+        current_color = self.timer_label.cget("fg")
+        new_color = "black" if current_color == "red" else "red"
+        self.timer_label.config(fg=new_color)
+        self.window.after(500, self.blink_game_over)  # Toggle color every 500ms
 
     def setbuttonfunction(self, functosend):
         self.buttonfunc = lambda: functosend
