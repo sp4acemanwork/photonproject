@@ -73,4 +73,4 @@ done < "$reqfile"
 
 clear 
 
-python3 ./splash_screen.py
+python3 ./main.py

@@ -10,7 +10,7 @@ from window import window
 
 class PlayerScreen:
     def __init__(self):
-        self.game_handler = handler("127.0.0.1", 7501, 7500, 1024)
+        self.game_handler = handler("127.0.0.1", 7501, 1024)
         self.app = customtkinter.CTk()
         self.app.geometry("500x400")
         self.app.attributes("-zoomed", True)
@@ -104,11 +104,13 @@ class PlayerScreen:
     def start_game(self):
         self.game_handler.start_game()
 
+
     def start_game_with_countdown(self):
-        CountdownTimer(self.app, self.countdown_to_playaction)
+        CountdownTimer(self.app, self.countdown_to_playaction(self.countdown_seconds))
+        
     
 
-    def countdown_to_playaction(self):
+    def countdown_to_playaction(self, total_time):
         self.app.destroy()
         print("Countdown finished, switching to ActionFrame screen...")
         #New window initialized 
@@ -119,6 +121,10 @@ class PlayerScreen:
 
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
+        list_of_players = self.game_handler.database_handler.get_all_players()
+        testpage.append_list(self.list_of_id_and_names)
+
+
 
 
     def change_network(self):
