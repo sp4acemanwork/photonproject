@@ -5,6 +5,7 @@ import customtkinter as ctk
 import subprocess
 import pygame
 import os
+import random
 
 class CountdownTimer:
     def __init__(self, parent, callback):
@@ -14,6 +15,7 @@ class CountdownTimer:
         self.countdown_window.title("Game Countdown")
         self.countdown_window.geometry("800x600")
         self.countdown_window.attributes("-zoomed", True)
+        #pygame.mixer is a module for loading and playing sounds with the GUI 
         pygame.mixer.init()
 
         screen_width = self.countdown_window.winfo_screenwidth()
@@ -41,9 +43,13 @@ class CountdownTimer:
         self.show_image(0)
 
     def show_image(self, index):
-        track_path = "/home/student/photonproject/music/photon_tracks/Track05.mp3"
+        #Selects random int to add to track path to randomize track selection
+        random_int = random.randint(0,9)
+        track_path = "/home/student/photonproject/music/photon_tracks/Track0" + str(random_int) + ".mp3"
         if index < len(self.countdown_images):
+            #Will start audio track when countdown is 18 seconds left
             if index == 12:  
+                #Checks that the file path is valid
                 if not os.path.isfile(track_path):
                     print("File not Found.")
                     return
@@ -66,31 +72,6 @@ class CountdownTimer:
             self.countdown_label.config(image=photo)
             self.countdown_label.image = photo
             self.countdown_window.after(1000, self.show_image, index + 1)
-            # self.countdown_window.after(18000, self.play_music)
         else:
             self.countdown_window.destroy()
             self.callback()
-
-    # def play_music(self):
-        # track_path = "/home/student/photonproject/music/photon_tracks/Track05.mp3"
-
-        # if not os.path.isfile(track_path):
-        #     print("File not Found.")
-        #     return
-        # try:
-        #     pygame.mixer.music.set_volume(1.0)
-        #     pygame.mixer.music.load(track_path)
-        #     pygame.mixer.music.play()
-        #     print(f"Now playing: {os.path.basename(track_path)}")
-        # except pygame.error as e:
-        #     print(f"Error Loading or Playing Music: {e}")
-
-        # track_path = "/home/student/photonproject/music/photon_tracks/Track05.mp3"
-        # print(f"Now playing: {track_path}")
-        
-        # # Run mpg123 command to play the music
-        # try:
-        #     subprocess.run(["mpg123", track_path])
-        #     print("Music started successfully!")
-        # except Exception as e:
-        #     print(f"Error playing music: {e}")
