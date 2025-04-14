@@ -22,7 +22,6 @@ class window:
         self.window.attributes("-zoomed", True)
         self.currentwindow = None
         self.pages = {}
-        
 
     def addPage(self, name: str, el: page):
         self.pages[name] = el
@@ -64,7 +63,7 @@ class actionFrame(page):  # example of how a page could be implemented
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
             "stylized_b_green": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
-            "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}}
+            "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "right", "expand": False}}
             
             
         }
@@ -81,19 +80,21 @@ class actionFrame(page):  # example of how a page could be implemented
             "green_label_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "x", "side": "top", "expand": False}},
             "green_list_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "both", "side": "bottom", "expand": True}},
             "green_label": {"el": tk.Label(lcontainergreen, text="Green Team", bg="green", font=("Helvetica", 16)), "opt": {"fill": "x", "side": "top"}},
-            "green_list": {"el": tk.Listbox(listcongreen, bg="green", width=20, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left"}},
+            "green_list": {"el": tk.Listbox(listcongreen, bg="green", width=50, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left"}},
             "green_list2": {"el": tk.Listbox(listcongreen, bg="darkgreen", width=2, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "right"}}
         }
         self.red_frame = {
             "red_label_container": {"el": tk.Frame(self.page_elements["redteam_frame"]["el"], bg="lightcoral"), "opt": {"fill": "x", "side": "top", "expand": False}},
             "red_list_container": {"el": tk.Frame(self.page_elements["redteam_frame"]["el"], bg="lightcoral"), "opt": {"fill": "both", "side": "bottom", "expand": True}},
             "red_label": {"el": tk.Label(lcontainerred, text="Red Team", bg="red", font=("Helvetica", 16)), "opt": {"fill": "x", "side": "top"}},
-            "red_list": {"el": tk.Listbox(listconred, bg="red", width=20, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "right"}},
+            "red_list": {"el": tk.Listbox(listconred, bg="red", width=50, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "right"}},
             "red_list2": {"el": tk.Listbox(listconred, bg="darkred", width=2, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left"}}
         }
         self.b_con = {
 
-            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
+            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}},
+            "b_label_red": {"el": tk.Listbox(self.page_elements["stylized_b_red"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
+
         }
         self.middle["button"]["el"].pack()
         # Red Team Containers
@@ -111,6 +112,35 @@ class actionFrame(page):  # example of how a page could be implemented
         self.green_frame["green_list2"]["el"].pack(**self.green_frame["green_list"]["opt"])
 
         self.b_con["b_label_green"]["el"].pack(**self.b_con["b_label_green"]["opt"])
+        self.b_con["b_label_red"]["el"].pack(**self.b_con["b_label_red"]["opt"])
+
+        # Add the timer label
+        self.timer_label = tk.Label(self.window, text="06:00", font=("Helvetica", 48), bg="black", fg="white")
+        self.timer_label.place(relx=0.5, rely=0.1, anchor="center")  # Place the timer in the middle-top of the screen
+
+        # Start the timer
+        self.remaining_time = 6 * 60  # 6 minutes in seconds
+        self.update_timer()
+        
+
+    def update_timer(self):
+        if self.remaining_time > 0:
+            minutes = self.remaining_time // 60
+            seconds = self.remaining_time % 60
+            self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
+            self.remaining_time -= 1
+            self.window.after(1000, self.update_timer)
+        else:
+            # Display "GAME OVER" text in the middle of the screen and make it blink
+            self.timer_label.config(text="GAME OVER", font=("Helvetica", 64), fg="red")
+            self.timer_label.place(relx=0.5, rely=0.5, anchor="center")  # Center the "GAME OVER" text
+            self.blink_game_over()
+
+    def blink_game_over(self):
+        current_color = self.timer_label.cget("fg")
+        new_color = "black" if current_color == "red" else "red"
+        self.timer_label.config(fg=new_color)
+        self.window.after(500, self.blink_game_over)  # Toggle color every 500ms
 
     def setbuttonfunction(self, functosend):
         self.buttonfunc = lambda: functosend
@@ -146,6 +176,9 @@ class actionFrame(page):  # example of how a page could be implemented
         # loop though red team and apend users
         # loop through green team and apend users
 
+        
+
+
     # def stylized_b(self, listofusers: list):
 
     #     for player in listofusers:
@@ -153,23 +186,27 @@ class actionFrame(page):  # example of how a page could be implemented
     #             index = listofusers.index(player)
     #             self.b_con["b_label_green"]["el"].insert(index, "B")
 
-    def stylized_b(self, listofusers: list):
-
-        # loop through all the players
+    def stylized_b(self, listofusers: list, name: str, base_score: int):
+        
+        #loop through all the players
         for player in listofusers:
-            # add empty items to Listbox
+            #add empty items to Listbox
             self.b_con["b_label_green"]["el"].insert(tk.END, "")
             self.b_con["b_label_red"]["el"].insert(tk.END, "")
-            # check for what team a player is on
-            if player[3] == "GREEN TEAM":
-                # check the score passed through from the server
-                if player.base_score == 3:
+            #check for what team a player is on
+            if player[3] == "GREEN TEAM" and player[2] == name:
+                #check the score passed through from the server
+                if base_score == 3:
                     self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
 
-            if player[3] == "RED TEAM":
-
-                if player.base_score == 3:
+            if player[3] == "RED TEAM" and player[2] == name:
+                
+                if base_score == 3:
                     self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
+                
+        
+
+
 
 
 class actionFrame2(page):  # example of how a page could be implemented
@@ -187,8 +224,6 @@ class actionFrame2(page):  # example of how a page could be implemented
         self.redFrame = {}
         self.middle["button"]["el"].pack()
 
-<<<<<<< HEAD
-=======
 def change_network_popup():
     popup = tk.Toplevel()
     popup.title("Popup Window")
@@ -210,7 +245,9 @@ def start_game_with_countdown(parent, list_of_id_and_names,event=None,):
     teams = list_of_id_and_names
 
     from countdown_timer import CountdownTimer  
+    
     CountdownTimer(parent, lambda: countdown_to_playaction(parent))
+    
 
 def countdown_to_playaction(parent):
     # self.app.destroy()
@@ -256,14 +293,11 @@ class splashFrame(page):
         self.parent.window.after(3000, next_screen)
         self.parent.window.mainloop()
 
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
 class playerFrame(page):
     def __init__(self, parent_window: window, parent: window):
         super().__init__(parent_window)
         self.parent_window = parent_window
         self.parent = parent
-<<<<<<< HEAD
-=======
         self.teams = []
         self.green_entries = []
         self.red_entries = []
@@ -271,7 +305,6 @@ class playerFrame(page):
         self.parent.window.bind("<F5>", lambda e: start_game_with_countdown(self.parent.window,self.teams))
         self.parent.window.bind("<Return>", lambda e: get_entry_value(self))
         self.parent.window.bind("<F12>", lambda e: delete_entries(self))
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
         self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
         
         def get_entry_value(self):
@@ -312,7 +345,8 @@ class playerFrame(page):
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=200), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}}}
+        self.middle = {"back_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}},
+                       "change_network_button": {"el" : tk.Button(self.page_elements["split_frame"]["el"], text="Change Network", command=self.change_network), "opt": {"anchor" :"center"}}}
         # stupid dumb fix because we didn't use html and typescript
 
         lcontainergreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="green", height=16)
@@ -331,12 +365,7 @@ class playerFrame(page):
 
 
         # GREEN ENTRY ROWS
-<<<<<<< HEAD
-        green_entries = []  
-        for i in range(14):
-=======
         for i in range(15):
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
             row = tk.Frame(listcongreen, bg="lightgreen")
             row.pack(fill="x", pady=2)
 
@@ -355,12 +384,7 @@ class playerFrame(page):
 
 
         # RED ENTRY ROWS
-<<<<<<< HEAD
-        red_entries = []
-        for i in range(14):
-=======
         for i in range(15):
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
             row = tk.Frame(listconred, bg="red")
             row.pack(fill="x", pady=2)
 
@@ -398,14 +422,8 @@ class playerFrame(page):
         }
        
 
-<<<<<<< HEAD
-        
-
-        self.middle["button"]["el"].pack()
-=======
         self.middle["back_button"]["el"].pack()
         self.middle["change_network_button"]["el"].pack(**self.middle["change_network_button"]["opt"])
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
         # Red Team Containers
         lcontainerred.pack(**self.red_frame["red_label_container"]["opt"])
         self.red_frame["red_label"]["el"].pack(**self.red_frame["red_label"]["opt"])
@@ -429,46 +447,3 @@ class playerFrame(page):
         self.green_frame["green_label_1"]["el"].pack(**self.green_frame["green_label_1"]["opt"])
         self.green_frame["green_label_2"]["el"].pack(**self.green_frame["green_label_2"]["opt"])
         self.green_frame["green_label_3"]["el"].pack(**self.green_frame["green_label_3"]["opt"])
-
-
-
-
-
-
-
-
-test = window()
-testpage = actionFrame(test.window, test)
-testpage2 = actionFrame2(test.window, test)
-test.addPage("actionscreen", testpage)
-example_list = [
-    (1, 101, "Alice", "RED TEAM"),
-    (2, 102, "Bob", "GREEN TEAM"),
-    (3, 103, "Charlie", "RED TEAM"),
-    (4, 104, "David", "GREEN TEAM"),
-    (5, 105, "Eve", "RED TEAM"),
-    (6, 106, "Frank", "GREEN TEAM"),
-    (7, 107, "Grace", "RED TEAM"),
-    (8, 108, "Hank", "GREEN TEAM")
-]
-
-testpage.append_list(example_list)
-testpage.stylized_b(example_list)
-test.addPage("test", testpage2)
-test.redraw("actionscreen")
-test.window.mainloop()
-
-# TEST
-# test = window()
-# testpage = playerFrame(test.window, test)
-# test.addPage("playerscreen", testpage)
-
-# test.redraw("playerscreen")
-# test.window.mainloop()
-
-# '''
-# window = tk.Tk()
-# testlabel = tk.Label(window, text='test')
-# testlabel.pack()
-# window.mainloop()
-# '''
