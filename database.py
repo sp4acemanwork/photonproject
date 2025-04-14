@@ -7,10 +7,11 @@ class database_handler:
         try:
             self.__conn = psycopg2.connect(dbname="photon")
 
-        # self.__conn = psycopg2.connect(dbname="photon", user="postgres",password="1234", host="localhost", port="5432")
             self.cur = self.__conn.cursor()
-        except psycopg2.OperationalError:
-            self.debug = False
+        except Exception as e:
+
+            self.debug = True
+            print(f"WARNING DATABASE IS NOT OPERATIANAL ON DEBUG MODE: {e}", e)
 
     # add a player
     def add_player(self, player_tuple) -> None:
@@ -33,6 +34,14 @@ class database_handler:
         row = self.cur.fetchall()
         player = (row[0][0], row[0][1])
         return player
+
+    # def get_all_players(self) :
+    #     list_of_players = []
+    #     self.cur.execute(f"select * from players")
+    #     result = self.cur.fetchall()
+    #     for x in result:
+    #         list_of_players.append(x)
+    #     return list_of_players
 
     # delete a player
     def delete_player(self, del_id: int) -> None:
@@ -111,6 +120,5 @@ class database_handler:
         """, (new_codename, player_id))
         self.__conn.commit()
 
-
-# test.get_player(1)
-# test.close()
+test = database_handler()
+test.clear()

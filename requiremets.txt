@@ -3,3 +3,5 @@ darkdetect
 packaging
 pillow
 psycopg2-binary
+keyboard
+pygame==2.6

@@ -71,4 +71,6 @@ while IFS= read -r line; do
   pip install $line
 done < "$reqfile"
 
-python3 ./splash_screen.py
+clear 
+
+python3 ./main.py
