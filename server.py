@@ -131,14 +131,12 @@ class udp_handler:
 
 #     test = handler("127.0.0.1", 7501, 7500, 1024)
 #     test.start_game()
-#     # while (True):
+#     while (True):
 
-#     #     user_name = input("enter name: ")
-#     #     user_id = int(input("enter id: "))
-#     #     user_eqid = int(input("enter equipment id: "))
-#     #     test.add_player(user_name, user_id, user_eqid)
-
-
-# # __main__()
+#         user_name = input("enter name: ")
+#         user_id = int(input("enter id: "))
+#         user_eqid = int(input("enter equipment id: "))
+#         test.add_player(user_name, user_id, user_eqid)
 
 
+# __main__()
