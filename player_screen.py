@@ -7,6 +7,8 @@ from PIL import Image, ImageTk
 from countdown_timer import CountdownTimer
 from window import actionFrame, actionFrame2
 from window import window
+import pygame 
+import random
 
 class PlayerScreen:
     def __init__(self):
@@ -119,9 +121,11 @@ class PlayerScreen:
         
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
-        # list_of_players = self.game_handler.database_handler.get_all_players()
-        testpage.append_list(self.list_of_id_and_names)
-        
+
+    def pick_random_file(self):
+
+    def play_music(self):
+        pygame.mixer.music.load("/home/student/photonproject/music/photon_tracks")
 
     def change_network(self):
         # Create a new window to enter network details
