@@ -3,7 +3,6 @@ teams = None
 
 
 def main():
-    
     # from splash_screen import SplashScreen  
     # splash_root = SplashScreen()
     # splash_root.after(3000, splash_root.splash_root.next_screen)
