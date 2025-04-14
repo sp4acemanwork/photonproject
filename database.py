@@ -8,9 +8,10 @@ class database_handler:
             self.__conn = psycopg2.connect(dbname="photon")
 
             self.cur = self.__conn.cursor()
-        except psycopg2.OperationalError:
+        except Exception as e:
+
             self.debug = True
-            print("WARNING DATABASE IS NOT OPERATIANAL ON DEBUG MODE")
+            print(f"WARNING DATABASE IS NOT OPERATIANAL ON DEBUG MODE: {e}", e)
 
     # add a player
     def add_player(self, player_tuple) -> None:
@@ -33,7 +34,7 @@ class database_handler:
         row = self.cur.fetchall()
         player = (row[0][0], row[0][1])
         return player
-    
+
     # def get_all_players(self) :
     #     list_of_players = []
     #     self.cur.execute(f"select * from players")
@@ -101,7 +102,9 @@ class database_handler:
         self.__conn.commit()
 
     def player_exists(self, player_id: int) -> bool:
-
+        if self.debug:
+            pass
+            return True
         self.cur.execute("SELECT COUNT(*) FROM players WHERE id = %s;", (player_id,))
         count = self.cur.fetchone()[0]
         return count > 0

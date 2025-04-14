@@ -7,6 +7,8 @@ from PIL import Image, ImageTk
 from countdown_timer import CountdownTimer
 from window import actionFrame, actionFrame2
 from window import window
+import pygame 
+import random
 
 class PlayerScreen:
     def __init__(self):
@@ -103,6 +105,8 @@ class PlayerScreen:
 
     def start_game(self):
         self.game_handler.start_game()
+        folder = "/home/student/photonproject/music/photon_tracks"
+        self.play_music(folder)
 
 
     def start_game_with_countdown(self):
@@ -118,12 +122,30 @@ class PlayerScreen:
         testpage = actionFrame(test.window, test)
         testpage2 = actionFrame2(test.window, test)
         test.addPage("actionscreen", testpage)
-
+        
         test.addPage("test", testpage2)
         test.redraw("actionscreen")
         list_of_players = self.game_handler.database_handler.get_all_players()
         testpage.append_list(self.list_of_id_and_names)
 
+    def pick_random_file(self, folder_path):
+        if not os.path.isdir(folder_path):
+            return None
+        files = os.listdir(folder_path)
+        if not files:
+            return None
+        random_file = random.choice(files)
+        return os.path.join(folder_path, random_file)
+
+    def play_music(self, folder_path):
+        track_path = self.pick_random_file(folder_path)
+
+        if not track_path:
+            print("File not Found.")
+            return
+        
+        pygame.mixer.music.load(track_path)
+        pygame.mixer.music.play()
 
 
 
