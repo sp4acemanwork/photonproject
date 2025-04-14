@@ -309,21 +309,21 @@ class playerFrame(page):
         
         def get_entry_value(self):
             # get entry value for green team
-            for id_entry,eqid_entry, name_entry in self.green_entries:
+            for id_entry, eqid_entry, name_entry in self.green_entries:
                 new_id = id_entry.get()
                 new_eqid = eqid_entry.get()
                 new_name = name_entry.get()
                 if new_id or new_name or new_eqid:  # Ignore empty entries
-                    self.teams.append((new_id, new_eqid, new_name, "GREEN TEAM" ))
+                    self.teams.append((new_id, new_eqid, new_name, "GREEN TEAM"))
                     game_handler.add_player(new_name, new_id, new_eqid)
 
             # get entry value for red team
-            for id_entry,eqid_entry, name_entry in self.red_entries:
+            for id_entry, eqid_entry, name_entry in self.red_entries:
                 new_id = id_entry.get()
                 new_eqid = eqid_entry.get()
                 new_name = name_entry.get()
                 if new_id or new_name or new_eqid:  # Ignore empty entries
-                    self.teams.append((new_id, new_eqid, new_name, "RED TEAM" ))
+                    self.teams.append((new_id, new_eqid, new_name, "RED TEAM"))
                     game_handler.add_player(new_name, new_id, new_eqid)
 
         def delete_entries(self):
