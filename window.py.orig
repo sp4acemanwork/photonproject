@@ -1,12 +1,13 @@
 import tkinter as tk
 import random
 from server import handler
-from PIL import  Image, ImageTk
-game_handler = handler("127.0.0.1", 7502, 1024)
-import os
-
+from main import start_game_with_countdown
 # import keyboard # implement later
 
+<<<<<<< HEAD
+=======
+game_handler = handler("127.0.0.1", 7501, 1024)
+>>>>>>> 3230d31 (put more of the functional code in main, i also added the change network capability to the refactored ui code)
 class page:
     def __init__(self, parent_window: tk.Tk):
         self.window = parent_window
@@ -187,14 +188,13 @@ class actionFrame2(page):  # example of how a page could be implemented
         self.redFrame = {}
         self.middle["button"]["el"].pack()
 
-<<<<<<< HEAD
-=======
-def change_network_popup():
+def create_popup():
     popup = tk.Toplevel()
     popup.title("Popup Window")
     popup.geometry("300x150")
     tk.Label(popup, text="Changing network to IP", font=("Helvetica", 14)).pack(pady=20)
     
+
     entry = tk.Entry(popup, font=("Helvetica", 12))
     entry.pack(pady=5)
 
@@ -204,115 +204,25 @@ def change_network_popup():
         print(f"AHHHH: {new_ip}")
         game_handler.change_socket(new_ip)
         popup.destroy()
+
     tk.Button(popup, text="Submit", command=submit).pack(pady=10)
-def start_game_with_countdown(parent, list_of_id_and_names,event=None,):
-    global teams
-    teams = list_of_id_and_names
 
-    from countdown_timer import CountdownTimer  
-    CountdownTimer(parent, lambda: countdown_to_playaction(parent))
-
-def countdown_to_playaction(parent):
-    # self.app.destroy()
-    parent.destroy()
-    print("Countdown finished, switching to ActionFrame screen...")
-    # New window initialized
-    test = window()
-    testpage = actionFrame(test.window, test)
-    test.addPage("actionscreen", testpage)
-    test.redraw("actionscreen")
-    testpage.append_list(teams)
-
-class splashFrame(page):
-    def __init__(self, parent_window: window, parent: window):
-        super().__init__(parent_window)
-        self.parent_window = parent_window
-        self.parent = parent
-        self.parent.window.bind("<Escape>", lambda e: self.parent.window.destroy())
-        window_width = self.parent.window.winfo_screenwidth()
-        window_height = self.parent.window.winfo_screenheight()
-
-        # Used os module to get the path of the image dynamically
-        image_path = os.path.join(os.path.dirname(__file__), "assets/images/logo.jpg")
-        image = Image.open(image_path)
-        resized_image = image.resize((window_width, window_height))
-        tk_image = ImageTk.PhotoImage(resized_image)
-
-        self.page_elements = {
-            "splash_frame": {"el": tk.Label(self.parent.window, image=tk_image, text=""), "opt": {"expand":True}},
-        }
-        self.page_elements["splash_frame"]["el"].pack(**self.page_elements["splash_frame"]["opt"])
-        
-
-        def next_screen():
-            self.parent.window.destroy()
-            test = window()
-            testpage = playerFrame(test.window, test)
-            test.addPage("playerscreen", testpage)
-
-            test.redraw("playerscreen")
-            test.window.mainloop()
-
-        self.parent.window.after(3000, next_screen)
-        self.parent.window.mainloop()
-
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
 class playerFrame(page):
     def __init__(self, parent_window: window, parent: window):
         super().__init__(parent_window)
         self.parent_window = parent_window
         self.parent = parent
-<<<<<<< HEAD
-=======
-        self.teams = []
-        self.green_entries = []
-        self.red_entries = []
-        self.change_network = lambda: change_network_popup()
-        self.parent.window.bind("<F5>", lambda e: start_game_with_countdown(self.parent.window,self.teams))
-        self.parent.window.bind("<Return>", lambda e: get_entry_value(self))
-        self.parent.window.bind("<F12>", lambda e: delete_entries(self))
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
+        self.change_network = lambda: create_popup()
+        self.parent.window.bind("<F5>", lambda e: start_game_with_countdown(self.parent.window))
+        # self.parent.window.bind("<F12>", lambda e: self.delete_entries())
         self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
-        
-        def get_entry_value(self):
-            # get entry value for green team
-            for id_entry,eqid_entry, name_entry in self.green_entries:
-                new_id = id_entry.get()
-                new_eqid = eqid_entry.get()
-                new_name = name_entry.get()
-                if new_id or new_name or new_eqid:  # Ignore empty entries
-                    self.teams.append((new_id, new_eqid, new_name, "GREEN TEAM" ))
-                    game_handler.add_player(new_name, new_id, new_eqid)
-
-            # get entry value for red team
-            for id_entry,eqid_entry, name_entry in self.red_entries:
-                new_id = id_entry.get()
-                new_eqid = eqid_entry.get()
-                new_name = name_entry.get()
-                if new_id or new_name or new_eqid:  # Ignore empty entries
-                    self.teams.append((new_id, new_eqid, new_name, "RED TEAM" ))
-                    game_handler.add_player(new_name, new_id, new_eqid)
-
-        def delete_entries(self):
-            # delete entries value for green team
-            for id_entry,eqid_entry, name_entry in self.green_entries:
-                new_id = id_entry.delete(0, tk.END)
-                new_eqid = eqid_entry.delete(0, tk.END)
-                new_name = name_entry.delete(0, tk.END)
-            # delete entries value for red team
-            for id_entry,eqid_entry, name_entry in self.red_entries:
-                new_id = id_entry.delete(0, tk.END)
-                new_eqid = eqid_entry.delete(0, tk.END)
-                new_name = name_entry.delete(0, tk.END)
-                
-
-
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=200), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=200), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}}}
+        self.middle = {"back_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}},
+                       "change_network_button": {"el" : tk.Button(self.page_elements["split_frame"]["el"], text="Change Network", command=self.change_network), "opt": {"anchor" :"center"}}}
         # stupid dumb fix because we didn't use html and typescript
 
         lcontainergreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="green", height=16)
@@ -331,12 +241,8 @@ class playerFrame(page):
 
 
         # GREEN ENTRY ROWS
-<<<<<<< HEAD
         green_entries = []  
-        for i in range(14):
-=======
         for i in range(15):
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
             row = tk.Frame(listcongreen, bg="lightgreen")
             row.pack(fill="x", pady=2)
 
@@ -351,16 +257,12 @@ class playerFrame(page):
             player_name = tk.Entry(row, width=20)
             player_name.pack(side="left", padx=10)
 
-            self.green_entries.append((player_id, equip_id, player_name))
+            green_entries.append((player_id, equip_id, player_name))
 
 
         # RED ENTRY ROWS
-<<<<<<< HEAD
         red_entries = []
-        for i in range(14):
-=======
         for i in range(15):
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
             row = tk.Frame(listconred, bg="red")
             row.pack(fill="x", pady=2)
 
@@ -375,7 +277,7 @@ class playerFrame(page):
             player_name = tk.Entry(row, width=20)
             player_name.pack(side="left", padx=10)
 
-            self.red_entries.append((player_id, equip_id, player_name))
+            red_entries.append((player_id, equip_id, player_name))
   
 
         self.green_frame = {
@@ -398,14 +300,10 @@ class playerFrame(page):
         }
        
 
-<<<<<<< HEAD
         
 
-        self.middle["button"]["el"].pack()
-=======
         self.middle["back_button"]["el"].pack()
         self.middle["change_network_button"]["el"].pack(**self.middle["change_network_button"]["opt"])
->>>>>>> c7c4be8 (I believe that I have completely refectored all the code)
         # Red Team Containers
         lcontainerred.pack(**self.red_frame["red_label_container"]["opt"])
         self.red_frame["red_label"]["el"].pack(**self.red_frame["red_label"]["opt"])
@@ -430,7 +328,7 @@ class playerFrame(page):
         self.green_frame["green_label_2"]["el"].pack(**self.green_frame["green_label_2"]["opt"])
         self.green_frame["green_label_3"]["el"].pack(**self.green_frame["green_label_3"]["opt"])
 
-
+       
 
 
 
@@ -466,9 +364,9 @@ test.window.mainloop()
 # test.redraw("playerscreen")
 # test.window.mainloop()
 
-# '''
-# window = tk.Tk()
-# testlabel = tk.Label(window, text='test')
-# testlabel.pack()
-# window.mainloop()
-# '''
+'''
+window = tk.Tk()
+testlabel = tk.Label(window, text='test')
+testlabel.pack()
+window.mainloop()
+'''
