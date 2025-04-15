@@ -4,7 +4,8 @@ from server import handler
 from PIL import Image, ImageTk
 import os
 from server import usr
-game_handler = handler("127.0.0.1", 7502, 1024)
+import threading
+game_handler = handler("127.0.0.1", 7501, 7500, 1024)
 # import keyboard # implement later
 
 
@@ -12,7 +13,7 @@ class window:
     def __init__(self):
         self.window = tk.Tk()
         self.window.geometry("800x600")
-        self.window.attributes("-fullscreen", True)
+        self.window.attributes("-zoomed", True)
         self.currentwindow = None
         self.pages = {}
 
@@ -53,6 +54,8 @@ class window:
         print(self.pages)
         self.hidepage()
         self.redraw_intital(windowname)
+
+
 
 
 class page:
@@ -127,6 +130,7 @@ class actionFrame(page):  # example of how a page could be implemented
         # Start the timer
     def start_timer(self):
         if self.parent.currentwindow == "actionframe":
+            game_handler.start_game()
             self.timer_label = tk.Label(self.window, text="06:00", font=("Helvetica", 48), bg="black", fg="white")
             self.timer_label.place(relx=0.5, rely=0.1, anchor="center") 
             self.remaining_time = 6 * 60  # 6 minutes in seconds
@@ -139,6 +143,7 @@ class actionFrame(page):  # example of how a page could be implemented
             self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
             self.remaining_time -= 1
             if self.parent.currentwindow == "actionframe":
+                threading.Thread(target=game_handler.recive_event, daemon=True).start()
                 self.window.after(1000, self.update_timer)
 
         else:
@@ -148,6 +153,7 @@ class actionFrame(page):  # example of how a page could be implemented
             self.blink_game_over()
 
     def blink_game_over(self):
+        game_handler.end_game()
         current_color = self.timer_label.cget("fg")
         new_color = "black" if current_color == "red" else "red"
         self.timer_label.config(fg=new_color)

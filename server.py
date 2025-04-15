@@ -13,16 +13,21 @@ class usr:
 
 # you should do all main functions of the back end through this class
 class handler:
-    def __init__(self, target_ip: str, port: int, buffer_size: int):
+    def __init__(self, target_ip: str, port: int, send_port: int, buffer_size: int):
         self.target_ip = target_ip
         self.port = port
         self.buffer_size = buffer_size
         self.udp_handler = udp_handler("127.0.0.1", self.port, self.buffer_size)
         self.database_handler = database_handler()
         self.local_score_keep = {}  # keeps a list of usr obj
+        self.local_port_send = send_port
     def start_game(self):
         print("printing values")
-        self.udp_handler.send_message("202", [self.target_ip, self.port])
+        self.udp_handler.send_message("202", (self.target_ip, self.local_port_send))
+
+    def end_game(self):
+        for i in range(4):
+            self.udp_handler.send_message("221", (self.target_ip, self.local_port_send))
 
     def get_list_of_usrs(self) -> dict:
         return self.local_score_keep
@@ -71,29 +76,31 @@ class handler:
         player = self.local_score_keep[part[0]]
 
         if part[1] == "43":
-            print(f"user id:{part[0]} scored for RED")
-            if player == "GREEN TEAM":
-                player.scored += 1
+            print(f"user id:{part[0]} scored for RED {player.team}")
+            if player.team == "RED TEAM":
+                player.base_score += 1
+                player.score += 100
             else:
                 player.score -= 10
 
-            self.udp_handler.send_message(player.score, (self.target_ip, self.local_port_send))
+            self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
 
         if part[1] == "53":
-            print(f"user id:{part[0]} scored for GREEN")
-            if player.team == "RED TEAM":
-                player.scored += 1
+            print(f"user id:{part[0]} scored for GREEN {player.team}")
+            if player.team == "GREEN TEAM":
+                player.base_score += 1
+                player.score += 100
             else:
                 player.score -= 10
 
-            self.udp_handler.send_message(player.score, (self.target_ip, self.local_port_send))
+            self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
 
         else:
             print(f"user id:{part[0]} tagged user id:{part[1]}")
             self.udp_handler.send_message(part[1], (self.target_ip, self.local_port_send))
-            if player.scored == 3:
-                return (player.player_name, True)
-        return (player.player_name, False)
+            if player.base_score == 3:
+                return (part[0], True)
+        return (part[0], False)
 
 
 # this class shouldn't be called directly rather use the functions that do the sending functions automatically
@@ -116,8 +123,8 @@ class udp_handler:
         client_ip = "client ip:{}".format(address)
         print(client_msg)
         print(client_ip)
-        bytes_address_pair[0] = bytes_address_pair[0].decode('utf-8')
-        return bytes_address_pair
+        decodedmsg = bytes_address_pair[0].decode('utf-8')
+        return (decodedmsg, address)
 
     # this function takes -> (message, tuple:[ip, port])
     def send_message(self, send_message: str, address: tuple[str, str]):
