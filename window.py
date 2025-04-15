@@ -3,6 +3,7 @@ import random
 from server import handler
 from PIL import Image, ImageTk
 import os
+from server import usr
 game_handler = handler("127.0.0.1", 7502, 1024)
 # import keyboard # implement later
 
@@ -155,8 +156,7 @@ class actionFrame(page):  # example of how a page could be implemented
     def setbuttonfunction(self, functosend):
         self.buttonfunc = lambda: functosend
 
-    def append_user(self, team: bool, name: str, id: str):
-        score: int = 0
+    def append_user(self, team: bool, name: str, score):
         if team:
             print("appending red user")
             self.red_frame["red_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
@@ -167,20 +167,20 @@ class actionFrame(page):  # example of how a page could be implemented
             self.green_frame["green_list2"]["el"].insert(tk.END, f"{score}")
             #self.b_con["b_label_green"]["el"].insert(tk.END, "B")
 
-    def append_list(self, listofusers: list):
+    def append_list(self, listofusers: dict):
         print("appendint_list")
-        for player in listofusers:
-            if player[3] == "RED TEAM":
+        for key, player in listofusers.items():
+            if player.team == "RED TEAM":
 
                 print(f"r {player}")
-                self.append_user(True, player[2], player[1])
+                self.append_user(True, player.name, player.score)
 
-            elif player[3] == "GREEN TEAM":
+            elif player.team == "GREEN TEAM":
                 print(f"g {player}")
-                self.append_user(False, player[2], player[1])
+                self.append_user(False, player.name, player.score)
             else:
                 print(f"e {player}")
-                self.append_user(random.choice([True, False]), player[2], player[1])
+                self.append_user(random.choice([True, False]), player.name, player.score)
 
         # loop though red team and apend users
         # loop through green team and apend users
@@ -310,7 +310,8 @@ class playerFrame(page):
                 new_name = name_entry.get()
                 if new_id or new_name or new_eqid:  # Ignore empty entries
                     self.teams.append((new_id, new_eqid, new_name, "GREEN TEAM" ))
-                    game_handler.add_player(new_name, new_id, new_eqid)
+                    game_handler.add_player(new_name, new_id, new_eqid, "GREEN TEAM")
+                    print("adding GREEN team guy")
 
             # get entry value for red team
             for id_entry,eqid_entry, name_entry in self.red_entries:
@@ -319,7 +320,10 @@ class playerFrame(page):
                 new_name = name_entry.get()
                 if new_id or new_name or new_eqid:  # Ignore empty entries
                     self.teams.append((new_id, new_eqid, new_name, "RED TEAM"))
-                    game_handler.add_player(new_name, new_id, new_eqid)
+                    game_handler.add_player(new_name, new_id, new_eqid, "RED TEAM")
+                    print("adding RED team guy")
+            print(f"test {game_handler.get_list_of_usrs()}")
+            parent.pages['actionframe'].append_list(game_handler.get_list_of_usrs())
 
         def delete_entries(self):
             # delete entries value for green team

@@ -8,7 +8,7 @@ class usr:
         self.name = name
         self.score = 0
         self.base_score = 0
-        self.team = ""  # check to see how players are sorted
+        self.team = team # check to see how players are sorted
 
 
 # you should do all main functions of the back end through this class
@@ -20,10 +20,12 @@ class handler:
         self.udp_handler = udp_handler("127.0.0.1", self.port, self.buffer_size)
         self.database_handler = database_handler()
         self.local_score_keep = {}  # keeps a list of usr obj
-
     def start_game(self):
         print("printing values")
         self.udp_handler.send_message("202", [self.target_ip, self.port])
+
+    def get_list_of_usrs(self) -> dict:
+        return self.local_score_keep
 
     # change ip
     def change_socket(self, new_target_ip: str):
@@ -70,7 +72,7 @@ class handler:
 
         if part[1] == "43":
             print(f"user id:{part[0]} scored for RED")
-            if player == "GREEN":
+            if player == "GREEN TEAM":
                 player.scored += 1
             else:
                 player.score -= 10
@@ -79,7 +81,7 @@ class handler:
 
         if part[1] == "53":
             print(f"user id:{part[0]} scored for GREEN")
-            if player.team == "RED":
+            if player.team == "RED TEAM":
                 player.scored += 1
             else:
                 player.score -= 10
