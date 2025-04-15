@@ -10,12 +10,14 @@ def main():
     # splash_root.mainloop()
     parent = window()
     splash_frame = splashFrame(parent)
+    plater_frame = playerFrame(parent)
     action_frame = actionFrame(parent)
     player_frame = playerFrame(parent)
-    parent.addPage("playerscreen", splash_frame)
+    
+    parent.addPage("splashframe", splash_frame)
     parent.addPage("actionframe", action_frame)
     parent.addPage("playerframe", player_frame)
-    parent.redraw_intital("playerscreen")
+    parent.redraw_intital("splashframe")
     parent.window.mainloop()
 
 

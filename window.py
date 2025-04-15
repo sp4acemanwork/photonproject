@@ -121,12 +121,15 @@ class actionFrame(page):  # example of how a page could be implemented
         self.b_con["b_label_red"]["el"].pack(**self.b_con["b_label_red"]["opt"])
 
         # Add the timer label
-        self.timer_label = tk.Label(self.window, text="06:00", font=("Helvetica", 48), bg="black", fg="white")
-        self.timer_label.place(relx=0.5, rely=0.1, anchor="center")  # Place the timer in the middle-top of the screen
+ # Place the timer in the middle-top of the screen
 
         # Start the timer
-        self.remaining_time = 6 * 60  # 6 minutes in seconds
-        self.update_timer()
+    def start_timer(self):
+        if self.parent.currentwindow == "actionframe":
+            self.timer_label = tk.Label(self.window, text="06:00", font=("Helvetica", 48), bg="black", fg="white")
+            self.timer_label.place(relx=0.5, rely=0.1, anchor="center") 
+            self.remaining_time = 6 * 60  # 6 minutes in seconds
+            self.update_timer()
 
     def update_timer(self):
         if self.remaining_time > 0:
@@ -134,7 +137,7 @@ class actionFrame(page):  # example of how a page could be implemented
             seconds = self.remaining_time % 60
             self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
             self.remaining_time -= 1
-            if self.parent.currentwindow == "actionrame":
+            if self.parent.currentwindow == "actionframe":
                 self.window.after(1000, self.update_timer)
 
         else:
@@ -246,38 +249,42 @@ def start_game_with_countdown(parent: window, list_of_id_and_names,event=None,):
     from countdown_timer import CountdownTimer
     CountdownTimer(parent, lambda: countdown_to_playaction(parent))
 
+
 def countdown_to_playaction(parent: window):
     # self.app.destroy()
     print("Countdown finished, switching to ActionFrame screen...")
     # New window initialized
     parent.switch_window("actionframe")
+    print(parent.pages)
+    parent.pages['actionframe'].start_timer()
+
 
 class splashFrame(page):
-    def __init__(self,parent: window):
+    def __init__(self, parent: window):
         super().__init__(parent)
-        print("SPLASH FRAM IS DOING")
-        self.parent = parent
+        print("SplashFrame initializing...")
+
         self.parent.window.bind("<Escape>", lambda e: self.parent.window.destroy())
         window_width = self.parent.window.winfo_screenwidth()
         window_height = self.parent.window.winfo_screenheight()
 
-        # Used os module to get the path of the image dynamically
+        # Load and resize image
         image_path = os.path.join(os.path.dirname(__file__), "assets/images/logo.jpg")
         image = Image.open(image_path)
         resized_image = image.resize((window_width, window_height))
-        tk_image = ImageTk.PhotoImage(resized_image)
+        self.tk_image = ImageTk.PhotoImage(resized_image)  # Keep reference
 
+        splash_label = tk.Label(self.parent.window, image=self.tk_image)
         self.page_elements = {
-            "splash_frame": {"el": tk.Label(self.parent.window, image=tk_image, text=""), "opt": {"expand":True}},
+            "splash_frame": {
+                "el": splash_label,
+                "opt": {"fill": "both", "expand": True}
+            }
         }
-        self.page_elements["splash_frame"]["el"].pack(**self.page_elements["splash_frame"]["opt"])
 
         def next_screen():
-
             self.parent.switch_window("playerframe")
-
         self.parent.window.after(3000, next_screen)
-        # self.parent.window.mainloop()
 
 class playerFrame(page):
     def __init__(self,parent: window):
@@ -291,7 +298,10 @@ class playerFrame(page):
         self.parent.window.bind("<F5>", lambda e: start_game_with_countdown(self.parent,self.teams))
         self.parent.window.bind("<Return>", lambda e: get_entry_value(self))
         self.parent.window.bind("<F12>", lambda e: delete_entries(self))
-        self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
+        self.get_entries_button = lambda: get_entry_value(self)
+        self.clear_entries_button = lambda: delete_entries(self)
+        self.start_button = lambda: start_game_with_countdown(self.parent, self.teams)
+        # set function that button will call here or set it with the function setbuttonfunction(func)
         def get_entry_value(self):
             # get entry value for green team
             for id_entry,eqid_entry, name_entry in self.green_entries:
@@ -308,7 +318,7 @@ class playerFrame(page):
                 new_eqid = eqid_entry.get()
                 new_name = name_entry.get()
                 if new_id or new_name or new_eqid:  # Ignore empty entries
-                    self.teams.append((new_id, new_eqid, new_name, "RED TEAM" ))
+                    self.teams.append((new_id, new_eqid, new_name, "RED TEAM"))
                     game_handler.add_player(new_name, new_id, new_eqid)
 
         def delete_entries(self):
@@ -323,14 +333,17 @@ class playerFrame(page):
                 new_eqid = eqid_entry.delete(0, tk.END)
                 new_name = name_entry.delete(0, tk.END)
 
-
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=200), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=200), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
         }
-        self.middle = {"back_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}},
-                       "change_network_button": {"el" : tk.Button(self.page_elements["split_frame"]["el"], text="Change Network", command=self.change_network), "opt": {"anchor" :"center"}}}
+        self.middle = {
+
+            "start_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="start game <F5>", command=self.start_button), "opt": {}},
+            "get_entries_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="get entries <Enter>", command=self.get_entries_button), "opt": {}},
+            "clear_entries_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="clear entries <F12>", command=self.clear_entries_button), "opt": {}},
+            "change_network_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="Change Network", command=self.change_network), "opt": {"anchor": "center"}}}
         # stupid dumb fix because we didn't use html and typescript
 
         lcontainergreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="green", height=16)
@@ -403,8 +416,11 @@ class playerFrame(page):
             "red_label_3" : {"el": tk.Label(red_label_row, text="Player Name", bg="lightcoral", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}}
         }
 
-        self.middle["back_button"]["el"].pack()
         self.middle["change_network_button"]["el"].pack(**self.middle["change_network_button"]["opt"])
+        self.middle["get_entries_button"]["el"].pack(**self.middle["get_entries_button"]["opt"])
+        self.middle["clear_entries_button"]["el"].pack(**self.middle["clear_entries_button"]["opt"])
+        self.middle["start_button"]["el"].pack(**self.middle["start_button"]["opt"])
+
         # Red Team Containers
         lcontainerred.pack(**self.red_frame["red_label_container"]["opt"])
         self.red_frame["red_label"]["el"].pack(**self.red_frame["red_label"]["opt"])
