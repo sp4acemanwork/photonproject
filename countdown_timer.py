@@ -9,13 +9,13 @@ import random
 from window import window
 
 class CountdownTimer:
-    def __init__(self, parent: window, callback):  # RJ..... :/
+    def __init__(self, parent: window, callback):  # fixed parent to be window
         self.parent = parent.window
         self.callback = callback
         self.countdown_window = Toplevel(self.parent)
         self.countdown_window.title("Game Countdown")
         self.countdown_window.geometry("800x600")
-        self.countdown_window.attributes("-zoomed", True)
+        self.countdown_window.attributes("-fullscreen", True)
         #pygame.mixer is a module for loading and playing sounds with the GUI 
         pygame.mixer.init()
 

@@ -12,7 +12,7 @@ class window:
     def __init__(self):
         self.window = tk.Tk()
         self.window.geometry("800x600")
-        self.window.attributes("-zoomed", True)
+        self.window.attributes("-fullscreen", True)
         self.currentwindow = None
         self.pages = {}
 
