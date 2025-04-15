@@ -6,10 +6,11 @@ import subprocess
 import pygame
 import os
 import random
+from window import window
 
 class CountdownTimer:
-    def __init__(self, parent, callback):
-        self.parent = parent
+    def __init__(self, parent: window, callback):  # RJ..... :/
+        self.parent = parent.window
         self.callback = callback
         self.countdown_window = Toplevel(self.parent)
         self.countdown_window.title("Game Countdown")

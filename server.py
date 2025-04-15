@@ -49,16 +49,16 @@ class handler:
         # self.udp_handler.recive_message()
         # self.database_handler.print_table()
 
-    def player_exists(self, new_id):
+    def player_exists(self, new_id: str):
         return self.database_handler.player_exists(new_id)
 
     def recive_message(self) -> tuple[str, str]:
         return self.udp_handler.recive_message()
 
-    def get_base_score(self, equipment_id,) -> tuple[str, int]:
+    def get_base_score(self, equipment_id: str) -> tuple[str, int]:
         return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].scored)
 
-    def get_score(self, equipment_id,) -> tuple[str, int]:
+    def get_score(self, equipment_id: str) -> tuple[str, int]:
         return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].score)
 
     #                                           [player,  b to their name]

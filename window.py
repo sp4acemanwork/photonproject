@@ -1,18 +1,10 @@
 import tkinter as tk
 import random
 from server import handler
-from PIL import  Image, ImageTk
-game_handler = handler("127.0.0.1", 7502, 1024)
+from PIL import Image, ImageTk
 import os
-
+game_handler = handler("127.0.0.1", 7502, 1024)
 # import keyboard # implement later
-
-class page:
-    def __init__(self, parent_window: tk.Tk):
-        self.window = parent_window
-        self.page_elements = {}
-        self.setvis = True
-        
 
 
 class window:
@@ -23,14 +15,23 @@ class window:
         self.currentwindow = None
         self.pages = {}
 
-    def addPage(self, name: str, el: page):
+    def addPage(self, name: str, el: 'page'):
+        print
         self.pages[name] = el
+        print(self.pages)
 
-    def redraw(self, windowname: str):
+    def redraw_intital(self, windowname: str):  # initial redraw requires page to be declared
         print("packpages")
 
         page = self.pages[windowname]
         self.currentwindow = windowname
+        for element in page.page_elements.values():  # Access the page elements
+            element["el"].pack(**element["opt"])  # Pack each element
+            print(f"packing{0} ", element)
+
+    def redraw(self):  # otherwise redraw current page
+        print("packpages")
+        page = self.currentwindow
         for element in page.page_elements.values():  # Access the page elements
             element["el"].pack(**element["opt"])  # Pack each element
             print(f"packing{0} ", element)
@@ -48,15 +49,24 @@ class window:
 
     def switch_window(self, windowname: str):
         print(f"switching to window {0}", windowname)
+        print(self.pages)
         self.hidepage()
-        self.redraw(windowname)
+        self.redraw_intital(windowname)
+
+
+class page:
+    def __init__(self, parent: window):
+        self.parrent_window = parent.window
+        self.parent = parent
+        self.page_elements = {}
+        self.setvis = True
 
 
 class actionFrame(page):  # example of how a page could be implemented
-    def __init__(self, parent_window: tk.Tk, parent: window):  # could horribly backfire
-        super().__init__(parent_window)
-        self.parent_window = parent_window
+    def __init__(self,parent: window):  # could horribly backfire
+        super().__init__(parent)
         self.parent = parent
+        self.window = parent.window
         self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=60), "opt": {"fill": "both", "side": "right", "expand": False}},
@@ -64,8 +74,6 @@ class actionFrame(page):  # example of how a page could be implemented
             "stylized_b_green": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "left", "expand": False}},
             "split_frame": {"el": tk.Frame(self.window, bg="black"), "opt": {"fill": "both", "side": "left", "expand": True}},
             "stylized_b_red": {"el": tk.Frame(self.window, bg="brown", width = 20), "opt": {"fill": "both", "side": "right", "expand": False}}
-            
-            
         }
         self.middle = {"button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="back", command=self.buttonfunc), "opt": {}}}
         # stupid dumb fix because we didn't use html and typescript
@@ -74,7 +82,6 @@ class actionFrame(page):  # example of how a page could be implemented
         lcontainerred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="red", height=16)
         listcongreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="darkgreen", width=30)
         listconred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="darkred", width=30, )
-        
 
         self.green_frame = {
             "green_label_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "x", "side": "top", "expand": False}},
@@ -96,7 +103,6 @@ class actionFrame(page):  # example of how a page could be implemented
             "b_label_red": {"el": tk.Listbox(self.page_elements["stylized_b_red"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
 
         }
-        self.middle["button"]["el"].pack()
         # Red Team Containers
         lcontainerred.pack(**self.red_frame["red_label_container"]["opt"])
         self.red_frame["red_label"]["el"].pack(**self.red_frame["red_label"]["opt"])
@@ -121,7 +127,6 @@ class actionFrame(page):  # example of how a page could be implemented
         # Start the timer
         self.remaining_time = 6 * 60  # 6 minutes in seconds
         self.update_timer()
-        
 
     def update_timer(self):
         if self.remaining_time > 0:
@@ -129,7 +134,9 @@ class actionFrame(page):  # example of how a page could be implemented
             seconds = self.remaining_time % 60
             self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
             self.remaining_time -= 1
-            self.window.after(1000, self.update_timer)
+            if self.parent.currentwindow == "actionrame":
+                self.window.after(1000, self.update_timer)
+
         else:
             # Display "GAME OVER" text in the middle of the screen and make it blink
             self.timer_label.config(text="GAME OVER", font=("Helvetica", 64), fg="red")
@@ -151,7 +158,6 @@ class actionFrame(page):  # example of how a page could be implemented
             print("appending red user")
             self.red_frame["red_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
             self.red_frame["red_list2"]["el"].insert(tk.END, f"{score}")
-            
         else:
             print("user append green user")
             self.green_frame["green_list"]["el"].insert(tk.END, f"{name.rjust(20)}")
@@ -176,7 +182,6 @@ class actionFrame(page):  # example of how a page could be implemented
         # loop though red team and apend users
         # loop through green team and apend users
 
-        
 
 
     # def stylized_b(self, listofusers: list):
@@ -187,7 +192,6 @@ class actionFrame(page):  # example of how a page could be implemented
     #             self.b_con["b_label_green"]["el"].insert(index, "B")
 
     def stylized_b(self, listofusers: list, name: str, base_score: int):
-        
         #loop through all the players
         for player in listofusers:
             #add empty items to Listbox
@@ -200,19 +204,15 @@ class actionFrame(page):  # example of how a page could be implemented
                     self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
 
             if player[3] == "RED TEAM" and player[2] == name:
-                
                 if base_score == 3:
                     self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
-                
-        
 
 
 
 
 class actionFrame2(page):  # example of how a page could be implemented
-    def __init__(self, parent_window: window, parent: window):
-        super().__init__(parent_window)
-        self.parent_window = parent_window
+    def __init__(self, parent: window):
+        super().__init__()
         self.parent = parent
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="blue", width="100"), "opt": {"fill": "both", "side": "right", "expand": True}},
@@ -229,7 +229,6 @@ def change_network_popup():
     popup.title("Popup Window")
     popup.geometry("300x150")
     tk.Label(popup, text="Changing network to IP", font=("Helvetica", 14)).pack(pady=20)
-    
     entry = tk.Entry(popup, font=("Helvetica", 12))
     entry.pack(pady=5)
 
@@ -240,30 +239,23 @@ def change_network_popup():
         game_handler.change_socket(new_ip)
         popup.destroy()
     tk.Button(popup, text="Submit", command=submit).pack(pady=10)
-def start_game_with_countdown(parent, list_of_id_and_names,event=None,):
+def start_game_with_countdown(parent: window, list_of_id_and_names,event=None,):
     global teams
     teams = list_of_id_and_names
 
-    from countdown_timer import CountdownTimer  
-    
+    from countdown_timer import CountdownTimer
     CountdownTimer(parent, lambda: countdown_to_playaction(parent))
-    
 
-def countdown_to_playaction(parent):
+def countdown_to_playaction(parent: window):
     # self.app.destroy()
-    parent.destroy()
     print("Countdown finished, switching to ActionFrame screen...")
     # New window initialized
-    test = window()
-    testpage = actionFrame(test.window, test)
-    test.addPage("actionscreen", testpage)
-    test.redraw("actionscreen")
-    testpage.append_list(teams)
+    parent.switch_window("actionframe")
 
 class splashFrame(page):
-    def __init__(self, parent_window: window, parent: window):
-        super().__init__(parent_window)
-        self.parent_window = parent_window
+    def __init__(self,parent: window):
+        super().__init__(parent)
+        print("SPLASH FRAM IS DOING")
         self.parent = parent
         self.parent.window.bind("<Escape>", lambda e: self.parent.window.destroy())
         window_width = self.parent.window.winfo_screenwidth()
@@ -279,34 +271,27 @@ class splashFrame(page):
             "splash_frame": {"el": tk.Label(self.parent.window, image=tk_image, text=""), "opt": {"expand":True}},
         }
         self.page_elements["splash_frame"]["el"].pack(**self.page_elements["splash_frame"]["opt"])
-        
 
         def next_screen():
-            self.parent.window.destroy()
-            test = window()
-            testpage = playerFrame(test.window, test)
-            test.addPage("playerscreen", testpage)
 
-            test.redraw("playerscreen")
-            test.window.mainloop()
+            self.parent.switch_window("playerframe")
 
         self.parent.window.after(3000, next_screen)
-        self.parent.window.mainloop()
+        # self.parent.window.mainloop()
 
 class playerFrame(page):
-    def __init__(self, parent_window: window, parent: window):
-        super().__init__(parent_window)
-        self.parent_window = parent_window
+    def __init__(self,parent: window):
+        super().__init__(parent)
+        self.window = parent.window
         self.parent = parent
         self.teams = []
         self.green_entries = []
         self.red_entries = []
         self.change_network = lambda: change_network_popup()
-        self.parent.window.bind("<F5>", lambda e: start_game_with_countdown(self.parent.window,self.teams))
+        self.parent.window.bind("<F5>", lambda e: start_game_with_countdown(self.parent,self.teams))
         self.parent.window.bind("<Return>", lambda e: get_entry_value(self))
         self.parent.window.bind("<F12>", lambda e: delete_entries(self))
         self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
-        
         def get_entry_value(self):
             # get entry value for green team
             for id_entry,eqid_entry, name_entry in self.green_entries:
@@ -337,7 +322,6 @@ class playerFrame(page):
                 new_id = id_entry.delete(0, tk.END)
                 new_eqid = eqid_entry.delete(0, tk.END)
                 new_name = name_entry.delete(0, tk.END)
-                
 
 
         self.page_elements = {
@@ -358,7 +342,6 @@ class playerFrame(page):
         green_label_row = tk.Frame(listcongreen, bg="green")
         green_label_row.pack(fill="x", side="top")
 
-        
         # --- RED LABEL ROW FRAME ---
         red_label_row = tk.Frame(listconred, bg="red")
         red_label_row.pack(fill="x", side="top")
@@ -400,7 +383,6 @@ class playerFrame(page):
             player_name.pack(side="left", padx=10)
 
             self.red_entries.append((player_id, equip_id, player_name))
-  
 
         self.green_frame = {
             "green_label_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "x", "side": "top", "expand": False}},
@@ -420,7 +402,6 @@ class playerFrame(page):
             "red_label_2" : {"el": tk.Label(red_label_row, text="Equipment ID", bg="lightcoral", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}},
             "red_label_3" : {"el": tk.Label(red_label_row, text="Player Name", bg="lightcoral", font=("Helvetica", 12)), "opt": {"side": "left", "expand": True, "padx": 5}}
         }
-       
 
         self.middle["back_button"]["el"].pack()
         self.middle["change_network_button"]["el"].pack(**self.middle["change_network_button"]["opt"])
