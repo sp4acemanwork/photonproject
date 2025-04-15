@@ -143,7 +143,7 @@ class actionFrame(page):  # example of how a page could be implemented
             self.timer_label.config(text=f"{minutes:02}:{seconds:02}")
             self.remaining_time -= 1
             if self.parent.currentwindow == "actionframe":
-                threading.Thread(target=game_handler.recive_event, daemon=True).start()
+                threading.Thread(target=self.event, daemon=True).start()
                 self.window.after(1000, self.update_timer)
 
         else:
@@ -199,22 +199,25 @@ class actionFrame(page):  # example of how a page could be implemented
     #         if player.base_score == 3:
     #             index = listofusers.index(player)
     #             self.b_con["b_label_green"]["el"].insert(index, "B")
+    def event(self):
+        playertuple = game_handler.recive_event()
+        listofusers = game_handler.get_list_of_usrs()
+        self.stylized_b(listofusers, playertuple[0], playertuple[1])
 
-    def stylized_b(self, listofusers: list, name: str, base_score: int):
-        #loop through all the players
+
+    def stylized_b(self, listofusers: dict, eq_id: str, base_score: bool):
+        # loop through all the players
         for player in listofusers:
-            #add empty items to Listbox
+            # add empty items to Listbox
             self.b_con["b_label_green"]["el"].insert(tk.END, "")
             self.b_con["b_label_red"]["el"].insert(tk.END, "")
-            #check for what team a player is on
-            if player[3] == "GREEN TEAM" and player[2] == name:
-                #check the score passed through from the server
-                if base_score == 3:
-                    self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
+            # check for what team a player is on
 
-            if player[3] == "RED TEAM" and player[2] == name:
-                if base_score == 3:
-                    self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
+                # check the score passed through from the server
+            if base_score:
+                self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
+            if base_score:
+                self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
 
 
 
