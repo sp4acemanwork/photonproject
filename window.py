@@ -162,6 +162,37 @@ class actionFrame(page):  # example of how a page could be implemented
     def setbuttonfunction(self, functosend):
         self.buttonfunc = lambda: functosend
 
+    def update_user_score(self, team: bool, name: str, new_score, player_id:int, hit_base: bool):
+        
+        listofusers = game_handler.get_list_of_usrs()
+        test = []
+        for player in listofusers:
+            test.append(player)
+
+            
+    
+        if team:
+            if hit_base:
+                if player_id in test:
+                    self.b_con["b_label_red"]["el"].insert(test.index(str(player_id)) + 1, "B")
+            listbox_names = self.red_frame["red_list"]["el"]
+            listbox_scores = self.red_frame["red_list2"]["el"]
+        else:
+            if hit_base:
+                if player_id in test:
+                    self.b_con["b_label_green"]["el"].insert(test.index(str(player_id)) + 1, "B")
+            listbox_names = self.green_frame["green_list"]["el"]
+            listbox_scores = self.green_frame["green_list2"]["el"]
+
+        # Try to find the index by matching the name
+        for index in range(listbox_names.size()):
+            if listbox_names.get(index).strip() == name.strip().rjust(20).strip():
+                listbox_scores.delete(index)
+                listbox_scores.insert(index, str(new_score))
+                return
+
+        print(f"User '{name}' not found in {'red' if team else 'green'} list.")
+
     def append_user(self, team: bool, name: str, score):
         if team:
             print("appending red user")
@@ -200,7 +231,7 @@ class actionFrame(page):  # example of how a page could be implemented
     #             index = listofusers.index(player)
     #             self.b_con["b_label_green"]["el"].insert(index, "B")
 
-    def stylized_b(self, listofusers: list, name: str, base_score: int):
+    def stylized_b(self, listofusers: dict, name: str, base_score: int):
         #loop through all the players
         for player in listofusers:
             #add empty items to Listbox
@@ -209,11 +240,11 @@ class actionFrame(page):  # example of how a page could be implemented
             #check for what team a player is on
             if player[3] == "GREEN TEAM" and player[2] == name:
                 #check the score passed through from the server
-                if base_score == 3:
+                if base_score == 1:
                     self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
 
             if player[3] == "RED TEAM" and player[2] == name:
-                if base_score == 3:
+                if base_score == 1:
                     self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
 
 

@@ -4,11 +4,12 @@ import re
 
 
 class usr:
-    def __init__(self, name: str, team: str):
+    def __init__(self, name: str, team: str, id: int):
         self.name = name
         self.score = 0
         self.base_score = 0
         self.team = team # check to see how players are sorted
+        self.id = id
 
 
 # you should do all main functions of the back end through this class
@@ -51,7 +52,7 @@ class handler:
         test = (self.target_ip, self.port)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
-        newusr = usr(player_name, team)
+        newusr = usr(player_name, team, player_id)
         self.local_score_keep[equipment_id] = newusr
         # self.udp_handler.recive_message()
         # self.database_handler.print_table()
@@ -63,7 +64,7 @@ class handler:
         return self.udp_handler.recive_message()
 
     def get_base_score(self, equipment_id: str) -> tuple[str, int]:
-        return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].scored)
+        return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].score)
 
     def get_score(self, equipment_id: str) -> tuple[str, int]:
         return (self.local_score_keep[equipment_id].name, self.local_score_keep[equipment_id].score)
@@ -72,35 +73,45 @@ class handler:
     def recive_event(self) -> tuple[str, bool]:  # figure out what to return
         mesg: tuple = self.udp_handler.recive_message()
         event: str = mesg[0]
+        print(f"MESSAGE: {event}")
         part = re.split(r":", event, maxsplit=1)
         player = self.local_score_keep[part[0]]
+        hit = False
+        if len(part) == 2:
+            if part[1] == "43":
+                print(f"user id:{part[0]} scored for RED {player.team}")
+                if player.team == "RED TEAM":
+                    player.base_score += 1
+                    player.score += 100
+                else:
+                    player.score -= 10
 
-        if part[1] == "43":
-            print(f"user id:{part[0]} scored for RED {player.team}")
-            if player.team == "RED TEAM":
-                player.base_score += 1
-                player.score += 100
+                self.udp_handler.send_message(str(player), (self.target_ip, self.local_port_send))
+                
+
+            if part[1] == "53":
+                print(f"user id:{part[0]} scored for GREEN {player.team}")
+                if player.team == "GREEN TEAM":
+                    player.base_score += 1
+                    player.score += 100
+                else:
+                    player.score -= 10
+
+                self.udp_handler.send_message(str(player), (self.target_ip, self.local_port_send))
+                
+
             else:
-                player.score -= 10
-
-            self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
-
-        if part[1] == "53":
-            print(f"user id:{part[0]} scored for GREEN {player.team}")
-            if player.team == "GREEN TEAM":
-                player.base_score += 1
-                player.score += 100
-            else:
-                player.score -= 10
-
-            self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
-
-        else:
-            print(f"user id:{part[0]} tagged user id:{part[1]}")
-            self.udp_handler.send_message(part[1], (self.target_ip, self.local_port_send))
-            if player.base_score == 3:
-                return (part[0], True)
-        return (part[0], False)
+                print(f"user id:{part[0]} tagged user id:{part[1]}")
+                
+                if player.team == "GREEN TEAM":
+                    player.score += 10
+                else:
+                    player.score += 10
+                self.udp_handler.send_message(part[1], (self.target_ip, self.local_port_send))
+            print(f"BASE: {player.base_score}")
+            if player.base_score == 1:
+                return (player, True)
+        return (player, hit)
 
 
 # this class shouldn't be called directly rather use the functions that do the sending functions automatically
