@@ -75,6 +75,8 @@ class actionFrame(page):  # example of how a page could be implemented
         self.b_players = set()
         self.red_team_score = 0
         self.green_team_score = 0
+        self.back_button = lambda: self.parent.switch_window("playerframe")
+        self.end_message = "CONGRATS"
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=60), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
@@ -90,7 +92,10 @@ class actionFrame(page):  # example of how a page could be implemented
         listcongreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="darkgreen", width=30)
         listconred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="darkred", width=30, )
         self.split_frame = {
+
+            "back_button": {"el": tk.Button(self.page_elements["split_frame"]["el"], text="go back", command=self.back_button), "opt": {}},
             "message_list": {"el": tk.Listbox(self.page_elements["split_frame"]["el"], bg="black",fg="white", width=46, height=10, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left","pady": (180, 0)}},
+            "end_score": {"el": tk.Label(self.page_elements["split_frame"]["el"], text=self.end_message, bg="green", font=("Helvetica", 16)), "opt": {"fill": "x", "side": "top"}},
         }
         self.green_frame = {
             "green_label_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "x", "side": "top", "expand": False}},
@@ -159,9 +164,9 @@ class actionFrame(page):  # example of how a page could be implemented
             if self.parent.currentwindow == "actionframe":
                 threading.Thread(target=self.event, daemon=True).start()
                 self.window.after(1000, self.update_timer)
-
         else:
             # Display "GAME OVER" text in the middle of the screen and make it blink
+            self.split_frame["back_button"]["el"].pack(**self.split_frame["back_button"]["opt"])
             self.timer_label.config(text="GAME OVER", font=("Helvetica", 64), fg="red")
             self.timer_label.place(relx=0.5, rely=0.5, anchor="center")  # Center the "GAME OVER" text
             self.blink_game_over()
