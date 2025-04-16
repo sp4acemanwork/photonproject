@@ -39,7 +39,7 @@ class CountdownTimer:
         self.music_folder = os.path.join(os.path.dirname(__file__), "music/photon_tracks")  # Dynamically locate the music folder
 
         self.countdown_label = Label(self.countdown_window, borderwidth=0, highlightthickness=0) # Removes the white border
-        self.countdown_label.place(relx=0.501, rely=0.612, anchor=CENTER)
+        self.countdown_label.place(relx=0.501, rely=0.582, anchor=CENTER)
 
         self.countdown_window.bind("<Escape>", lambda e: self.countdown_window.destroy())
         self.countdown_window.bind("<F1>", lambda e: self.countdown_window.minsize())
@@ -48,7 +48,7 @@ class CountdownTimer:
     def show_image(self, index):
         if index < len(self.countdown_images):
             # Will start audio track when countdown is 18 seconds left
-            if index == 12:
+            if index == 15:
                 # Select a random track from the music folder
                 tracks = [f for f in os.listdir(self.music_folder) if f.endswith(".mp3")]
                 if not tracks:
@@ -73,7 +73,10 @@ class CountdownTimer:
             self.countdown_label.lift()  # Ensure the countdown label is in front
             self.countdown_label.config(image=photo)
             self.countdown_label.image = photo
-            self.countdown_window.after(1000, self.show_image, index + 1)
+            if index <= 24:
+                self.countdown_window.after(1000, self.show_image, index + 1)
+            else:
+                self.countdown_window.after(1500, self.show_image, index + 1)
         else:
             self.countdown_window.destroy()
             self.callback()  # Trigger the callback to start the next action

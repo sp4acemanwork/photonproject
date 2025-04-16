@@ -72,6 +72,7 @@ class actionFrame(page):  # example of how a page could be implemented
         self.parent = parent
         self.window = parent.window
         self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
+        self.b_players = set()
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=60), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
@@ -86,25 +87,27 @@ class actionFrame(page):  # example of how a page could be implemented
         lcontainerred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="red", height=16)
         listcongreen = tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="darkgreen", width=30)
         listconred = tk.Frame(self.page_elements["redteam_frame"]["el"], bg="darkred", width=30, )
-
+        self.split_frame = {
+            "message_list": {"el": tk.Listbox(self.page_elements["split_frame"]["el"], bg="black",fg="white", width=46, height=10, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left","pady": (180, 0)}},
+        }
         self.green_frame = {
             "green_label_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "x", "side": "top", "expand": False}},
             "green_list_container": {"el": tk.Frame(self.page_elements["greenteam_frame"]["el"], bg="lightgreen"), "opt": {"fill": "both", "side": "bottom", "expand": True}},
             "green_label": {"el": tk.Label(lcontainergreen, text="Green Team", bg="green", font=("Helvetica", 16)), "opt": {"fill": "x", "side": "top"}},
             "green_list": {"el": tk.Listbox(listcongreen, bg="green", width=50, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left"}},
-            "green_list2": {"el": tk.Listbox(listcongreen, bg="darkgreen", width=2, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "right"}}
+            "green_list2": {"el": tk.Listbox(listcongreen, bg="darkgreen", width=4, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "right"}}
         }
         self.red_frame = {
             "red_label_container": {"el": tk.Frame(self.page_elements["redteam_frame"]["el"], bg="lightcoral"), "opt": {"fill": "x", "side": "top", "expand": False}},
             "red_list_container": {"el": tk.Frame(self.page_elements["redteam_frame"]["el"], bg="lightcoral"), "opt": {"fill": "both", "side": "bottom", "expand": True}},
             "red_label": {"el": tk.Label(lcontainerred, text="Red Team", bg="red", font=("Helvetica", 16)), "opt": {"fill": "x", "side": "top"}},
             "red_list": {"el": tk.Listbox(listconred, bg="red", width=50, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "right"}},
-            "red_list2": {"el": tk.Listbox(listconred, bg="darkred", width=2, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left"}}
+            "red_list2": {"el": tk.Listbox(listconred, bg="darkred", width=4, font=("Helvetica", 16)), "opt": {"fill": "both", "side": "left"}}
         }
         self.b_con = {
 
-            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}},
-            "b_label_red": {"el": tk.Listbox(self.page_elements["stylized_b_red"]["el"], bg="black", width = 1, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
+            "b_label_green": {"el": tk.Listbox(self.page_elements["stylized_b_green"]["el"], bg="black", width = 2, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}},
+            "b_label_red": {"el": tk.Listbox(self.page_elements["stylized_b_red"]["el"], bg="black", width = 2, font=("Helvetica", 16),fg="white"), "opt": {"fill": "both", "side": "right"}}
 
         }
         # Red Team Containers
@@ -124,6 +127,8 @@ class actionFrame(page):  # example of how a page could be implemented
         self.b_con["b_label_green"]["el"].pack(**self.b_con["b_label_green"]["opt"])
         self.b_con["b_label_red"]["el"].pack(**self.b_con["b_label_red"]["opt"])
 
+        self.split_frame["message_list"]["el"].pack(**self.split_frame["message_list"]["opt"])
+        
         # Add the timer label
  # Place the timer in the middle-top of the screen
 
@@ -201,25 +206,121 @@ class actionFrame(page):  # example of how a page could be implemented
     #             self.b_con["b_label_green"]["el"].insert(index, "B")
     def event(self):
         playertuple = game_handler.recive_event()
+        listofmess = game_handler.get_messages()
         listofusers = game_handler.get_list_of_usrs()
+        self.messages(listofmess)
         self.stylized_b(listofusers, playertuple[0], playertuple[1])
 
+    def messages(self, listofmess): 
+        
+        i = 0
+       
+        for mess in listofmess:
+            self.split_frame["message_list"]["el"].insert(i, mess)
+            listofmess.remove(mess)
+            i +=1
+    def flash_listbox_item(self, listbox, index, count=6):
+        def toggle_color():
+            current_color = listbox.itemcget(index, "fg")
+            new_color = "white" if current_color == "blue" else "blue"
+            listbox.itemconfig(index, {"fg": new_color})
+            if self.flash_count < count:
+                self.flash_count += 1
+                listbox.after(300, toggle_color)
+
+        self.flash_count = 0
+        toggle_color()
 
     def stylized_b(self, listofusers: dict, eq_id: str, base_score: bool):
-        # loop through all the players
-        for player in listofusers:
-            # add empty items to Listbox
-            self.b_con["b_label_green"]["el"].insert(tk.END, "")
-            self.b_con["b_label_red"]["el"].insert(tk.END, "")
-            # check for what team a player is on
+        if listofusers[eq_id].team == "RED TEAM":
+            listbox_names = self.red_frame["red_list"]["el"]
+            listbox_scores = self.red_frame["red_list2"]["el"]
+            b_listbox = self.b_con["b_label_red"]["el"]
+            team = "RED TEAM"
+        else:
+            listbox_names = self.green_frame["green_list"]["el"]
+            listbox_scores = self.green_frame["green_list2"]["el"]
+            b_listbox = self.b_con["b_label_green"]["el"]
+            team = "GREEN TEAM"
 
-                # check the score passed through from the server
-            if base_score:
-                self.b_con["b_label_green"]["el"].insert(listofusers.index(player), "B")
-            if base_score:
-                self.b_con["b_label_red"]["el"].insert(listofusers.index(player), "B")
+        team_users = [player for player in listofusers.values() if player.team == team]
+        sorted_users = sorted(team_users, key=lambda p: p.score, reverse=True)
+
+        listbox_names.delete(0, tk.END)
+        listbox_scores.delete(0, tk.END)
+        b_listbox.delete(0, tk.END)
+
+        # If the player hit base, remember their ID
+        if base_score:
+            self.b_players.add(eq_id)
+        keys = list(listofusers.keys())
+        wanted_index = keys.index(eq_id)
+
+        for player in sorted_users:
+            listbox_names.insert(tk.END, f"{player.name.rjust(20)}")
+            listbox_scores.insert(tk.END, str(player.score))
+
+            # Add B if player earned it
+            if player.id in self.b_players:
+                b_listbox.insert(wanted_index , "B")
+            else:
+                b_listbox.insert(wanted_index , "")
+
+        # Flash top player
+        if sorted_users:
+            top_player_name = sorted_users[0].name.strip().rjust(20)
+            for i in range(listbox_names.size()):
+                if listbox_names.get(i).strip() == top_player_name.strip():
+                    self.flash_listbox_item(listbox_names, i)
+                    break
+            
+
+        # Flash the top player
+        if sorted_users:
+            top_player_name = sorted_users[0].name.strip().rjust(20)
+            for i in range(listbox_names.size()):
+                if listbox_names.get(i).strip() == top_player_name.strip():
+                    self.flash_listbox_item(listbox_names, i)
+                    break
+
+  
+    # def stylized_b(self, listofusers: dict, eq_id: str, base_score: bool):
+
+        # keys = list(listofusers.keys())
+        # wanted_index = keys.index(eq_id)
+
+    #     print(f"Wanted index: {wanted_index}")
+    #     # loop through all the players
+    #     for player in listofusers:
+    #         # add empty items to Listbox
+    #         self.b_con["b_label_green"]["el"].insert(tk.END, "")
+    #         self.b_con["b_label_red"]["el"].insert(tk.END, "")
 
 
+
+    #     # UPDATE SCORES
+    #     if listofusers[eq_id].team == "RED TEAM":
+    #         listbox_names = self.red_frame["red_list"]["el"]
+    #         listbox_scores = self.red_frame["red_list2"]["el"]
+
+    #     if listofusers[eq_id].team == "GREEN TEAM":
+    #         listbox_names = self.green_frame["green_list"]["el"]
+    #         listbox_scores = self.green_frame["green_list2"]["el"]
+    #     for index in range(listbox_names.size()):
+    #         print("SCROE: ", listofusers[eq_id].score)
+    #         if listbox_names.get(index).strip() == listofusers[eq_id].name.strip().rjust(20).strip():
+    #             listbox_scores.delete(index)
+    #             listbox_scores.insert(index, str(listofusers[eq_id].score))
+        
+    #             if base_score == True and listofusers[eq_id].team == "GREEN TEAM":
+    #                 print("adding B for green?")
+    #                 self.b_con["b_label_green"]["el"].insert(index + 1, "B")
+    #             if base_score == True and listofusers[eq_id].team == "RED TEAM":
+    #                 print("adding B for green?")
+    #                 self.b_con["b_label_red"]["el"].insert(index + 1 , "B")
+
+
+        
 
 
 class actionFrame2(page):  # example of how a page could be implemented

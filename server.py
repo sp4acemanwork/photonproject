@@ -4,9 +4,10 @@ import re
 
 
 class usr:
-    def __init__(self, name: str, team: str):
+    def __init__(self, name: str, id:int, team: str):
         self.name = name
         self.score = 0
+        self.id = id
         self.base_score = 0
         self.team = team # check to see how players are sorted
 
@@ -20,6 +21,7 @@ class handler:
         self.udp_handler = udp_handler("127.0.0.1", self.port, self.buffer_size)
         self.database_handler = database_handler()
         self.local_score_keep = {}  # keeps a list of usr obj
+        self.messages = []
         self.local_port_send = send_port
     def start_game(self):
         print("printing values")
@@ -31,7 +33,8 @@ class handler:
 
     def get_list_of_usrs(self) -> dict:
         return self.local_score_keep
-
+    def get_messages(self):
+        return self.messages
     # change ip
     def change_socket(self, new_target_ip: str):
         print("changing ip from ip:{} -> ip:{}".format(self.target_ip, new_target_ip))
@@ -51,7 +54,7 @@ class handler:
         test = (self.target_ip, self.port)
         self.udp_handler.send_message(str(equipment_id), test)
         #  add check for if user is in the table already
-        newusr = usr(player_name, team)
+        newusr = usr(player_name, player_id, team)
         self.local_score_keep[equipment_id] = newusr
         # self.udp_handler.recive_message()
         # self.database_handler.print_table()
@@ -74,32 +77,40 @@ class handler:
         event: str = mesg[0]
         part = re.split(r":", event, maxsplit=1)
         player = self.local_score_keep[part[0]]
+        if len(part) == 2:
+            if part[1] == "43":
+                print(f"user id:{part[0]} scored for RED {player.team}")
+                self.messages.append(f"{player.name} scored for {player.team}")
+                if player.team == "RED TEAM":
+                    player.base_score += 1
+                    player.score += 100
+                else:
+                    player.score -= 10
 
-        if part[1] == "43":
-            print(f"user id:{part[0]} scored for RED {player.team}")
-            if player.team == "RED TEAM":
-                player.base_score += 1
-                player.score += 100
-            else:
-                player.score -= 10
-
-            self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
-
-        if part[1] == "53":
-            print(f"user id:{part[0]} scored for GREEN {player.team}")
-            if player.team == "GREEN TEAM":
-                player.base_score += 1
-                player.score += 100
-            else:
-                player.score -= 10
-
-            self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
-
-        else:
-            print(f"user id:{part[0]} tagged user id:{part[1]}")
-            self.udp_handler.send_message(part[1], (self.target_ip, self.local_port_send))
-            if player.base_score == 3:
+                self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
                 return (part[0], True)
+            if part[1] == "53":
+                print(f"user id:{part[0]} scored for GREEN {player.team}")
+                self.messages.append(f"{player.name} scored for {player.team}")
+                if player.team == "GREEN TEAM":
+                    player.base_score += 1
+                    player.score += 100
+                else:
+                    player.score -= 10
+
+                self.udp_handler.send_message(str(player.score), (self.target_ip, self.local_port_send))
+                return (part[0], True)
+            else:
+                player1 = self.local_score_keep[part[1]]
+                print(f"user id:{part[0]} tagged user id:{part[1]}")
+                self.messages.append(f"{player.name} tagged {player1.name}")
+                if player.team == "GREEN TEAM":
+                    player.score += 10
+                else:
+                    player.score += 10
+                self.udp_handler.send_message(part[1], (self.target_ip, self.local_port_send))
+                # if player.base_score == 1:
+                #     return (part[0], True)
         return (part[0], False)
 
 
