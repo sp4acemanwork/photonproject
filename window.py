@@ -300,14 +300,31 @@ class actionFrame(page):  # example of how a page could be implemented
         # Update team scores after processing events
         self.update_team_scores(listofusers)
 
+    def flash_label(self, label, count=6):
+        def toggle(i=0):
+            if i >= count:
+                label.config(fg="white")  # Reset to normal
+                return
+            current_color = label.cget("fg")
+            label.config(fg="yellow" if current_color == "white" else "white")
+            label.after(300, toggle, i + 1)
+
+        toggle()
+
     def update_team_scores(self, listofusers: dict):
         # Calculate total scores for each team
         self.red_team_score = sum(player.score for player in listofusers.values() if player.team == "RED TEAM")
         self.green_team_score = sum(player.score for player in listofusers.values() if player.team == "GREEN TEAM")
 
         # Update the score labels
-        self.red_team_score_label.config(text=f"Red Team Score: {self.red_team_score}")
-        self.green_team_score_label.config(text=f"Green Team Score: {self.green_team_score}")
+        self.red_team_score_label.config(text=f"Red Team Score: {self.red_team_score}", fg="white")
+        self.green_team_score_label.config(text=f"Green Team Score: {self.green_team_score}", fg="white")
+
+        # Flash the higher score
+        if self.red_team_score > self.green_team_score:
+            self.flash_label(self.red_team_score_label)
+        elif self.green_team_score > self.red_team_score:
+            self.flash_label(self.green_team_score_label)
 
   
     # def stylized_b(self, listofusers: dict, eq_id: str, base_score: bool):
