@@ -73,6 +73,8 @@ class actionFrame(page):  # example of how a page could be implemented
         self.window = parent.window
         self.buttonfunc = lambda: self.parent.switch_window("test")  # set function that button will call here or set it with the function setbuttonfunction(func)
         self.b_players = set()
+        self.red_team_score = 0
+        self.green_team_score = 0
         self.page_elements = {
             "redteam_frame": {"el": tk.Frame(self.window, bg="red", width=60), "opt": {"fill": "both", "side": "right", "expand": False}},
             "greenteam_frame": {"el": tk.Frame(self.window, bg="green", width=60), "opt": {"fill": "both", "side": "left", "expand": False}},
@@ -131,6 +133,13 @@ class actionFrame(page):  # example of how a page could be implemented
         
         # Add the timer label
  # Place the timer in the middle-top of the screen
+
+        # Add team score labels
+        self.red_team_score_label = tk.Label(self.page_elements["redteam_frame"]["el"], text="Red Team Score: 0", font=("Helvetica", 16), bg="red", fg="white")
+        self.red_team_score_label.pack(side="top", pady=10)
+
+        self.green_team_score_label = tk.Label(self.page_elements["greenteam_frame"]["el"], text="Green Team Score: 0", font=("Helvetica", 16), bg="green", fg="white")
+        self.green_team_score_label.pack(side="top", pady=10)
 
         # Start the timer
     def start_timer(self):
@@ -282,6 +291,18 @@ class actionFrame(page):  # example of how a page could be implemented
                 if listbox_names.get(i).strip() == top_player_name.strip():
                     self.flash_listbox_item(listbox_names, i)
                     break
+
+        # Update team scores after processing events
+        self.update_team_scores(listofusers)
+
+    def update_team_scores(self, listofusers: dict):
+        # Calculate total scores for each team
+        self.red_team_score = sum(player.score for player in listofusers.values() if player.team == "RED TEAM")
+        self.green_team_score = sum(player.score for player in listofusers.values() if player.team == "GREEN TEAM")
+
+        # Update the score labels
+        self.red_team_score_label.config(text=f"Red Team Score: {self.red_team_score}")
+        self.green_team_score_label.config(text=f"Green Team Score: {self.green_team_score}")
 
   
     # def stylized_b(self, listofusers: dict, eq_id: str, base_score: bool):
