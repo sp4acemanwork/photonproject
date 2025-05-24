@@ -1,7 +1,7 @@
 from window import window, splashFrame, actionFrame, playerFrame
 
 teams = None
-
+ # message may 24th I am incredibly high 
 
 def main():
     # from splash_screen import SplashScreen
